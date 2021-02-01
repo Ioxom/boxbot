@@ -20,7 +20,7 @@ public class CustomUser {
     }
 
     public String getAsTag() {
-        return this.username + this.tag;
+        return this.username + "#" + this.tag;
     }
 
     public String getUsername() {

@@ -27,10 +27,6 @@ public class Box {
         } else {
             throw new IllegalArgumentException("passed added object of incompatible type to constructor");
         }
-
-        System.out.println(this.items);
-        System.out.println(this.users);
-        System.out.println(this.owner);
     }
 
     public void add(Object object) {

@@ -32,11 +32,5 @@ public class Listener extends ListenerAdapter {
                 event.getChannel().sendMessage("Box is here :package: ").queue();
                 break;
         }
-       /* ObjectMapper mapper = new ObjectMapper().setDefaultPrettyPrinter(new DefaultPrettyPrinter());
-        try {
-            mapper.writeValue(new File("box_data.json"), new Box(new CustomUser(event.getAuthor()), event.getAuthor()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } */
     }
 }

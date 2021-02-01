@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class Main {
@@ -28,7 +28,7 @@ public class Main {
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
-                throw new FileNotFoundException("property file '" + fileName + "' not found in the classpath");
+                throw new FileNotFoundException("property file \"" + fileName + "\" not found in the classpath");
             }
 
             VERSION = properties.getProperty("version");
@@ -39,7 +39,7 @@ public class Main {
     }
 
     public static Frame frame;
-    public static ArrayList<Box> boxes;
+    public static HashMap<String, Box> boxes = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -49,12 +49,12 @@ public class Main {
 
         //read saved box data
         try {
-            boxes = new ArrayList<>();
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(new File("box_data.json"), boxes);
-            Box[] boxesAsArray = mapper.readValue(new File("box_data.json"), Box[].class);
-            boxes = new ArrayList<>(Arrays.asList(boxesAsArray));
-            boxes.add(new Box(new CustomUser(6L, "h", 5), "h"));
+            boxes.put("yes", new Box(new CustomUser(6L, "h", 5), "h"));
+            FrickYouJackson yeehaw = new FrickYouJackson(boxes);
+            mapper.writeValue(new File("box_data.json"), yeehaw);
+            FrickYouJackson frick = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
+            boxes = frick.boxes;
         } catch (Exception e) {
             e.printStackTrace();
         }
