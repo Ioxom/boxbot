@@ -43,7 +43,7 @@ public class Frame {
         }
         //configure the console, adding a scroll bar and setting the colour
         final Dimension consoleSize = new Dimension(500, 375);
-        this.console.setBackground(Color.ORANGE);
+        this.console.setBackground(Color.GRAY);
         this.console.setSize(consoleSize);
         this.console.setEditable(false);
         //create a pane to allow the console to have scrolling
