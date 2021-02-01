@@ -22,7 +22,7 @@ public class Main {
         try {
             Properties properties = new Properties();
             String fileName = "boxbot.properties";
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("boxbot.properties");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(fileName);
 
             //load input stream
             if (inputStream != null) {
@@ -69,7 +69,7 @@ public class Main {
         try {
             String token = null;
             try {
-                token = Files.readString(Paths.get("C:\\Users\\darby\\Documents\\GitHub\\boxbot\\src\\main\\java\\ca\\ioxom\\boxbot\\Files\\token.txt"));
+                token = Files.readString(Paths.get("token.txt"));
                 if (token == null) frame.throwError("could not get token", true);
             } catch (FileNotFoundException e) {
                 frame.throwError("token.txt not found", true);

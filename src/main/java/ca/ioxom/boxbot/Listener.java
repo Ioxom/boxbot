@@ -1,16 +1,9 @@
 package ca.ioxom.boxbot;
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 
 public class Listener extends ListenerAdapter {
     private boolean isCheckingForResponse;
@@ -38,11 +31,6 @@ public class Listener extends ListenerAdapter {
             case "-box yes" :
                 event.getChannel().sendMessage("Box is here :package: ").queue();
                 break;
-
-
-
-
-
         }
        /* ObjectMapper mapper = new ObjectMapper().setDefaultPrettyPrinter(new DefaultPrettyPrinter());
         try {

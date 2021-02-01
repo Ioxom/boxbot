@@ -31,8 +31,8 @@ compileJava {
 //append the version to a properties file so we can access it from java code
 task('addVersion') {
     doLast {
-        file("src/main/resources/ioxbot.properties").write(
-                "# ioxbot's version. this is stored here to allow project-wide version syncing\n" +
+        file("src/main/resources/boxbot.properties").write(
+                "# boxbot's version. this is stored here to allow project-wide version syncing\n" +
                         "version=$version"
         )
     }
