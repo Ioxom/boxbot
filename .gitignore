@@ -1,6 +1,8 @@
 .gradle
 /build/
 .idea
+box_data.json
+token.txt
 
 # Ignore Gradle GUI config
 gradle-app.setting

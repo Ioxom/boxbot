@@ -49,11 +49,12 @@ public class Main {
 
         //read saved box data
         try {
+            boxes = new ArrayList<>();
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.writeValue(new File("box_data.json"), boxes);
             Box[] boxesAsArray = mapper.readValue(new File("box_data.json"), Box[].class);
             boxes = new ArrayList<>(Arrays.asList(boxesAsArray));
-            boxes.add(new Box(new CustomUser(6L, "h"), "h"));
-            mapper.writeValue(new File("box_data.json"), boxes);
+            boxes.add(new Box(new CustomUser(6L, "h", 5), "h"));
         } catch (Exception e) {
             e.printStackTrace();
         }
