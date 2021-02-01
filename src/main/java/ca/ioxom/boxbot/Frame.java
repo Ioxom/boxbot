@@ -30,7 +30,7 @@ public class Frame {
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         //set icon
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/ioxbot_profile_photo.png");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
             if (inputStream != null) {
                 Image image = ImageIO.read(inputStream);
                 this.frame.setIconImage(image);
@@ -39,13 +39,13 @@ public class Frame {
                 this.throwError("failed to add icon to frame; resources may be broken");
             }
         } catch (IOException e) {
-            this.throwError("an IOException occurred while reading file \"images/ioxbot_profile_photo.png\"");
+            this.throwError("an IOException occurred while reading file \"images/box.png\"");
         }
         //configure the console, adding a scroll bar and setting the colour
         final Dimension consoleSize = new Dimension(500, 375);
         this.console.setBackground(Color.ORANGE);
         this.console.setSize(consoleSize);
-        this.console.setEditable(true);
+        this.console.setEditable(false);
         //create a pane to allow the console to have scrolling
         JScrollPane pane = new JScrollPane(this.console);
         pane.setPreferredSize(consoleSize);

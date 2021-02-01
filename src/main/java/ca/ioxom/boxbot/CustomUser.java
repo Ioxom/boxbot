@@ -30,4 +30,8 @@ public class CustomUser {
     public long getId() {
         return this.id;
     }
+
+    public int getTag() {
+        return this.tag;
+    }
 }

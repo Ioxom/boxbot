@@ -1,13 +1,21 @@
 package ca.ioxom.boxbot;
 
+import net.dv8tion.jda.api.entities.User;
+
 import java.util.ArrayList;
 
 public class Box {
     public CustomUser owner;
     public ArrayList<String> items;
     public ArrayList<CustomUser> users;
-    public Box(CustomUser owner, Object object) {
-        this.owner = owner;
+    public Box(Object owner, Object object) {
+        if (owner instanceof CustomUser) {
+            this.owner = (CustomUser) owner;
+        } else if (owner instanceof User) {
+            this.owner = new CustomUser((User) owner);
+        } else {
+            throw new IllegalArgumentException("passed user object of incompatible type to constructor");
+        }
         if (object instanceof String) {
             this.items = new ArrayList<>();
             this.items.add((String) object);
@@ -17,7 +25,7 @@ public class Box {
             this.users.add((CustomUser) object);
             this.items = new ArrayList<>();
         } else {
-            throw new IllegalArgumentException("passed object of incompatible type to constructor");
+            throw new IllegalArgumentException("passed added object of incompatible type to constructor");
         }
 
         System.out.println(this.items);
@@ -45,7 +53,7 @@ public class Box {
         }
     }
 
-    public void addToUsersBox(CustomUser owner, Object item) {
+    public void addToBoxOfUser(CustomUser owner, Object item) {
 
     }
 }
