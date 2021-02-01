@@ -1,14 +1,11 @@
 package ca.ioxom.boxbot;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class FrickYouJackson {
-    public HashMap<String, Box> boxes;
-    public FrickYouJackson() {
-        this.boxes = new HashMap<>();
-    }
+    public ArrayList<Box> boxes;
 
-    public FrickYouJackson(HashMap<String, Box> boxes) {
+    public FrickYouJackson(ArrayList<Box> boxes) {
         this.boxes = boxes;
     }
 }

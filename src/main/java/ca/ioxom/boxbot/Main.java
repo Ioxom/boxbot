@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
 
 public class Main {
@@ -39,7 +38,7 @@ public class Main {
     }
 
     public static Frame frame;
-    public static HashMap<String, Box> boxes = new HashMap<>();
+    public static ArrayList<Box> boxes = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -50,7 +49,7 @@ public class Main {
         //read saved box data
         try {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            boxes.put("yes", new Box(new CustomUser(6L, "h", 5), "h"));
+            boxes.add(new Box(new CustomUser(6L, "h", 5), "h"));
             FrickYouJackson yeehaw = new FrickYouJackson(boxes);
             mapper.writeValue(new File("box_data.json"), yeehaw);
             FrickYouJackson frick = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
