@@ -1,6 +1,7 @@
 .gradle
 /build/
 .idea
+.run
 box_data.json
 token.txt
 
@@ -17,4 +18,3 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
-token.txt
