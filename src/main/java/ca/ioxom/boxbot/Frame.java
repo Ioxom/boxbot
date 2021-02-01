@@ -21,8 +21,8 @@ public class Frame {
     private final JFrame frame;
     private final JPanel panel;
     public Frame() {
-        this.frame = new JFrame("ioxbot v " + Main.VERSION);
-        this.console = new JTextArea("[init] loading ioxbot");
+        this.frame = new JFrame("boxbot v " + Main.VERSION);
+        this.console = new JTextArea("[init] loading boxbot");
         this.panel = new JPanel(new BorderLayout());
     }
 
@@ -43,9 +43,9 @@ public class Frame {
         }
         //configure the console, adding a scroll bar and setting the colour
         final Dimension consoleSize = new Dimension(500, 375);
-        this.console.setBackground(Color.GRAY);
+        this.console.setBackground(Color.ORANGE);
         this.console.setSize(consoleSize);
-        this.console.setEditable(false);
+        this.console.setEditable(true);
         //create a pane to allow the console to have scrolling
         JScrollPane pane = new JScrollPane(this.console);
         pane.setPreferredSize(consoleSize);
@@ -74,7 +74,7 @@ public class Frame {
     }
 
     public void throwError(String error, boolean fatal) {
-        this.console.append((fatal?"\n[err/FATAL] " : "\n[err] ") + error + (fatal? "; closing ioxbot" : ""));
+        this.console.append((fatal?"\n[err/FATAL] " : "\n[err] ") + error + (fatal? "; closing boxbot" : ""));
         if (fatal) {
             //wait for five seconds to allow for reading the error
             try {
