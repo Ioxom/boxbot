@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class Main {
-    public static ArrayList<Box> boxes;
     public static String VERSION;
     static {
         try {
@@ -40,6 +39,7 @@ public class Main {
     }
 
     public static Frame frame;
+    public static ArrayList<Box> boxes;
 
     public static void main(String[] args) {
 
