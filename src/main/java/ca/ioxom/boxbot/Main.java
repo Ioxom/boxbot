@@ -50,9 +50,14 @@ public class Main {
         //read saved box data
         try {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+            Box[] yes = new Box[20];
+            yes[0] = new Box(new CustomUser(6L, "h", 5), "h");
+
+            FrickYouJackson yeehaw = new FrickYouJackson(yes);
+            mapper.writeValue(new File("box_data.json"), yeehaw);
 
             FrickYouJackson frick = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
-            boxes = (ArrayList<Box>) Arrays.asList(frick.boxes);
+            boxes = new ArrayList<>(Arrays.asList(frick.boxes));
 
         } catch (Exception e) {
             e.printStackTrace();
