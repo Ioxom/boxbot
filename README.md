@@ -1,2 +1,2 @@
-# boxbot
+# ioxbox
 discord bot. boxes. yes

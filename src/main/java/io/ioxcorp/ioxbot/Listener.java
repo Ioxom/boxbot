@@ -1,4 +1,4 @@
-package ca.ioxom.boxbot;
+package io.ioxcorp.ioxbot;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,11 +11,16 @@ import java.awt.Color;
 public class Listener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        switch (event.getMessage().getContentRaw().toLowerCase()) {
-            case "-box yes" :
+        final String prefix = "-box ";
+        final String messageContentRaw = event.getMessage().getContentRaw().toLowerCase();
+
+        if (!messageContentRaw.startsWith(prefix)) return;
+        String[] message = messageContentRaw.split(prefix)[1].split(" ");
+        switch (message[0]) {
+            case "yes" :
                 event.getChannel().sendMessage("Box is here :package: ").queue();
                 break;
-            case "-box help" :
+            case "help" :
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("The Box People :tm:")
                         .setColor(new Color(0xfc03df))

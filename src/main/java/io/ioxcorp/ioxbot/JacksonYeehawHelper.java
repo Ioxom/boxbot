@@ -1,4 +1,4 @@
-package ca.ioxom.boxbot;
+package io.ioxcorp.ioxbot;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;

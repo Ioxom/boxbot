@@ -1,4 +1,4 @@
-package ca.ioxom.boxbot;
+package io.ioxcorp.ioxbot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
