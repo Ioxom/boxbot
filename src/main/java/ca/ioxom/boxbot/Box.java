@@ -98,5 +98,17 @@ public class Box {
         } else if (!(owner instanceof CustomUser)) {
             throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#addToBoxOfUser(Object owner, Object item), must be User or CustomUser");
         }
+
+        Main.boxes.get(((CustomUser) owner).id).add(item);
+    }
+
+    public void removeFromBoxOfUser(Object owner, Object item) {
+        if (owner instanceof User) {
+            owner = new CustomUser((User) owner);
+        } else if (!(owner instanceof CustomUser)) {
+            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#removeFromBoxOfUser(Object owner, Object item), must be User or CustomUser");
+        }
+
+        Main.boxes.get(((CustomUser) owner).id).remove(item);
     }
 }
