@@ -20,7 +20,7 @@ public class Box {
             this.owner = new CustomUser((User) owner);
         //if we don't get a User or CustomUser object throw exception
         } else {
-            throw new IllegalArgumentException("passed user object of incompatible type to constructor");
+            throw new IllegalArgumentException("passed user object of incompatible type to Box constructor (must be User or CustomUser)");
         }
 
         //open a Box with either a String or CustomUser object
@@ -39,7 +39,7 @@ public class Box {
             this.users.add(user);
             this.items = new ArrayList<>();
         } else {
-            throw new IllegalArgumentException("passed added object of incompatible type to constructor");
+            throw new IllegalArgumentException("passed added object of incompatible type to Box constructor (must be String, User or CustomUser)");
         }
     }
 
@@ -51,8 +51,10 @@ public class Box {
             this.items.add((String) object);
         } else if (object instanceof CustomUser) {
             this.users.add((CustomUser) object);
+        } else if (object instanceof User) {
+            this.users.add(new CustomUser((User) object));
         } else {
-            throw new IllegalArgumentException("passed object of incompatible type to Box#add(Object object)");
+            throw new IllegalArgumentException("passed object of incompatible type to Box#add(Object object), must be String, User or CustomUser");
         }
     }
 
@@ -61,12 +63,18 @@ public class Box {
             this.items.remove(object);
         } else if (object instanceof CustomUser) {
             this.users.remove(object);
+        } else if (object instanceof User) {
+            this.users.remove(new CustomUser((User) object));
         } else {
-            throw new IllegalArgumentException("passed object of incompatible type to Box#remove(Object object)");
+            throw new IllegalArgumentException("passed object of incompatible type to Box#remove(Object object), must be String, User or CustomUser");
         }
     }
 
-    public void addToBoxOfUser(CustomUser owner, Object item) {
-
+    public void addToBoxOfUser(Object owner, Object item) {
+        if (owner instanceof User) {
+            owner = new CustomUser((User) owner);
+        } else if (!(owner instanceof CustomUser)) {
+            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#addToBoxOfUser(Object owner, Object item), must be User or CustomUser");
+        }
     }
 }
