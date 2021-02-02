@@ -26,3 +26,14 @@ Our current project is IoxBox, a discord bot oriented around storing things in y
 
 
 # Behind the creators
+
+Ioxom and Thonkman are both Canadian nationals currently living in Manitoba (yes it exists). Ioxom began his programming career in 2018 after recieving a book on C++ from Thonkman. Although he did not continue using C++ and switched to Java. Thonkman started a few months later after being convinced it was a good idea. They both had begun with Scratch and made a few games together. Together they've had many succesful and many unsuccesful ideas and programs. Most of which are posted on their Githubs'. Thonkmans first succesful program was Thonkybot (JS edition), a discord bot made in javascript, it didnt go far but it worked at least. Ioxoms first program was IoxBot (JS), a very well made bot. Later on both bots were transfered to regular Java where Thonkybot stopped being developed. IoxBot is still actively being worked on. 
+
+
+## Our skills
+
+Ioxom is a very powerful programmer with lots of skills and critical thinking ability, he can write his own code whenever he wants.
+
+Thonkman is an ok programmer with the skills of a bag of bricks and the critical thinking strengths of an undercooked onion ring.
+
+They are both actively taking lessons to improve their skills.
