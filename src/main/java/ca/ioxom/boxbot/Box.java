@@ -46,6 +46,28 @@ public class Box {
     //for jackson to use when parsing
     public Box() {}
 
+    public String toString() {
+        StringBuilder users = new StringBuilder();
+        if (this.users.isEmpty()) {
+            users.append("none").append("\n\n");
+        } else {
+            for (CustomUser user : this.users) {
+                users.append(user.toString()).append("\n\n");
+            }
+        }
+
+        StringBuilder items = new StringBuilder();
+        if (this.items.isEmpty()) {
+            items.append("none").append("\n\n");
+        } else {
+            for (String item : this.items) {
+                items.append(item).append("\n\n");
+            }
+        }
+
+        return this.owner.toString() + "\nusers:\n" + users + "\nitems:\n" + items;
+    }
+
     public void add(Object object) {
         if (object instanceof String) {
             this.items.add((String) object);

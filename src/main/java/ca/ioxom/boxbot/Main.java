@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class Main {
@@ -41,7 +42,7 @@ public class Main {
     }
 
     public static Frame frame;
-    public static ArrayList<Box> boxes = new ArrayList<>();
+    public static HashMap<Long, Box> boxes = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -50,21 +51,12 @@ public class Main {
         frame.init();
 
         //read saved box data
-        //currently I have no idea what's going on here but it works
-        try {
-            ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            Box[] yes = new Box[20];
-            yes[0] = new Box(new CustomUser(6L, "h", 5), "h");
+        HashMap<Long, Box> yes = new HashMap<>();
+        yes.put(new CustomUser(6L, "h", 5).id, new Box(new CustomUser(6L, "h", 5), "h"));
 
-            FrickYouJackson yeehaw = new FrickYouJackson(yes);
-            mapper.writeValue(new File("box_data.json"), yeehaw);
+        JacksonYeehawHelper.save(yes);
 
-            FrickYouJackson frick = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
-            boxes = new ArrayList<>(Arrays.asList(frick.boxes));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boxes = JacksonYeehawHelper.read();
 
         //throw error if version is not found
         if (VERSION == null) {
