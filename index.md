@@ -1,37 +1,29 @@
-## Welcome to GitHub Pages
+## Welcome to IoxCorp
 
-You can use the [editor on GitHub](https://github.com/Ioxom/boxbot/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Welcome to IoxCorp, the worlds next innovation center.
+Here at IoxCorp, we are making the future... today! We specialize in making programs for high tech objects and systems.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### History
 
-### Markdown
+The IoxCorp was founded in 04/01/20 by the "Ioxom Foundation", and is actively being sponsored by "The Birch Tree", It is also funded by "Thonkman"
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
+# Our projects
 
-[Link](url) and ![Image](src)
-```
+Our current project is BoxBot, a discord bot oriented around storing things in your personal box. You will be able to store sentences, numbers eventually (and hopefully files). One day I imagine it being the best bot on discord with more than just storing things in boxes.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### BoxBot objectives
 
-### Jekyll Themes
+- 24/7 activity
+- Storing things in boxes
+- Encryption
+- Better website
+- And much more
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Ioxom/boxbot/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
+# Behind the creators
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
