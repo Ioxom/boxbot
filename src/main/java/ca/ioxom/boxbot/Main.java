@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class Main {
+
+    //get the version from a .properties that's saved in the .jar that gradle produces
     public static String VERSION;
     static {
         try {
@@ -48,6 +50,7 @@ public class Main {
         frame.init();
 
         //read saved box data
+        //currently I have no idea what's going on here but it works
         try {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
             Box[] yes = new Box[20];

@@ -27,7 +27,6 @@ public class Frame {
     }
 
     public void init() {
-        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         //set icon
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
@@ -41,20 +40,26 @@ public class Frame {
         } catch (IOException e) {
             this.throwError("an IOException occurred while reading file \"images/box.png\"");
         }
+
         //configure the console, adding a scroll bar and setting the colour
+        //we also disallow editing for the console because yeah obvious
         final Dimension consoleSize = new Dimension(500, 375);
         this.console.setBackground(Color.GRAY);
         this.console.setSize(consoleSize);
         this.console.setEditable(false);
+
         //create a pane to allow the console to have scrolling
         JScrollPane pane = new JScrollPane(this.console);
         pane.setPreferredSize(consoleSize);
+
         //configure the main background panel
         this.panel.setPreferredSize(consoleSize);
         this.panel.add(pane);
         this.frame.setContentPane(this.panel);
         this.logInit("added console to frame");
+
         //open the frame
+        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(new Dimension(600, 275));
         this.frame.setVisible(true);
         this.logInit("finished initializing frame");

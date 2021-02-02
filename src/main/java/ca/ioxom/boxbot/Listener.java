@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 
+//unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
     private boolean isCheckingForResponse;
     private User checkedUser;
