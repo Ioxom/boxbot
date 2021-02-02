@@ -14,9 +14,9 @@ The IoxCorp was founded in 04/01/20 by the "Ioxom Foundation", and is actively b
 
 # Our projects
 
-Our current project is BoxBot, a discord bot oriented around storing things in your personal box. You will be able to store sentences, numbers eventually (and hopefully files). One day I imagine it being the best bot on discord with more than just storing things in boxes.
+Our current project is IoxBox, a discord bot oriented around storing things in your personal box. You will be able to store sentences, numbers eventually (and hopefully files). One day I imagine it being the best bot on discord with more than just storing things in boxes.
 
-### BoxBot objectives
+### IoxBox objectives
 
 - 24/7 activity
 - Storing things in boxes
@@ -26,4 +26,3 @@ Our current project is BoxBot, a discord bot oriented around storing things in y
 
 
 # Behind the creators
-
