@@ -1,12 +1,12 @@
 plugins {
-    id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id('java')
+    id('application')
+    id('com.github.johnrengelman.shadow') version('6.1.0')
 }
 
 mainClassName = 'ca.ioxom.boxbot.Main'
-group 'ca.ioxom'
-version '0.1.0'
+group('ca.ioxom')
+version('0.1.1')
 def jdaVersion = '4.2.0_227'
 def jacksonVersion = '2.11.0'
 
@@ -21,7 +21,7 @@ dependencies {
     implementation(group: 'net.dv8tion', name: 'JDA', version: jdaVersion)
 }
 
-//we use java 11
+//language level is java 11
 compileJava {
     sourceCompatibility = '11'
     targetCompatibility = '11'
@@ -40,6 +40,7 @@ task('addVersion') {
 
 //create a jar that includes dependencies so it can be run
 task uberJar(type: Jar) {
+
     manifest {
         attributes 'Main-Class': mainClassName, 'Manifest-Version': 1.0
     }
@@ -47,6 +48,7 @@ task uberJar(type: Jar) {
     from sourceSets.main.output
 
     DuplicatesStrategy.EXCLUDE
+    //ensure that the version is updated when building jars
     dependsOn(addVersion)
     dependsOn configurations.runtimeClasspath
     from {
