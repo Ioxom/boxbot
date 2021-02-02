@@ -32,10 +32,6 @@ public class CustomUser {
     }
 
     public String toString() {
-        return "id: " + this.id + "\ntag" + this.getAsTag();
-    }
-
-    public String getAsTag() {
-        return this.username + "#" + this.tag;
+        return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
     }
 }
