@@ -1,12 +1,16 @@
 package ca.ioxom.boxbot;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 
 public class Box {
+    @JsonProperty("owner")
     public CustomUser owner;
+    @JsonProperty("items")
     public ArrayList<String> items;
+    @JsonProperty("users")
     public ArrayList<CustomUser> users;
     public Box(Object owner, Object object) {
         if (owner instanceof CustomUser) {
@@ -28,6 +32,8 @@ public class Box {
             throw new IllegalArgumentException("passed added object of incompatible type to constructor");
         }
     }
+
+    public Box() {}
 
     public void add(Object object) {
         if (object instanceof String) {

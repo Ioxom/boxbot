@@ -1,11 +1,13 @@
 package ca.ioxom.boxbot;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FrickYouJackson {
-    public ArrayList<Box> boxes;
+    @JsonProperty("boxes")
+    public Box[] boxes;
+    public FrickYouJackson() {}
 
-    public FrickYouJackson(ArrayList<Box> boxes) {
+    public FrickYouJackson(Box[] boxes) {
         this.boxes = boxes;
     }
 }

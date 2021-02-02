@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class Main {
@@ -49,11 +50,10 @@ public class Main {
         //read saved box data
         try {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            boxes.add(new Box(new CustomUser(6L, "h", 5), "h"));
-            FrickYouJackson yeehaw = new FrickYouJackson(boxes);
-            mapper.writeValue(new File("box_data.json"), yeehaw);
+
             FrickYouJackson frick = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
-            boxes = frick.boxes;
+            boxes = (ArrayList<Box>) Arrays.asList(frick.boxes);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
