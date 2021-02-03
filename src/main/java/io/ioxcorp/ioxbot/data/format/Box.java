@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Box {
     @JsonProperty("owner")
@@ -113,6 +114,8 @@ public class Box {
         } else {
             throw new IllegalArgumentException("passed object of incompatible type to Box#add(Object object), must be String, User or CustomUser");
         }
+
+        JacksonYeehawHelper.save();
     }
 
     public void remove(Object object) {
@@ -125,6 +128,8 @@ public class Box {
         } else {
             throw new IllegalArgumentException("passed object of incompatible type to Box#remove(Object object), must be String, User or CustomUser");
         }
+
+        JacksonYeehawHelper.save();
     }
     
     public static void createBox(Object owner, Object item) {
@@ -135,6 +140,8 @@ public class Box {
         }
         
         Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
+
+        JacksonYeehawHelper.save();
     }
 
     //TODO: 0.2.0: remove these methods and all uses of them
@@ -178,5 +185,13 @@ public class Box {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Box box = (Box) o;
+        return Objects.equals(owner, box.owner) && Objects.equals(items, box.items) && Objects.equals(users, box.users);
     }
 }

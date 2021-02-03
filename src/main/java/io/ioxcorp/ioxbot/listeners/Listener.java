@@ -48,7 +48,6 @@ public class Listener extends ListenerAdapter {
                     Box.createBox(author, message[1]);
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
-                JacksonYeehawHelper.save(boxes);
                 Main.frame.logCommand(author, "box add", true);
                 break;
             case "remove":
@@ -62,7 +61,6 @@ public class Listener extends ListenerAdapter {
                     ).queue();
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
-                JacksonYeehawHelper.save(boxes);
                 Main.frame.logCommand(author, "box remove", true);
                 break;
 
