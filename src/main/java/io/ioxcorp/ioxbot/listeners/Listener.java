@@ -25,19 +25,18 @@ public class Listener extends ListenerAdapter {
         CustomUser author = new CustomUser(event.getAuthor());
 
         switch (message[0]) {
-            //TODO: 0.2.0: remove this no i wont
+            //TODO: 0.2.0: remove this
             case "yes":
                 event.getChannel().sendMessage("Box is here :package: ").queue();
                 break;
             case "help":
-                //TODO: 0.2.0: this is bad no is good
                 EmbedBuilder helpEmbed = new EmbedBuilder()
-                        .setAuthor("The Box People :tm:")
+                        .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(new Color(0xfc03df))
-                        .addField("What in the heck does this bot do?", "This bot is very hot, it stores cool things for you. Like words, words and more words for now.", false)
-                        .addField("Commands", "Prefix is -box \n Commands are the following; yes, add", false)
-                        .addField("The IoxCorp Incorporated", "IoxCorp Incorporated was founded in 04/01/20 by the \"Ioxom Foundation\", and is actively being sponsored by \" The Birch Tree\", It is also funded by \"Thonkman\"\nIf you would like to learn more, please use the command -ioxcorp (nonexistent atm)", false)
-                        .setFooter("Powered by electricity *and ioxcorp:tm:*");
+                        .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
+                        .addField("commands", "prefix is -box \n commands are the following; yes, add", false)
+                        .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
+                        .setFooter("powered by ioxcorp™");
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
                 break;
             //TODO: 0.2.0: allow for parsing of user objects
