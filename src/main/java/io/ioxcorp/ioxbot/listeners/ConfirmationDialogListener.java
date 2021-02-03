@@ -1,6 +1,9 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbot.listeners;
 
-public class ConfirmationDialog {
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+//TODO: 0.3.0: implement confirmation dialogue that doesn't break the main thread
+public class ConfirmationDialogListener extends ListenerAdapter {
     //plan:
     //make this class use its own dedicated thread so it can properly sleep while awaiting confirmation
     //use a private boolean object that saves whether we're awaiting confirmation

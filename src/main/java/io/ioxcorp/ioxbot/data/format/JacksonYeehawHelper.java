@@ -1,7 +1,8 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbot.data.format;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.ioxcorp.ioxbot.Main;
 
 import java.io.File;
 import java.io.IOException;

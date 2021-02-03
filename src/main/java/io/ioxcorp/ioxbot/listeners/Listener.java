@@ -1,7 +1,11 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbot.listeners;
 
 import static io.ioxcorp.ioxbot.Main.boxes;
 
+import io.ioxcorp.ioxbot.Main;
+import io.ioxcorp.ioxbot.data.format.Box;
+import io.ioxcorp.ioxbot.data.format.CustomUser;
+import io.ioxcorp.ioxbot.data.format.JacksonYeehawHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

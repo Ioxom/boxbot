@@ -1,7 +1,8 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbot.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.ioxcorp.ioxbot.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;

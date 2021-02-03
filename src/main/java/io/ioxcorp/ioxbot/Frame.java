@@ -1,5 +1,7 @@
 package io.ioxcorp.ioxbot;
 
+import io.ioxcorp.ioxbot.data.format.CustomUser;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
