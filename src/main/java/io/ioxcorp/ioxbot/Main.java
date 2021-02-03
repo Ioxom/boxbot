@@ -70,6 +70,7 @@ public class Main {
             try {
                 token = Files.readString(Paths.get("token.txt"));
                 if (token == null) frame.throwError("could not get token", true);
+            //TODO: 0.2.0: find a way to prefer throwing FileNotFoundException over IOException as it's more informative
             } catch (FileNotFoundException e) {
                 frame.throwError("token.txt not found", true);
             } catch (IOException e) {

@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbot;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.User;
@@ -21,7 +22,7 @@ public class CustomUser {
         this.username = splitTag[0];
     }
 
-    //jackson need a parameterless constructor so it can properly deserialize JSON
+    @JsonCreator
     public CustomUser() {
         this.id = 0L;
         this.username = "";

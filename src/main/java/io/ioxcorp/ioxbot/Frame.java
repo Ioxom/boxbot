@@ -63,6 +63,8 @@ public class Frame {
         this.logInit("finished initializing frame");
     }
 
+    //TODO: 0.2.0: make this all one method with type controlled by an enum or something
+
     //methods for logging
     public void logInit(String message) {
         this.console.append("\n[init] " + message);

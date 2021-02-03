@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbot;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -45,7 +46,7 @@ public class Box {
         }
     }
 
-    //for jackson to use when parsing
+    @JsonCreator
     public Box() {}
 
     //TODO: 0.2.0: this is bad
@@ -134,6 +135,8 @@ public class Box {
         
         Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
     }
+
+    //TODO: 0.2.0: remove these methods and all uses of them
 
     public static void addToBoxOfUser(Object owner, Object item) {
         if (owner instanceof User) {

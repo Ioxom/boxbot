@@ -37,6 +37,7 @@ public class Listener extends ListenerAdapter {
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
                 break;
             //TODO: 0.2.0: allow for parsing of user objects
+            //TODO: 0.2.0: instead of listing contents list only the affected variables and give success or failure dialogue
             case "add":
                 if (boxes.containsKey(author.id)) {
                     Box.addToBoxOfUser(author, message[1]);
@@ -61,6 +62,8 @@ public class Listener extends ListenerAdapter {
                 JacksonYeehawHelper.save(boxes);
                 Main.frame.logCommand(author, "box remove", true);
                 break;
+
+                //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
         }
     }
 }
