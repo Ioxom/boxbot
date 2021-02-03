@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbot.data.format;
+package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

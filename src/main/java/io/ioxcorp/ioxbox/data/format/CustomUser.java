@@ -1,9 +1,9 @@
-package io.ioxcorp.ioxbot.data.format;
+package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.ioxcorp.ioxbot.Main;
+import io.ioxcorp.ioxbox.Main;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Objects;

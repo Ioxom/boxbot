@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbot.listeners;
+package io.ioxcorp.ioxbox.listeners;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

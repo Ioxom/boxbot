@@ -1,8 +1,9 @@
-package io.ioxcorp.ioxbot.data.format;
+package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.ioxcorp.ioxbot.Main;
+import io.ioxcorp.ioxbox.Main;
+import static io.ioxcorp.ioxbox.Frame.LogType;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class JacksonYeehawHelper {
 
         if (data == null) {
             //TODO: 0.2.0: better error here
-            Main.frame.throwError("failed to read json", true);
+            Main.frame.log(LogType.FATAL_ERROR, "failed to read json");
             return null;
         } else {
             return data.map;

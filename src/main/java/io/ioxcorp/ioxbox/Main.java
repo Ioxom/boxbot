@@ -1,9 +1,10 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbox;
 
-import io.ioxcorp.ioxbot.data.format.Box;
-import io.ioxcorp.ioxbot.data.format.CustomUser;
-import io.ioxcorp.ioxbot.data.format.JacksonYeehawHelper;
-import io.ioxcorp.ioxbot.listeners.Listener;
+import io.ioxcorp.ioxbox.data.format.Box;
+import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.data.format.JacksonYeehawHelper;
+import io.ioxcorp.ioxbox.listeners.Listener;
+import static io.ioxcorp.ioxbox.Frame.LogType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -64,7 +65,7 @@ public class Main {
         //TODO: 0.2.0: explain why the version could not be obtained in error
         if (VERSION == null) {
             VERSION = "0.0.0";
-            frame.throwError("could not get version; defaulting to 0.0.0");
+            frame.log(Frame.LogType.ERROR, "could not get version; defaulting to 0.0.0");
         }
 
         //log in
@@ -73,25 +74,25 @@ public class Main {
             String token = null;
             try {
                 token = Files.readString(Paths.get("token.txt"));
-                if (token == null) frame.throwError("could not get token", true);
+                if (token == null) frame.log(LogType.FATAL_ERROR, "could not get token");
             //TODO: 0.2.0: find a way to prefer throwing FileNotFoundException over IOException as it's more informative
             } catch (FileNotFoundException e) {
-                frame.throwError("token.txt not found", true);
+                frame.log(LogType.FATAL_ERROR, "token.txt not found");
             } catch (IOException e) {
-                frame.throwError("an IOException occurred when reading file: token.txt", true);
+                frame.log(LogType.FATAL_ERROR, "an IOException occurred when reading file: token.txt");
             }
             api = JDABuilder.createDefault(token).build();
-            Main.frame.logInit("successfully logged in JDA");
+            Main.frame.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
-            frame.throwError("invalid token", true);
+            frame.log(LogType.FATAL_ERROR, "invalid token");
         }
 
         //add event listeners
         if (api != null) {
             api.addEventListener(new Listener());
-            frame.logInit("initialized jda");
+            frame.log(LogType.INIT, "initialized jda");
         } else {
-            frame.throwError("failed to create JDA object for unknown reasons", true);
+            frame.log(LogType.ERROR, "failed to create JDA object for unknown reasons");
         }
     }
 }

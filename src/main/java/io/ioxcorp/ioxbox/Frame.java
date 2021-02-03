@@ -1,6 +1,6 @@
-package io.ioxcorp.ioxbot;
+package io.ioxcorp.ioxbox;
 
-import io.ioxcorp.ioxbot.data.format.CustomUser;
+import io.ioxcorp.ioxbox.data.format.CustomUser;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -33,12 +33,12 @@ public class Frame {
             if (inputStream != null) {
                 Image image = ImageIO.read(inputStream);
                 this.frame.setIconImage(image);
-                this.logInit("added icon to frame");
+                this.log(LogType.INIT, "added icon to frame");
             } else {
-                this.throwError("failed to add icon to frame; resources may be broken");
+                this.log(LogType.ERROR, "failed to add icon to frame; resources may be broken");
             }
         } catch (IOException e) {
-            this.throwError("an IOException occurred while reading file \"images/box.png\"");
+            this.log(LogType.FATAL_ERROR, "an IOException occurred while reading file \"images/box.png\"");
         }
 
         //configure the console, adding a scroll bar and setting the colour
@@ -56,44 +56,48 @@ public class Frame {
         this.panel.setPreferredSize(consoleSize);
         this.panel.add(pane);
         this.frame.setContentPane(this.panel);
-        this.logInit("added console to frame");
+        this.log(LogType.INIT, "added console to frame");
 
         //open the frame
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(new Dimension(600, 275));
         this.frame.setVisible(true);
-        this.logInit("finished initializing frame");
+        this.log(LogType.INIT, "finished initialising frame");
     }
 
-    //TODO: 0.2.0: make this all one method with type controlled by an enum or something
-
-    //methods for logging
-    public void logInit(String message) {
-        this.console.append("\n[init] " + message);
-    }
-
-    public void logMain(String message) {
-        this.console.append("\n[main] " + message);
-    }
+    //TODO: 0.3.0: make this better
 
     public void logCommand(CustomUser user, String command, boolean containsUsed) {
         this.console.append("\n[cmd] " + user.getTag() + (containsUsed? " used " : " ")  + command);
     }
 
-    public void throwError(String error, boolean fatal) {
-        this.console.append((fatal?"\n[err/FATAL] " : "\n[err] ") + error + (fatal? "; closing ioxbox" : ""));
-        if (fatal) {
-            //wait for five seconds to allow for reading the error
-            try {
-                Thread.sleep(5000);
-                System.exit(1);
-            } catch (Exception e) {
-                this.console.append("\n" + e.toString());
-            }
-        }
+    public enum LogType {
+        MAIN,
+        INIT,
+        ERROR,
+        FATAL_ERROR
     }
 
-    public void throwError(String error) {
-        this.console.append("\n[err] " + error);
+    public void log(LogType type, String message) {
+        switch (type) {
+            case INIT:
+                this.console.append("\n[init] " + message);
+                break;
+            case MAIN:
+                this.console.append("\n[main] " + message);
+                break;
+            case ERROR:
+                this.console.append("\n[err] " + message);
+                break;
+            case FATAL_ERROR:
+                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
+                //wait for five seconds to allow for reading the error
+                try {
+                    Thread.sleep(5000);
+                    System.exit(1);
+                } catch (Exception e) {
+                    System.exit(1);
+                }
+        }
     }
 }

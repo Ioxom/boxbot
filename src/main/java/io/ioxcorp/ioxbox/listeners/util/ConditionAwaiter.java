@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbot.listeners.util;
+package io.ioxcorp.ioxbox.listeners.util;
 
 import java.util.concurrent.CountDownLatch;
 
