@@ -25,12 +25,12 @@ public class Listener extends ListenerAdapter {
         CustomUser author = new CustomUser(event.getAuthor());
 
         switch (message[0]) {
-            //TODO: 0.2.0: remove this
+            //TODO: 0.2.0: remove this no i wont
             case "yes":
                 event.getChannel().sendMessage("Box is here :package: ").queue();
                 break;
             case "help":
-                //TODO: 0.2.0: this is bad
+                //TODO: 0.2.0: this is bad no is good
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("The Box People :tm:")
                         .setColor(new Color(0xfc03df))
