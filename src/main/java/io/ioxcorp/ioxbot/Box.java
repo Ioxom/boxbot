@@ -1,6 +1,8 @@
 package io.ioxcorp.ioxbot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
@@ -66,6 +68,36 @@ public class Box {
         }
 
         return this.owner.toString() + "\nusers:\n" + users + "\nitems:\n" + items;
+    }
+
+    public MessageEmbed embed() {
+        StringBuilder users = new StringBuilder();
+        if (this.users.isEmpty()) {
+            users.append("none").append("\n");
+        } else {
+            for (CustomUser user : this.users) {
+                users.append(user.toString()).append("\n");
+            }
+        }
+
+        StringBuilder items = new StringBuilder();
+        if (this.items.isEmpty()) {
+            items.append("none").append("\n");
+        } else {
+            for (String item : this.items) {
+                items.append(item).append("\n");
+            }
+        }
+
+        EmbedBuilder e = new EmbedBuilder()
+                .setColor(0x00FF00)
+                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                .setTitle(this.owner.tag() + "'s box contents:")
+                .addField("items:", String.valueOf(items), false)
+                .addField("users:", String.valueOf(users), false)
+                .setFooter("box id: " + this.owner.id);
+
+        return e.build();
     }
 
     public void add(Object object) {

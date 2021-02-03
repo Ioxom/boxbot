@@ -34,4 +34,8 @@ public class CustomUser {
     public String toString() {
         return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
     }
+
+    public String tag() {
+        return this.username + "#" + this.tag;
+    }
 }
