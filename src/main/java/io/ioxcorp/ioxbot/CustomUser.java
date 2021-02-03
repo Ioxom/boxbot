@@ -3,6 +3,8 @@ package io.ioxcorp.ioxbot;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.Objects;
+
 //the JDA User class is too convoluted to save to JSON, so we only keep what we need
 public class CustomUser {
     @JsonProperty("id")
@@ -37,5 +39,22 @@ public class CustomUser {
 
     public String tag() {
         return this.username + "#" + this.tag;
+    }
+
+    public boolean hasBox() {
+        return Main.boxes.containsKey(this.id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomUser that = (CustomUser) o;
+        return id == that.id && tag == that.tag && Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, tag);
     }
 }

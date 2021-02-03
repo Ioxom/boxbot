@@ -123,6 +123,16 @@ public class Box {
             throw new IllegalArgumentException("passed object of incompatible type to Box#remove(Object object), must be String, User or CustomUser");
         }
     }
+    
+    public static void createBox(Object owner, Object item) {
+        if (owner instanceof User) {
+            owner = new CustomUser((User) owner);
+        } else if (!(owner instanceof CustomUser)) {
+            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#createBox(Object owner, Object item), must be User or CustomUser");
+        }
+        
+        Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
+    }
 
     public void addToBoxOfUser(Object owner, Object item) {
         if (owner instanceof User) {
@@ -130,8 +140,12 @@ public class Box {
         } else if (!(owner instanceof CustomUser)) {
             throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#addToBoxOfUser(Object owner, Object item), must be User or CustomUser");
         }
-
-        Main.boxes.get(((CustomUser) owner).id).add(item);
+        
+        if (((CustomUser) owner).hasBox()) {
+            Main.boxes.get(((CustomUser) owner).id).add(item);   
+        } else {
+            createBox(owner, item);
+        }
     }
 
     public void removeFromBoxOfUser(Object owner, Object item) {
@@ -141,6 +155,23 @@ public class Box {
             throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#removeFromBoxOfUser(Object owner, Object item), must be User or CustomUser");
         }
 
+        // note: NullPointerException is the wrong thing to throw here
+        if (!((CustomUser) owner).hasBox()) {
+            throw new NullPointerException("\"owner\" object passed to Box#removeFromBoxOfUser does not have a box to remove from");
+        } else if (!Main.boxes.get(((CustomUser) owner).id).contains(item)) {
+            throw new NullPointerException("Box of owner does not contain requested item");
+        }
+
         Main.boxes.get(((CustomUser) owner).id).remove(item);
+    }
+
+    public boolean contains(Object object) {
+        if (object instanceof CustomUser) {
+            return this.users.contains(object);
+        } else if (object instanceof String) {
+            return this.items.contains(object);
+        } else {
+            return false;
+        }
     }
 }
