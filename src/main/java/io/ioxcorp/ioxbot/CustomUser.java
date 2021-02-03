@@ -45,6 +45,10 @@ public class CustomUser {
         return Main.boxes.containsKey(this.id);
     }
 
+    public Box getBox() {
+        return Main.boxes.get(this.id);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

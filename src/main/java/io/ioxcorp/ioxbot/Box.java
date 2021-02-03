@@ -135,7 +135,7 @@ public class Box {
         Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
     }
 
-    public void addToBoxOfUser(Object owner, Object item) {
+    public static void addToBoxOfUser(Object owner, Object item) {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
@@ -149,7 +149,7 @@ public class Box {
         }
     }
 
-    public void removeFromBoxOfUser(Object owner, Object item) {
+    public static void removeFromBoxOfUser(Object owner, Object item) {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {

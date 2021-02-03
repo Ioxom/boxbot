@@ -39,13 +39,27 @@ public class Listener extends ListenerAdapter {
             //TODO: 0.2.0: allow for parsing of user objects
             case "add":
                 if (boxes.containsKey(author.id)) {
-                    boxes.get(author.id).addToBoxOfUser(author, message[1]);
+                    Box.addToBoxOfUser(author, message[1]);
                 } else {
                     Box.createBox(author.id, message[1]);
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 JacksonYeehawHelper.save(boxes);
                 Main.frame.logCommand(author, "box add", true);
+                break;
+            case "remove":
+                if (boxes.containsKey(author.id)) {
+                    if (author.getBox().contains(message[1])) Box.removeFromBoxOfUser(author, message[1]);
+                } else {
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setColor(0x00FF00)
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setDescription("error removing from box: box does not exist").build()
+                    ).queue();
+                }
+                event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
+                JacksonYeehawHelper.save(boxes);
+                Main.frame.logCommand(author, "box remove", true);
                 break;
         }
     }
