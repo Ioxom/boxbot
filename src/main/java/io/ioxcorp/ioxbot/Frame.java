@@ -73,7 +73,7 @@ public class Frame {
     }
 
     public void logCommand(CustomUser user, String command, boolean containsUsed) {
-        this.console.append("\n[cmd] " + user.tag() + (containsUsed? " used " : " ")  + command);
+        this.console.append("\n[cmd] " + user.getTag() + (containsUsed? " used " : " ")  + command);
     }
 
     public void throwError(String error, boolean fatal) {

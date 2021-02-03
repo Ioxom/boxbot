@@ -93,7 +93,7 @@ public class Box {
         EmbedBuilder e = new EmbedBuilder()
                 .setColor(0x00FF00)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setTitle(this.owner.tag() + "'s box contents:")
+                .setTitle(this.owner.getTag() + "'s box contents:")
                 .addField("items:", String.valueOf(items), false)
                 .addField("users:", String.valueOf(users), false)
                 .setFooter("box id: " + this.owner.id);

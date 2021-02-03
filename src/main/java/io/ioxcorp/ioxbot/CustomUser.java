@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.User;
 
@@ -37,7 +38,8 @@ public class CustomUser {
         return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
     }
 
-    public String tag() {
+    @JsonIgnore
+    public String getTag() {
         return this.username + "#" + this.tag;
     }
 
@@ -45,6 +47,7 @@ public class CustomUser {
         return Main.boxes.containsKey(this.id);
     }
 
+    @JsonIgnore
     public Box getBox() {
         return Main.boxes.get(this.id);
     }

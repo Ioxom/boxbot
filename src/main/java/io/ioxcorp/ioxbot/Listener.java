@@ -41,7 +41,7 @@ public class Listener extends ListenerAdapter {
                 if (boxes.containsKey(author.id)) {
                     Box.addToBoxOfUser(author, message[1]);
                 } else {
-                    Box.createBox(author.id, message[1]);
+                    Box.createBox(author, message[1]);
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 JacksonYeehawHelper.save(boxes);
