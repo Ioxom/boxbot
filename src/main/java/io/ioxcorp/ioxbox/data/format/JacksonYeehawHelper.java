@@ -23,17 +23,6 @@ public class JacksonYeehawHelper {
         }
     }
 
-    //TODO: 0.2.0: this method is only used for testing. remove it
-    public static void save(HashMap<Long, Box> boxes) {
-        FrickYouJackson yeehaw = new FrickYouJackson(boxes);
-        try {
-            mapper.writeValue(new File("box_data.json"), yeehaw);
-        } catch (IOException e) {
-            //TODO: 0.2.0: replace printStackTrace() with an error thrown to frame console
-            e.printStackTrace();
-        }
-    }
-
     public static HashMap<Long, Box> read() {
         FrickYouJackson data = null;
         try {

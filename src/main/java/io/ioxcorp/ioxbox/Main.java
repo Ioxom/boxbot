@@ -1,10 +1,8 @@
 package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
-import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.listeners.Listener;
-import static io.ioxcorp.ioxbox.Frame.LogType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -16,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
+
+import static io.ioxcorp.ioxbox.Frame.LogType;
 
 public class Main {
 
@@ -43,24 +43,19 @@ public class Main {
     }
 
     public static Frame frame;
-    public static HashMap<Long, Box> boxes = new HashMap<>();
-
-    public static void main(String[] args) {
-
+    static {
         //create frame
         frame = new Frame();
         frame.init();
+    }
 
+    public static HashMap<Long, Box> boxes;
+    static {
         //read saved box data
-
-        //TODO: 0.2.0: this is test code, remove later
-        HashMap<Long, Box> yes = new HashMap<>();
-        yes.put(new CustomUser(6L, "h", 5).id, new Box(new CustomUser(6L, "h", 5), "h"));
-
-        JacksonYeehawHelper.save(yes);
-
         boxes = JacksonYeehawHelper.read();
+    }
 
+    public static void main(String[] args) {
         //throw error if version is not found
         //TODO: 0.2.0: explain why the version could not be obtained in error
         if (VERSION == null) {
