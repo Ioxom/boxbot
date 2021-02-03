@@ -64,6 +64,27 @@ public class Listener extends ListenerAdapter {
                 break;
 
                 //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
+            case "content":
+                try {
+                    event.getChannel().sendMessage("got the command").queue();
+                    if (author.hasBox()) {
+                        event.getChannel().sendMessage("You have a box!").queue();
+                        author.getBox();
+                        event.getChannel().sendMessage((CharSequence) author.getBox());
+
+
+                    } else {
+                        event.getChannel().sendMessage("You dont have a box you idiot");
+                    }
+                } catch (Exception e) {
+                    event.getChannel().sendMessage("Yes");
+                    e.printStackTrace();
+                }
+
+
+                Main.frame.logCommand(author, "box context", true);
+
+                break;
         }
     }
 }
