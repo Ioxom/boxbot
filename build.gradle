@@ -8,7 +8,7 @@ mainClassName = 'io.ioxcorp.ioxbox.Main'
 group('io.ioxcorp')
 version('0.1.2')
 def jdaVersion = '4.2.0_227'
-def jacksonVersion = '2.11.0'
+def jacksonVersion = '2.12.1'
 
 repositories {
     jcenter()
