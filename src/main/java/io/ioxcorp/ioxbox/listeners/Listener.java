@@ -85,8 +85,7 @@ public class Listener extends ListenerAdapter {
                     event.getChannel().sendMessage("got the command").queue();
                     if (author.hasBox()) {
                         event.getChannel().sendMessage("You have a box!").queue();
-                        author.getBox();
-                        event.getChannel().sendMessage((CharSequence) author.getBox());
+                        event.getChannel().sendMessage(author.getBox().items).queue();
 
 
                     } else {
