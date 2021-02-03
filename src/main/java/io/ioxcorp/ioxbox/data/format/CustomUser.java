@@ -30,12 +30,6 @@ public class CustomUser {
         this.tag = 0;
     }
 
-    public CustomUser(long id, String username, int tag) {
-        this.id = id;
-        this.username = username;
-        this.tag = tag;
-    }
-
     public String toString() {
         return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
     }

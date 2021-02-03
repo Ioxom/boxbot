@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
+import java.io.IOException;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
@@ -42,16 +43,20 @@ public class Listener extends ListenerAdapter {
             //TODO: 0.2.0: instead of listing contents list only the affected variables and give success or failure dialogue
             case "add":
                 if (boxes.containsKey(author.id)) {
-                    Box.addToBoxOfUser(author, message[1]);
+                    author.getBox().add(message[1]);
                 } else {
-                    Box.createBox(author, message[1]);
+                    try {
+                        Box.createBox(author, message[1]);
+
+                    //this exception is never thrown because this code can only be executed if the user does not have a box
+                    } catch (IOException ignored) {}
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box add", true);
                 break;
             case "remove":
                 if (boxes.containsKey(author.id)) {
-                    if (author.getBox().contains(message[1])) Box.removeFromBoxOfUser(author, message[1]);
+                    if (author.getBox().contains(message[1])) author.getBox().remove(message[1]);
                 } else {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setColor(0x00FF00)
@@ -62,6 +67,17 @@ public class Listener extends ListenerAdapter {
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box remove", true);
                 break;
+            case "open":
+                try {
+                    Box.createBox(author, message[1]);
+                } catch (IOException e) {
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setColor(0x00FF00)
+                            .setDescription("error: user already has box")
+                            .build()
+                    ).queue();
+                }
 
                 //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
         }

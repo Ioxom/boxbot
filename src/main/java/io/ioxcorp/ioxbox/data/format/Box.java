@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -46,6 +47,21 @@ public class Box {
         } else {
             throw new IllegalArgumentException("passed added object of incompatible type to Box constructor (must be String, User or CustomUser)");
         }
+    }
+
+    public Box(Object owner) {
+        //convert the owner object to a CustomUser and save
+        if (owner instanceof CustomUser) {
+            this.owner = (CustomUser) owner;
+        } else if (owner instanceof User) {
+            this.owner = new CustomUser((User) owner);
+            //if we don't get a User or CustomUser object throw exception
+        } else {
+            throw new IllegalArgumentException("passed user object of incompatible type to Box constructor (must be User or CustomUser)");
+        }
+
+        this.users = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     @JsonCreator
@@ -132,49 +148,36 @@ public class Box {
         JacksonYeehawHelper.save();
     }
     
-    public static void createBox(Object owner, Object item) {
+    public static void createBox(Object owner, Object item) throws IOException {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
             throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#createBox(Object owner, Object item), must be User or CustomUser");
         }
-        
+
+        if (((CustomUser) owner).hasBox()) {
+            throw new IOException();
+        }
+
         Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
 
         JacksonYeehawHelper.save();
     }
 
-    //TODO: 0.2.0: remove these methods and all uses of them
-
-    public static void addToBoxOfUser(Object owner, Object item) {
+    public static void createBox(Object owner) throws IOException {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
-            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#addToBoxOfUser(Object owner, Object item), must be User or CustomUser");
+            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#createBox(Object owner), must be User or CustomUser");
         }
-        
+
         if (((CustomUser) owner).hasBox()) {
-            Main.boxes.get(((CustomUser) owner).id).add(item);   
-        } else {
-            createBox(owner, item);
-        }
-    }
-
-    public static void removeFromBoxOfUser(Object owner, Object item) {
-        if (owner instanceof User) {
-            owner = new CustomUser((User) owner);
-        } else if (!(owner instanceof CustomUser)) {
-            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#removeFromBoxOfUser(Object owner, Object item), must be User or CustomUser");
+            throw new IOException();
         }
 
-        //TODO: 0.2.0: NullPointerException is the wrong thing to throw here
-        if (!((CustomUser) owner).hasBox()) {
-            throw new NullPointerException("\"owner\" object passed to Box#removeFromBoxOfUser does not have a box to remove from");
-        } else if (!Main.boxes.get(((CustomUser) owner).id).contains(item)) {
-            throw new NullPointerException("Box of owner does not contain requested item");
-        }
+        Main.boxes.put(((CustomUser) owner).id, new Box(owner));
 
-        Main.boxes.get(((CustomUser) owner).id).remove(item);
+        JacksonYeehawHelper.save();
     }
 
     public boolean contains(Object object) {

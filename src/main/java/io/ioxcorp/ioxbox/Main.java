@@ -36,8 +36,7 @@ public class Main {
 
             VERSION = properties.getProperty("version");
             properties.clear();
-        } catch (Exception e) {
-            //TODO: 0.2.0: replace printStackTrace() with an error thrown to frame console
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -56,11 +55,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
         //throw error if version is not found
-        //TODO: 0.2.0: explain why the version could not be obtained in error
         if (VERSION == null) {
             VERSION = "0.0.0";
-            frame.log(Frame.LogType.ERROR, "could not get version; defaulting to 0.0.0");
+            frame.log(Frame.LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
         }
 
         //log in
@@ -70,11 +69,8 @@ public class Main {
             try {
                 token = Files.readString(Paths.get("token.txt"));
                 if (token == null) frame.log(LogType.FATAL_ERROR, "could not get token");
-            //TODO: 0.2.0: find a way to prefer throwing FileNotFoundException over IOException as it's more informative
-            } catch (FileNotFoundException e) {
-                frame.log(LogType.FATAL_ERROR, "token.txt not found");
             } catch (IOException e) {
-                frame.log(LogType.FATAL_ERROR, "an IOException occurred when reading file: token.txt");
+                frame.log(LogType.FATAL_ERROR, "token.txt not found");
             }
             api = JDABuilder.createDefault(token).build();
             Main.frame.log(LogType.INIT, "successfully logged in JDA");
