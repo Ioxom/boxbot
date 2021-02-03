@@ -48,6 +48,7 @@ public class Box {
     //for jackson to use when parsing
     public Box() {}
 
+    //TODO: 0.2.0: this is bad
     public String toString() {
         StringBuilder users = new StringBuilder();
         if (this.users.isEmpty()) {
@@ -155,7 +156,7 @@ public class Box {
             throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#removeFromBoxOfUser(Object owner, Object item), must be User or CustomUser");
         }
 
-        // note: NullPointerException is the wrong thing to throw here
+        //TODO: 0.2.0: NullPointerException is the wrong thing to throw here
         if (!((CustomUser) owner).hasBox()) {
             throw new NullPointerException("\"owner\" object passed to Box#removeFromBoxOfUser does not have a box to remove from");
         } else if (!Main.boxes.get(((CustomUser) owner).id).contains(item)) {

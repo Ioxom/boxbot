@@ -32,6 +32,7 @@ public class Main {
             VERSION = properties.getProperty("version");
             properties.clear();
         } catch (Exception e) {
+            //TODO: 0.2.0: replace printStackTrace() with an error thrown to frame console
             e.printStackTrace();
         }
     }
@@ -46,6 +47,8 @@ public class Main {
         frame.init();
 
         //read saved box data
+
+        //TODO: 0.2.0: this is test code, remove later
         HashMap<Long, Box> yes = new HashMap<>();
         yes.put(new CustomUser(6L, "h", 5).id, new Box(new CustomUser(6L, "h", 5), "h"));
 
@@ -54,6 +57,7 @@ public class Main {
         boxes = JacksonYeehawHelper.read();
 
         //throw error if version is not found
+        //TODO: 0.2.0: explain why the version could not be obtained in error
         if (VERSION == null) {
             VERSION = "0.0.0";
             frame.throwError("could not get version; defaulting to 0.0.0");
@@ -82,7 +86,7 @@ public class Main {
             api.addEventListener(new Listener());
             frame.logInit("initialized jda");
         } else {
-            frame.throwError("failed to create JDA object", true);
+            frame.throwError("failed to create JDA object for unknown reasons", true);
         }
     }
 }

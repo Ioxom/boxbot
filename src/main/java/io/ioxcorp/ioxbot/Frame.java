@@ -1,7 +1,5 @@
 package io.ioxcorp.ioxbot;
 
-import net.dv8tion.jda.api.entities.User;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,8 +72,8 @@ public class Frame {
         this.console.append("\n[main] " + message);
     }
 
-    public void logCommand(User user, String command, boolean containsUsed) {
-        this.console.append("\n[cmd] " + user.getAsTag() + (containsUsed? " used " : " ")  + command);
+    public void logCommand(CustomUser user, String command, boolean containsUsed) {
+        this.console.append("\n[cmd] " + user.tag() + (containsUsed? " used " : " ")  + command);
     }
 
     public void throwError(String error, boolean fatal) {
