@@ -18,10 +18,10 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Frame {
     private final JTextArea console;
-    private final JFrame frame;
+    private final JFrame jFrame;
     private final JPanel panel;
     public Frame() {
-        this.frame = new JFrame("ioxbox v " + Main.VERSION);
+        this.jFrame = new JFrame("ioxbox v " + Main.VERSION);
         this.console = new JTextArea("[init] loading ioxbox");
         this.panel = new JPanel(new BorderLayout());
     }
@@ -32,7 +32,7 @@ public class Frame {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
             if (inputStream != null) {
                 Image image = ImageIO.read(inputStream);
-                this.frame.setIconImage(image);
+                this.jFrame.setIconImage(image);
                 this.log(LogType.INIT, "added icon to frame");
             } else {
                 this.log(LogType.ERROR, "failed to add icon to frame; resources may be broken");
@@ -55,13 +55,13 @@ public class Frame {
         //configure the main background panel
         this.panel.setPreferredSize(consoleSize);
         this.panel.add(pane);
-        this.frame.setContentPane(this.panel);
+        this.jFrame.setContentPane(this.panel);
         this.log(LogType.INIT, "added console to frame");
 
         //open the frame
-        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(new Dimension(600, 275));
-        this.frame.setVisible(true);
+        this.jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.jFrame.setSize(new Dimension(600, 275));
+        this.jFrame.setVisible(true);
         this.log(LogType.INIT, "finished initialising frame");
     }
 

@@ -69,58 +69,58 @@ public class Box {
     public Box() {}
 
     public String toString() {
-        StringBuilder users = new StringBuilder();
+        StringBuilder usersAsString = new StringBuilder();
         if (this.users.isEmpty()) {
-            users.append("none").append("\n\n");
+            usersAsString.append("none").append("\n\n");
         } else {
             for (int i = 0; i < this.users.size(); i ++) {
                 if (i == this.users.size() - 1) {
-                    users.append(this.users.get(i).toString()).append("\n\n");
+                    usersAsString.append(this.users.get(i).toString()).append("\n\n");
                 } else {
-                    users.append(this.users.get(i).toString()).append(",\n");
+                    usersAsString.append(this.users.get(i).toString()).append(",\n");
                 }
             }
         }
 
-        StringBuilder items = new StringBuilder();
+        StringBuilder itemsAsString = new StringBuilder();
         if (this.items.isEmpty()) {
-            items.append("none").append("\n\n");
+            itemsAsString.append("none").append("\n\n");
         } else {
             for (int i = 0; i < this.items.size(); i ++) {
                 if (i == this.items.size() - 1) {
-                    users.append(this.items.get(i)).append("\n\n");
+                    itemsAsString.append(this.items.get(i)).append("\n\n");
                 } else {
-                    users.append(this.items.get(i)).append(",\n");
+                    itemsAsString.append(this.items.get(i)).append(",\n");
                 }
             }
         }
 
-        return this.owner.getTag() + "'s box:\nusers:\n" + users + "\nitems:\n" + items;
+        return this.owner.getTag() + "'s box:\nusers:\n" + usersAsString + "\nitems:\n" + itemsAsString;
     }
 
     public MessageEmbed embed() {
-        StringBuilder users = new StringBuilder();
+        StringBuilder usersAsString = new StringBuilder();
         if (this.users.isEmpty()) {
-            users.append("none").append("\n");
+            usersAsString.append("none").append("\n");
         } else {
             for (int i = 0; i < this.users.size(); i ++) {
                 if (i == this.users.size() - 1) {
-                    users.append(this.users.get(i).toString()).append("\n\n");
+                    usersAsString.append(this.users.get(i).toString()).append("\n\n");
                 } else {
-                    users.append(this.users.get(i).toString()).append(",\n");
+                    usersAsString.append(this.users.get(i).toString()).append(",\n");
                 }
             }
         }
 
-        StringBuilder items = new StringBuilder();
+        StringBuilder itemsAsString = new StringBuilder();
         if (this.items.isEmpty()) {
-            items.append("none").append("\n");
+            itemsAsString.append("none").append("\n");
         } else {
             for (int i = 0; i < this.items.size(); i ++) {
                 if (i == this.items.size() - 1) {
-                    items.append(this.items.get(i)).append("\n\n");
+                    itemsAsString.append(this.items.get(i)).append("\n\n");
                 } else {
-                    items.append(this.items.get(i)).append(",\n");
+                    itemsAsString.append(this.items.get(i)).append(",\n");
                 }
             }
         }
@@ -129,8 +129,8 @@ public class Box {
                 .setColor(0x00FF00)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                 .setTitle(this.owner.getTag() + "'s box contents:")
-                .addField("items:", String.valueOf(items), false)
-                .addField("users:", String.valueOf(users), false)
+                .addField("items:", String.valueOf(itemsAsString), false)
+                .addField("users:", String.valueOf(usersAsString), false)
                 .setFooter("box id: " + this.owner.id);
 
         return e.build();
@@ -212,5 +212,10 @@ public class Box {
         if (o == null || getClass() != o.getClass()) return false;
         Box box = (Box) o;
         return Objects.equals(owner, box.owner) && Objects.equals(items, box.items) && Objects.equals(users, box.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(owner, items, users);
     }
 }
