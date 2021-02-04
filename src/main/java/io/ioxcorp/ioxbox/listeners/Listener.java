@@ -25,16 +25,13 @@ public class Listener extends ListenerAdapter {
         CustomUser author = new CustomUser(event.getAuthor());
 
         switch (message[0]) {
-            //TODO: 0.2.0: remove this
-            case "yes":
-                event.getChannel().sendMessage("Box is here :package: ").queue();
-                break;
+            //TODO: 0.4.0: make this not a mess
             case "help":
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(new Color(0xfc03df))
                         .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
-                        .addField("commands", "prefix is -box \n commands are the following; yes, add", false)
+                        .addField("commands", "prefix is " + prefix + "\n commands are the following; yes, add", false)
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
@@ -111,6 +108,7 @@ public class Listener extends ListenerAdapter {
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box remove", true);
                 break;
+
             case "open":
                 if (message.length == 1) {
                     try {
@@ -164,29 +162,17 @@ public class Listener extends ListenerAdapter {
 
             //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
             //TODO: 0.2.0: alnex this is not what I envisioned
-            case "content":
-                try {
-                    if (author.hasBox()) {
-                        try {
-                            event.getChannel().sendMessage("YoUwU have a box!\n").queue();
-                            for (String item : author.getBox().items) {
-                                event.getChannel().sendMessage(item).queue();
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            event.getChannel().sendMessage("OwO, whats this? You don't appear to have something in that slot.").queue();
-                        }
-                    } else {
-                        event.getChannel().sendMessage("You don't have a box you UwUdiot.").queue();
-                    }
-                } catch (Exception e) {
-                    event.getChannel().sendMessage("There was an error TwT").queue();
-                    e.printStackTrace();
+            case "list":
+                if (author.hasBox()) {
+                    event.getChannel().sendMessage(author.getBox().embed()).queue();
+                } else {
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setColor(0x00FF00)
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setDescription("you don't seem to have a box. try opening a new one with " + prefix + "open!")
+                            .build()
+                    ).queue();
                 }
-
-
-                Main.frame.logCommand(author, "box context", true);
-
-                break;
         }
     }
 }

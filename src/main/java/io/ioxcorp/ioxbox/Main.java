@@ -1,7 +1,7 @@
 package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
-import io.ioxcorp.ioxbox.data.format.JacksonYeehawHelper;
+import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.listeners.Listener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

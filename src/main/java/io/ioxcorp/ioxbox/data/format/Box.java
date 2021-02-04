@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.data.format;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
+import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -73,8 +74,12 @@ public class Box {
         if (this.users.isEmpty()) {
             users.append("none").append("\n\n");
         } else {
-            for (CustomUser user : this.users) {
-                users.append(user.toString()).append("\n\n");
+            for (int i = 0; i < this.users.size(); i ++) {
+                if (i == this.users.size() - 1) {
+                    users.append(this.users.get(i).toString()).append("\n\n");
+                } else {
+                    users.append(this.users.get(i).toString()).append(",\n");
+                }
             }
         }
 
@@ -82,8 +87,12 @@ public class Box {
         if (this.items.isEmpty()) {
             items.append("none").append("\n\n");
         } else {
-            for (String item : this.items) {
-                items.append(item).append("\n\n");
+            for (int i = 0; i < this.items.size(); i ++) {
+                if (i == this.items.size() - 1) {
+                    users.append(this.items.get(i)).append("\n\n");
+                } else {
+                    users.append(this.items.get(i)).append(",\n");
+                }
             }
         }
 
@@ -95,8 +104,12 @@ public class Box {
         if (this.users.isEmpty()) {
             users.append("none").append("\n");
         } else {
-            for (CustomUser user : this.users) {
-                users.append(user.toString()).append("\n");
+            for (int i = 0; i < this.users.size(); i ++) {
+                if (i == this.users.size() - 1) {
+                    users.append(this.users.get(i).toString()).append("\n\n");
+                } else {
+                    users.append(this.users.get(i).toString()).append(",\n");
+                }
             }
         }
 
@@ -104,8 +117,12 @@ public class Box {
         if (this.items.isEmpty()) {
             items.append("none").append("\n");
         } else {
-            for (String item : this.items) {
-                items.append(item).append("\n");
+            for (int i = 0; i < this.items.size(); i ++) {
+                if (i == this.items.size() - 1) {
+                    items.append(this.items.get(i)).append("\n\n");
+                } else {
+                    items.append(this.items.get(i)).append(",\n");
+                }
             }
         }
 

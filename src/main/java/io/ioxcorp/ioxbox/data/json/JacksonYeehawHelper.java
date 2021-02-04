@@ -1,13 +1,15 @@
-package io.ioxcorp.ioxbox.data.format;
+package io.ioxcorp.ioxbox.data.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.ioxcorp.ioxbox.Main;
-import static io.ioxcorp.ioxbox.Frame.LogType;
+import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+
+import static io.ioxcorp.ioxbox.Frame.LogType;
 
 public class JacksonYeehawHelper {
 

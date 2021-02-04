@@ -1,7 +1,8 @@
-package io.ioxcorp.ioxbox.data.format;
+package io.ioxcorp.ioxbox.data.json;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
