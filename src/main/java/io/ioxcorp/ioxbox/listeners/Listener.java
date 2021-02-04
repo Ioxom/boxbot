@@ -160,7 +160,6 @@ public class Listener extends ListenerAdapter {
                 ).queue();
                 break;
 
-            //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
             case "list":
                 //if we have a ping
                 if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
@@ -187,6 +186,7 @@ public class Listener extends ListenerAdapter {
                         ).queue();
                     }
                 }
+                break;
         }
     }
 }
