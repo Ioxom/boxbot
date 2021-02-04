@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Arrays;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
@@ -82,17 +83,31 @@ public class Listener extends ListenerAdapter {
                 //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
             case "content":
                 try {
-                    event.getChannel().sendMessage("got the command").queue();
                     if (author.hasBox()) {
-                        event.getChannel().sendMessage("You have a box!").queue();
-                        event.getChannel().sendMessage(author.getBox().items).queue();
+                        try {
+                            int itemsNumero = 0;
+                            event.getChannel().sendMessage("YoUwU have a box!\n").queue();
+                            for (itemsNumero = 0; itemsNumero < author.getBox().items.size(); itemsNumero++) {
+
+                                event.getChannel().sendMessage(author.getBox().items.get(itemsNumero)).queue();
+                            }
+
+
+
+                        } catch (IndexOutOfBoundsException e) {
+                            event.getChannel().sendMessage("OwO, whats this? You dont appear to have something in that slot.").queue();
+                        }
+
+
+
+
 
 
                     } else {
-                        event.getChannel().sendMessage("You dont have a box you idiot");
+                        event.getChannel().sendMessage("You dont have a box you UwUdiot.").queue();
                     }
                 } catch (Exception e) {
-                    event.getChannel().sendMessage("Yes");
+                    event.getChannel().sendMessage("There was an error TwT").queue();
                     e.printStackTrace();
                 }
 
