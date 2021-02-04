@@ -20,8 +20,7 @@ public class JacksonYeehawHelper {
         try {
             mapper.writeValue(new File("box_data.json"), yeehaw);
         } catch (IOException e) {
-            //TODO: 0.2.0: replace printStackTrace() with an error thrown to frame console
-            e.printStackTrace();
+            Main.frame.log(LogType.ERROR, "failed to write to box_data.json: " + e);
         }
     }
 
@@ -30,12 +29,10 @@ public class JacksonYeehawHelper {
         try {
             data = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
         } catch (IOException e) {
-            //TODO: 0.2.0: replace printStackTrace() with an error thrown to frame console
-            e.printStackTrace();
+            Main.frame.log(LogType.FATAL_ERROR, "failed to read box_data.json: "  + e);
         }
 
         if (data == null) {
-            //TODO: 0.2.0: better error here
             Main.frame.log(LogType.FATAL_ERROR, "failed to read json data for unknown reasons");
             return null;
         } else {
