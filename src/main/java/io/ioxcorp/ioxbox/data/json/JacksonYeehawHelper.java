@@ -36,7 +36,7 @@ public class JacksonYeehawHelper {
 
         if (data == null) {
             //TODO: 0.2.0: better error here
-            Main.frame.log(LogType.FATAL_ERROR, "failed to read json");
+            Main.frame.log(LogType.FATAL_ERROR, "failed to read json data for unknown reasons");
             return null;
         } else {
             return data.map;

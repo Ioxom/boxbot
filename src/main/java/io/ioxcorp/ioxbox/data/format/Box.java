@@ -68,7 +68,6 @@ public class Box {
     @JsonCreator
     public Box() {}
 
-    //TODO: 0.2.0: this is bad
     public String toString() {
         StringBuilder users = new StringBuilder();
         if (this.users.isEmpty()) {
@@ -96,7 +95,7 @@ public class Box {
             }
         }
 
-        return this.owner.toString() + "\nusers:\n" + users + "\nitems:\n" + items;
+        return this.owner.getTag() + "'s box:\nusers:\n" + users + "\nitems:\n" + items;
     }
 
     public MessageEmbed embed() {
