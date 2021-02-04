@@ -85,15 +85,10 @@ public class Listener extends ListenerAdapter {
                 try {
                     if (author.hasBox()) {
                         try {
-                            int itemsNumero = 0;
                             event.getChannel().sendMessage("YoUwU have a box!\n").queue();
-                            for (itemsNumero = 0; itemsNumero < author.getBox().items.size(); itemsNumero++) {
-
-                                event.getChannel().sendMessage(author.getBox().items.get(itemsNumero)).queue();
+                            for (String item : author.getBox().items) {
+                                event.getChannel().sendMessage(item).queue();
                             }
-
-
-
                         } catch (IndexOutOfBoundsException e) {
                             event.getChannel().sendMessage("OwO, whats this? You dont appear to have something in that slot.").queue();
                         }
