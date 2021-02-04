@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Arrays;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
@@ -69,9 +68,33 @@ public class Listener extends ListenerAdapter {
                 Main.frame.logCommand(author, "box remove", true);
                 break;
             case "open":
-                if (message[1] == null) {
+                if (message.length == 1) {
                     try {
                         Box.createBox(author);
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setDescription("empty box successfully created!")
+                                .build()
+                        ).queue();
+                    } catch (IOException e) {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setDescription("you seem to already have a box. here have a rotater instead.")
+                                .setThumbnail("https://media.discordapp.net/attachments/722951540972978188/806690297894797322/rotater.gif")
+                                .build()
+                        ).queue();
+                    }
+                } else {
+                    try {
+                        Box.createBox(author, message[1]);
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setDescription("box successfully created with item " + message[1] + "!")
+                                .build()
+                        ).queue();
                     } catch (IOException e) {
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -82,18 +105,17 @@ public class Listener extends ListenerAdapter {
                         ).queue();
                     }
                 }
+                break;
 
-                try {
-                    Box.createBox(author, message[1]);
-                } catch (IOException e) {
-                    event.getChannel().sendMessage(new EmbedBuilder()
-                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                            .setColor(0x00FF00)
-                            .setDescription("you seem to already have a box. here have a rotater instead.")
-                            .setThumbnail("https://media.discordapp.net/attachments/722951540972978188/806690297894797322/rotater.gif")
-                            .build()
-                    ).queue();
-                }
+            //TODO: 0.3.0: require confirmation
+            case "delete":
+                boxes.remove(author.id);
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                        .setColor(0x00FF00)
+                        .setDescription("your box was successfully deleted!")
+                        .build()
+                ).queue();
                 break;
 
             //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
