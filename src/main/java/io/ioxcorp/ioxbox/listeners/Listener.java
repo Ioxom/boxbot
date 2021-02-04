@@ -69,18 +69,35 @@ public class Listener extends ListenerAdapter {
                 Main.frame.logCommand(author, "box remove", true);
                 break;
             case "open":
+                if (message[1] == null) {
+                    try {
+                        Box.createBox(author);
+                    } catch (IOException e) {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setDescription("you seem to already have a box. here have a rotater instead.")
+                                .setThumbnail("https://media.discordapp.net/attachments/722951540972978188/806690297894797322/rotater.gif")
+                                .build()
+                        ).queue();
+                    }
+                }
+
                 try {
                     Box.createBox(author, message[1]);
                 } catch (IOException e) {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                             .setColor(0x00FF00)
-                            .setDescription("error: user already has box")
+                            .setDescription("you seem to already have a box. here have a rotater instead.")
+                            .setThumbnail("https://media.discordapp.net/attachments/722951540972978188/806690297894797322/rotater.gif")
                             .build()
                     ).queue();
                 }
+                break;
 
-                //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
+            //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
+            //TODO: 0.2.0: alnex this is not what I envisioned
             case "content":
                 try {
                     if (author.hasBox()) {
