@@ -39,29 +39,73 @@ public class Listener extends ListenerAdapter {
                         .setFooter("powered by ioxcorp™");
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
                 break;
-            //TODO: 0.2.0: allow for parsing of user objects
             //TODO: 0.2.0: instead of listing contents list only the affected variables and give success or failure dialogue
             case "add":
-                if (boxes.containsKey(author.id)) {
-                    author.getBox().add(message[1]);
-                } else {
-                    try {
-                        Box.createBox(author, message[1]);
+                //if there are no mentioned users, use the first argument
+                if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
+                    if (boxes.containsKey(author.id)) {
+                        author.getBox().add(message[1]);
+                    } else {
+                        try {
+                            Box.createBox(author, message[1]);
 
-                    //this exception is never thrown because this code can only be executed if the user does not have a box
-                    } catch (IOException ignored) {}
+                            //this exception is never thrown because this code can only be executed if the user does not have a box
+                        } catch (IOException ignored) {}
+                    }
+                } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
+                    //TODO: 0.3.0: require confirmation from the user being boxed
+                    CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
+                    if (boxes.containsKey(author.id)) {
+                        author.getBox().add(user);
+                    } else {
+                        try {
+                            Box.createBox(author, user);
+
+                            //this exception is never thrown because this code can only be executed if the user does not have a box
+                        } catch (IOException ignored) {}
+                    }
+                } else {
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setColor(0x00FF00)
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setDescription("error adding to box: nothing found to add in message")
+                            .build()
+                    ).queue();
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box add", true);
                 break;
             case "remove":
-                if (boxes.containsKey(author.id)) {
-                    if (author.getBox().contains(message[1])) author.getBox().remove(message[1]);
+                //if there are no mentioned users, use the first argument
+                if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
+                    if (boxes.containsKey(author.id)) {
+                        if (author.getBox().contains(message[1])) author.getBox().remove(message[1]);
+                    } else {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setColor(0x00FF00)
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setDescription("error removing from box: box does not exist")
+                                .build()
+                        ).queue();
+                    }
+                } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
+                    CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
+                    if (boxes.containsKey(author.id)) {
+                        if (author.getBox().contains(user)) author.getBox().remove(user);
+                    } else {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setColor(0x00FF00)
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setDescription("error removing from box: box does not exist")
+                                .build()
+                        ).queue();
+                    }
                 } else {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setColor(0x00FF00)
                             .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                            .setDescription("error removing from box: box does not exist").build()
+                            .setDescription("error removing from box: nothing found to remove in message")
+                            .build()
                     ).queue();
                 }
                 event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
@@ -129,16 +173,10 @@ public class Listener extends ListenerAdapter {
                                 event.getChannel().sendMessage(item).queue();
                             }
                         } catch (IndexOutOfBoundsException e) {
-                            event.getChannel().sendMessage("OwO, whats this? You dont appear to have something in that slot.").queue();
+                            event.getChannel().sendMessage("OwO, whats this? You don't appear to have something in that slot.").queue();
                         }
-
-
-
-
-
-
                     } else {
-                        event.getChannel().sendMessage("You dont have a box you UwUdiot.").queue();
+                        event.getChannel().sendMessage("You don't have a box you UwUdiot.").queue();
                     }
                 } catch (Exception e) {
                     event.getChannel().sendMessage("There was an error TwT").queue();
