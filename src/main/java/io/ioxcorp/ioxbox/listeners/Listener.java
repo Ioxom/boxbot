@@ -161,17 +161,31 @@ public class Listener extends ListenerAdapter {
                 break;
 
             //TODO: 0.2.0: "list" [user id or ping] (uses author if not present) command to list box contents
-            //TODO: 0.2.0: alnex this is not what I envisioned
             case "list":
-                if (author.hasBox()) {
-                    event.getChannel().sendMessage(author.getBox().embed()).queue();
+                //if we have a ping
+                if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
+                    CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
+                    if (user.hasBox()) {
+                        event.getChannel().sendMessage(user.getBox().embed()).queue();
+                    } else {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setColor(0x00FF00)
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setDescription("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")
+                                .build()
+                        ).queue();
+                    }
                 } else {
-                    event.getChannel().sendMessage(new EmbedBuilder()
-                            .setColor(0x00FF00)
-                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                            .setDescription("you don't seem to have a box. try opening a new one with " + prefix + "open!")
-                            .build()
-                    ).queue();
+                    if (author.hasBox()) {
+                        event.getChannel().sendMessage(author.getBox().embed()).queue();
+                    } else {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setColor(0x00FF00)
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setDescription("you don't seem to have a box. try opening a new one with " + prefix + "open!")
+                                .build()
+                        ).queue();
+                    }
                 }
         }
     }
