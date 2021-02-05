@@ -69,49 +69,22 @@ public class Box {
     public Box() {}
 
     public String toString() {
-        StringBuilder usersAsString = new StringBuilder();
-        if (this.users.isEmpty()) {
-            usersAsString.append("none").append("\n\n");
-        } else {
-            for (int i = 0; i < this.users.size(); i ++) {
-                if (i == this.users.size() - 1) {
-                    usersAsString.append(this.users.get(i).toString()).append("\n\n");
-                } else {
-                    usersAsString.append(this.users.get(i).toString()).append(",\n");
-                }
-            }
-        }
-
-        StringBuilder itemsAsString = new StringBuilder();
-        if (this.items.isEmpty()) {
-            itemsAsString.append("none").append("\n\n");
-        } else {
-            for (int i = 0; i < this.items.size(); i ++) {
-                if (i == this.items.size() - 1) {
-                    itemsAsString.append(this.items.get(i)).append("\n\n");
-                } else {
-                    itemsAsString.append(this.items.get(i)).append(",\n");
-                }
-            }
-        }
-
-        return this.owner.getTag() + "'s box:\nusers:\n" + usersAsString + "\nitems:\n" + itemsAsString;
+        return this.owner.getTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
     }
 
     public MessageEmbed embed() {
-        StringBuilder usersAsString = new StringBuilder();
-        if (this.users.isEmpty()) {
-            usersAsString.append("none").append("\n");
-        } else {
-            for (int i = 0; i < this.users.size(); i ++) {
-                if (i == this.users.size() - 1) {
-                    usersAsString.append(this.users.get(i).toString()).append("\n\n");
-                } else {
-                    usersAsString.append(this.users.get(i).toString()).append(",\n");
-                }
-            }
-        }
+        EmbedBuilder e = new EmbedBuilder()
+                .setColor(0x00FF00)
+                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                .setTitle(this.owner.getTag() + "'s box contents:")
+                .addField("items:", this.itemsToString(), false)
+                .addField("users:", this.usersToString(), false)
+                .setFooter("box id: " + this.owner.id);
 
+        return e.build();
+    }
+
+    public String itemsToString() {
         StringBuilder itemsAsString = new StringBuilder();
         if (this.items.isEmpty()) {
             itemsAsString.append("none").append("\n");
@@ -125,15 +98,24 @@ public class Box {
             }
         }
 
-        EmbedBuilder e = new EmbedBuilder()
-                .setColor(0x00FF00)
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setTitle(this.owner.getTag() + "'s box contents:")
-                .addField("items:", String.valueOf(itemsAsString), false)
-                .addField("users:", String.valueOf(usersAsString), false)
-                .setFooter("box id: " + this.owner.id);
+        return itemsAsString.toString();
+    }
 
-        return e.build();
+    public String usersToString() {
+        StringBuilder usersAsString = new StringBuilder();
+        if (this.users.isEmpty()) {
+            usersAsString.append("none").append("\n");
+        } else {
+            for (int i = 0; i < this.users.size(); i ++) {
+                if (i == this.users.size() - 1) {
+                    usersAsString.append("user ").append(i).append(":\n").append(this.users.get(i).toString()).append("\n\n");
+                } else {
+                    usersAsString.append("user ").append(i).append(":\n").append(this.users.get(i).toString()).append(",\n");
+                }
+            }
+        }
+
+        return usersAsString.toString();
     }
 
     public void add(Object object) {

@@ -36,15 +36,27 @@ public class Listener extends ListenerAdapter {
                         .setFooter("powered by ioxcorp™");
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
                 break;
-            //TODO: 0.2.0: instead of listing contents list only the affected variables and give success or failure dialogue
             case "add":
                 //if there are no mentioned users, use the first argument
                 if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(message[1]);
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setTitle("successfully added item to box!")
+                                .setDescription("items:\n" + author.getBox().itemsToString())
+                                .build()
+                        ).queue();
                     } else {
                         try {
                             Box.createBox(author, message[1]);
+                            event.getChannel().sendMessage(new EmbedBuilder()
+                                    .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                    .setColor(0x00FF00)
+                                    .setDescription("box successfully created with item " + message[1] + "!")
+                                    .build()
+                            ).queue();
 
                             //this exception is never thrown because this code can only be executed if the user does not have a box
                         } catch (IOException ignored) {}
@@ -54,9 +66,22 @@ public class Listener extends ListenerAdapter {
                     CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(user);
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setTitle("successfully added user to box!")
+                                .setDescription("users:\n" + author.getBox().usersToString())
+                                .build()
+                        ).queue();
                     } else {
                         try {
                             Box.createBox(author, user);
+                            event.getChannel().sendMessage(new EmbedBuilder()
+                                    .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                    .setColor(0x00FF00)
+                                    .setDescription("box successfully created with user " + user.getTag() + "!")
+                                    .build()
+                            ).queue();
 
                             //this exception is never thrown because this code can only be executed if the user does not have a box
                         } catch (IOException ignored) {}
@@ -69,14 +94,29 @@ public class Listener extends ListenerAdapter {
                             .build()
                     ).queue();
                 }
-                event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box add", true);
                 break;
             case "remove":
                 //if there are no mentioned users, use the first argument
                 if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
                     if (boxes.containsKey(author.id)) {
-                        if (author.getBox().contains(message[1])) author.getBox().remove(message[1]);
+                        if (author.getBox().contains(message[1])) {
+                            author.getBox().remove(message[1]);
+                            event.getChannel().sendMessage(new EmbedBuilder()
+                                    .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                    .setColor(0x00FF00)
+                                    .setTitle("successfully removed item from box!")
+                                    .setDescription("items:\n" + author.getBox().itemsToString())
+                                    .build()
+                            ).queue();
+                        } else {
+                            event.getChannel().sendMessage(new EmbedBuilder()
+                                    .setColor(0x00FF00)
+                                    .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                    .setDescription("error removing from box: box does not contain item")
+                                    .build()
+                            ).queue();
+                        }
                     } else {
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setColor(0x00FF00)
@@ -89,6 +129,13 @@ public class Listener extends ListenerAdapter {
                     CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         if (author.getBox().contains(user)) author.getBox().remove(user);
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                                .setColor(0x00FF00)
+                                .setTitle("successfully removed user from box!")
+                                .setDescription("users:\n" + author.getBox().usersToString())
+                                .build()
+                        ).queue();
                     } else {
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setColor(0x00FF00)
@@ -105,7 +152,6 @@ public class Listener extends ListenerAdapter {
                             .build()
                     ).queue();
                 }
-                event.getChannel().sendMessage(boxes.get(author.id).embed()).queue();
                 Main.frame.logCommand(author, "box remove", true);
                 break;
 
