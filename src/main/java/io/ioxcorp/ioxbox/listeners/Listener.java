@@ -2,6 +2,7 @@ package io.ioxcorp.ioxbox.listeners;
 
 import static io.ioxcorp.ioxbox.Main.boxes;
 
+import io.ioxcorp.ioxbox.Frame;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
@@ -94,7 +95,7 @@ public class Listener extends ListenerAdapter {
                             .build()
                     ).queue();
                 }
-                Main.frame.logCommand(author, "box add", true);
+                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
                 break;
             case "remove":
                 //if there are no mentioned users, use the first argument
@@ -152,7 +153,7 @@ public class Listener extends ListenerAdapter {
                             .build()
                     ).queue();
                 }
-                Main.frame.logCommand(author, "box remove", true);
+                Main.frame.log(Frame.LogType.CMD, prefix + "remove", author);
                 break;
 
             case "open":
@@ -193,17 +194,28 @@ public class Listener extends ListenerAdapter {
                         ).queue();
                     }
                 }
+                Main.frame.log(Frame.LogType.CMD, prefix + "open", author);
                 break;
 
             //TODO: 0.3.0: require confirmation
             case "delete":
-                boxes.remove(author.id);
-                event.getChannel().sendMessage(new EmbedBuilder()
-                        .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0x00FF00)
-                        .setDescription("your box was successfully deleted!")
-                        .build()
-                ).queue();
+                if (boxes.containsKey(author.id)) {
+                    boxes.remove(author.id);
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setColor(0x00FF00)
+                            .setDescription("your box was successfully deleted!")
+                            .build()
+                    ).queue();
+                } else {
+                    event.getChannel().sendMessage(new EmbedBuilder()
+                            .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                            .setColor(0x00FF00)
+                            .setDescription("no box found to remove")
+                            .build()
+                    ).queue();
+                }
+                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
                 break;
 
             case "list":
@@ -232,6 +244,7 @@ public class Listener extends ListenerAdapter {
                         ).queue();
                     }
                 }
+                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
                 break;
         }
     }

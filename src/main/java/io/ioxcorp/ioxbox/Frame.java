@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -65,17 +66,12 @@ public class Frame {
         this.log(LogType.INIT, "finished initialising frame");
     }
 
-    //TODO: 0.3.0: make this better
-
-    public void logCommand(CustomUser user, String command, boolean containsUsed) {
-        this.console.append("\n[cmd] " + user.getTag() + (containsUsed? " used " : " ")  + command);
-    }
-
     public enum LogType {
         MAIN,
         INIT,
         ERROR,
-        FATAL_ERROR
+        FATAL_ERROR,
+        CMD
     }
 
     public void log(LogType type, String message) {
@@ -97,6 +93,41 @@ public class Frame {
                     System.exit(1);
                 } catch (Exception e) {
                     System.exit(1);
+                }
+                break;
+        }
+    }
+
+    public void log(LogType type, String message, Object author) {
+        switch (type) {
+            case INIT:
+                this.console.append("\n[init] " + message);
+                break;
+            case MAIN:
+                this.console.append("\n[main] " + message);
+                break;
+            case ERROR:
+                this.console.append("\n[err] " + message);
+                break;
+            case FATAL_ERROR:
+                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
+                //wait for five seconds to allow for reading the error
+                try {
+                    Thread.sleep(5000);
+                    System.exit(1);
+                } catch (Exception e) {
+                    System.exit(1);
+                }
+                break;
+            case CMD:
+                if (author instanceof User) {
+                    author = new CustomUser((User) author);
+                }
+
+                if (author instanceof CustomUser) {
+                    this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                } else {
+                    throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
                 }
         }
     }
