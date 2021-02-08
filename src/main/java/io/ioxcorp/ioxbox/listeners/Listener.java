@@ -22,7 +22,7 @@ public class Listener extends ListenerAdapter {
         final String prefix = "-box ";
         final String messageContentRaw = event.getMessage().getContentRaw().toLowerCase();
 
-        if (!messageContentRaw.startsWith(prefix)) return;
+        if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) return;
         String[] message = messageContentRaw.split(prefix)[1].split(" ");
         CustomUser author = new CustomUser(event.getAuthor());
 
