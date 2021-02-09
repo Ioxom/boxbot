@@ -4,6 +4,7 @@ import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.Frame.LogType;
 
+import io.ioxcorp.ioxbox.data.exceptions.ExistingBoxException;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,7 +14,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
-import java.io.IOException;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
@@ -54,8 +54,9 @@ public class Listener extends ListenerAdapter {
                             event.getChannel().sendMessage(successEmbed("box successfully created with item " + messagecontent[1] + "!")).queue();
 
                         //this exception is never thrown because this code can only be executed if the user does not have a box
-                        } catch (IOException ignored) {}
+                        } catch (ExistingBoxException ignored) {}
                     }
+                //if we have a mention use it
                 } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
                     //TODO: 0.3.0: require confirmation from the user being boxed
                     CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
@@ -71,7 +72,7 @@ public class Listener extends ListenerAdapter {
                             event.getChannel().sendMessage(successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
 
                         //this exception is never thrown because this code can only be executed if the user does not have a box
-                        } catch (IOException ignored) {}
+                        } catch (ExistingBoxException ignored) {}
                     }
                 } else {
                     event.getChannel().sendMessage(errorEmbed("error adding to box: nothing found to add in message")).queue();
@@ -116,7 +117,7 @@ public class Listener extends ListenerAdapter {
                     try {
                         Box.createBox(author);
                         event.getChannel().sendMessage(successEmbed("empty box successfully created!")).queue();
-                    } catch (IOException e) {
+                    } catch (ExistingBoxException e) {
                         event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. why not have a rotater instead of a new one!")).queue();
                     }
                 } else {
@@ -128,7 +129,7 @@ public class Listener extends ListenerAdapter {
                                 .setDescription("box successfully created with item " + messagecontent[1] + "!")
                                 .build()
                         ).queue();
-                    } catch (IOException e) {
+                    } catch (ExistingBoxException e) {
                         event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead.")).queue();
                     }
                 }
