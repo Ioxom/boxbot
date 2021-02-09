@@ -16,6 +16,11 @@ public class CustomUser {
     public final String username;
     @JsonProperty("tag")
     public final int tag;
+
+    /**
+     * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
+     * @param user the {@link User User} object to be converted
+     */
     public CustomUser(User user) {
         this.id = user.getIdLong();
         String[] splitTag = user.getAsTag().split("#");
@@ -34,15 +39,26 @@ public class CustomUser {
         return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
     }
 
+    /**
+     * @return the formatting most users see in discord of a {@link User User}: something like bob#1000
+     */
     @JsonIgnore
     public String getTag() {
         return this.username + "#" + this.tag;
     }
 
+    /**
+     * checks the {@link java.util.HashMap HashMap} contained in {@link Main Main} for a box owned by the user
+     * @return true, if the {@link CustomUser CustomUser} has a box; false, if they do not
+     */
     public boolean hasBox() {
         return Main.boxes.containsKey(this.id);
     }
 
+    /**
+     * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of boxes
+     * @return the found {@link Box Box}, null if there is no box owned by the user
+     */
     @JsonIgnore
     public Box getBox() {
         return Main.boxes.get(this.id);
