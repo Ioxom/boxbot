@@ -1,24 +1,32 @@
 plugins {
-    id('java')
-    id('application')
-    id('com.github.johnrengelman.shadow') version('6.1.0')
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-mainClassName = 'io.ioxcorp.ioxbox.Main'
-group('io.ioxcorp')
-version('0.2.0')
+mainClassName = "io.ioxcorp.ioxbox.Main"
+group 'io.ioxcorp'
+version '0.2.1'
 def jdaVersion = '4.2.0_227'
 def jacksonVersion = '2.12.1'
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
     //json parsing library
-    implementation(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion)
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     //integration with discord
-    implementation(group: 'net.dv8tion', name: 'JDA', version: jdaVersion)
+    implementation group: 'net.dv8tion', name: 'JDA', version: jdaVersion
+}
+
+test {
+    useJUnitPlatform()
 }
 
 //language level is java 11
@@ -47,7 +55,7 @@ task uberJar(type: Jar) {
 
     from sourceSets.main.output
 
-    DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     //ensure that the version is updated when building jars
     dependsOn(addVersion)
     dependsOn configurations.runtimeClasspath
