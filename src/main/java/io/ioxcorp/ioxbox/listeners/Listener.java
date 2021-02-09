@@ -1,9 +1,9 @@
 package io.ioxcorp.ioxbox.listeners;
 
 import static io.ioxcorp.ioxbox.Main.boxes;
+import static io.ioxcorp.ioxbox.Main.frame;
+import static io.ioxcorp.ioxbox.Frame.LogType;
 
-import io.ioxcorp.ioxbox.Frame;
-import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,10 +23,10 @@ public class Listener extends ListenerAdapter {
         final String messageContentRaw = event.getMessage().getContentRaw().toLowerCase();
 
         if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) return;
-        String[] message = messageContentRaw.split(prefix)[1].split(" ");
+        String[] messagecontent = messageContentRaw.split(prefix)[1].split(" ");
         CustomUser author = new CustomUser(event.getAuthor());
 
-        switch (message[0]) {
+        switch (messagecontent[0]) {
             //TODO: 0.4.0: make this not a mess
             case "help":
                 EmbedBuilder helpEmbed = new EmbedBuilder()
@@ -37,20 +37,21 @@ public class Listener extends ListenerAdapter {
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 event.getChannel().sendMessage(helpEmbed.build()).queue();
+                frame.log(LogType.CMD, "help", author);
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
-                if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
+                if (event.getMessage().getMentionedUsers().isEmpty() && messagecontent.length > 1) {
                     if (boxes.containsKey(author.id)) {
-                        author.getBox().add(message[1]);
+                        author.getBox().add(messagecontent[1]);
                         event.getChannel().sendMessage(successEmbed(
                                 "successfully added item to box!",
                                 "items:\n" + author.getBox().itemsToString()
                         )).queue();
                     } else {
                         try {
-                            Box.createBox(author, message[1]);
-                            event.getChannel().sendMessage(successEmbed("box successfully created with item " + message[1] + "!")).queue();
+                            Box.createBox(author, messagecontent[1]);
+                            event.getChannel().sendMessage(successEmbed("box successfully created with item " + messagecontent[1] + "!")).queue();
 
                         //this exception is never thrown because this code can only be executed if the user does not have a box
                         } catch (IOException ignored) {}
@@ -75,14 +76,14 @@ public class Listener extends ListenerAdapter {
                 } else {
                     event.getChannel().sendMessage(errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
-                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
+                frame.log(LogType.CMD, prefix + "add", author);
                 break;
             case "remove":
                 //if there are no mentioned users, use the first argument
-                if (event.getMessage().getMentionedUsers().isEmpty() && message.length > 1) {
+                if (event.getMessage().getMentionedUsers().isEmpty() && messagecontent.length > 1) {
                     if (boxes.containsKey(author.id)) {
-                        if (author.getBox().contains(message[1])) {
-                            author.getBox().remove(message[1]);
+                        if (author.getBox().contains(messagecontent[1])) {
+                            author.getBox().remove(messagecontent[1]);
                             event.getChannel().sendMessage(successEmbed(
                                     "successfully removed item from box!",
                                     "items:\n" + author.getBox().itemsToString()
@@ -107,11 +108,11 @@ public class Listener extends ListenerAdapter {
                 } else {
                     event.getChannel().sendMessage(errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
-                Main.frame.log(Frame.LogType.CMD, prefix + "remove", author);
+                frame.log(LogType.CMD, prefix + "remove", author);
                 break;
 
             case "open":
-                if (message.length == 1) {
+                if (messagecontent.length == 1) {
                     try {
                         Box.createBox(author);
                         event.getChannel().sendMessage(successEmbed("empty box successfully created!")).queue();
@@ -120,18 +121,18 @@ public class Listener extends ListenerAdapter {
                     }
                 } else {
                     try {
-                        Box.createBox(author, message[1]);
+                        Box.createBox(author, messagecontent[1]);
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                                 .setColor(0x00FF00)
-                                .setDescription("box successfully created with item " + message[1] + "!")
+                                .setDescription("box successfully created with item " + messagecontent[1] + "!")
                                 .build()
                         ).queue();
                     } catch (IOException e) {
                         event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead.")).queue();
                     }
                 }
-                Main.frame.log(Frame.LogType.CMD, prefix + "open", author);
+                frame.log(LogType.CMD, prefix + "open", author);
                 break;
 
             //TODO: 0.3.0: require confirmation
@@ -142,7 +143,7 @@ public class Listener extends ListenerAdapter {
                 } else {
                     event.getChannel().sendMessage(errorEmbed("no box found to remove")).queue();
                 }
-                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
+                frame.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "list":
@@ -161,7 +162,14 @@ public class Listener extends ListenerAdapter {
                         event.getChannel().sendMessage(errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
-                Main.frame.log(Frame.LogType.CMD, prefix + "add", author);
+                frame.log(LogType.CMD, prefix + "add", author);
+                break;
+
+            case "ping":
+                long time = System.currentTimeMillis();
+                event.getChannel().sendMessage("calculating ping...").queue(message ->
+                        message.editMessageFormat("ioxbot's ping is: %dms", System.currentTimeMillis() - time).queue());
+                frame.log(LogType.CMD, "ping", author);
                 break;
         }
     }
@@ -179,7 +187,7 @@ public class Listener extends ListenerAdapter {
                 .setColor(0xC91A00)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                 .setDescription(error)
-                .setThumbnail("https://media.discordapp.net/attachments/722951540972978188/806690297894797322/rotater.gif")
+                .setThumbnail("https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif")
                 .build();
     }
 
