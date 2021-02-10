@@ -4,7 +4,6 @@ import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.Frame.LogType;
 
-import io.ioxcorp.ioxbox.data.exceptions.ExistingBoxException;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,6 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
+import java.security.InvalidParameterException;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
@@ -23,10 +23,10 @@ public class Listener extends ListenerAdapter {
         final String messageContentRaw = event.getMessage().getContentRaw().toLowerCase();
 
         if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) return;
-        String[] messagecontent = messageContentRaw.split(prefix)[1].split(" ");
+        String[] messageContent = messageContentRaw.split(prefix)[1].split(" ");
         CustomUser author = new CustomUser(event.getAuthor());
 
-        switch (messagecontent[0]) {
+        switch (messageContent[0]) {
             //TODO: 0.4.0: make this not a mess
             case "help":
                 EmbedBuilder helpEmbed = new EmbedBuilder()
@@ -41,20 +41,16 @@ public class Listener extends ListenerAdapter {
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
-                if (event.getMessage().getMentionedUsers().isEmpty() && messagecontent.length > 1) {
+                if (event.getMessage().getMentionedUsers().isEmpty() && messageContent.length > 1) {
                     if (boxes.containsKey(author.id)) {
-                        author.getBox().add(messagecontent[1]);
+                        author.getBox().add(messageContent[1]);
                         event.getChannel().sendMessage(successEmbed(
                                 "successfully added item to box!",
                                 "items:\n" + author.getBox().itemsToString()
                         )).queue();
                     } else {
-                        try {
-                            Box.createBox(author, messagecontent[1]);
-                            event.getChannel().sendMessage(successEmbed("box successfully created with item " + messagecontent[1] + "!")).queue();
-
-                        //this exception is never thrown because this code can only be executed if the user does not have a box
-                        } catch (ExistingBoxException ignored) {}
+                        Box.createBox(author, messageContent[1]);
+                        event.getChannel().sendMessage(successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
                 //if we have a mention use it
                 } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
@@ -67,12 +63,8 @@ public class Listener extends ListenerAdapter {
                                 "users:\n" + author.getBox().usersToString()
                         )).queue();
                     } else {
-                        try {
-                            Box.createBox(author, user);
-                            event.getChannel().sendMessage(successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
-
-                        //this exception is never thrown because this code can only be executed if the user does not have a box
-                        } catch (ExistingBoxException ignored) {}
+                        Box.createBox(author, user);
+                        event.getChannel().sendMessage(successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
                     }
                 } else {
                     event.getChannel().sendMessage(errorEmbed("error adding to box: nothing found to add in message")).queue();
@@ -81,10 +73,10 @@ public class Listener extends ListenerAdapter {
                 break;
             case "remove":
                 //if there are no mentioned users, use the first argument
-                if (event.getMessage().getMentionedUsers().isEmpty() && messagecontent.length > 1) {
+                if (event.getMessage().getMentionedUsers().isEmpty() && messageContent.length > 1) {
                     if (boxes.containsKey(author.id)) {
-                        if (author.getBox().contains(messagecontent[1])) {
-                            author.getBox().remove(messagecontent[1]);
+                        if (author.getBox().contains(messageContent[1])) {
+                            author.getBox().remove(messageContent[1]);
                             event.getChannel().sendMessage(successEmbed(
                                     "successfully removed item from box!",
                                     "items:\n" + author.getBox().itemsToString()
@@ -113,24 +105,28 @@ public class Listener extends ListenerAdapter {
                 break;
 
             case "open":
-                if (messagecontent.length == 1) {
+                if (messageContent.length == 1) {
                     try {
                         Box.createBox(author);
                         event.getChannel().sendMessage(successEmbed("empty box successfully created!")).queue();
-                    } catch (ExistingBoxException e) {
-                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. why not have a rotater instead of a new one!")).queue();
+                    } catch (InvalidParameterException e) {
+                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead.")).queue();
+                    } catch (IllegalArgumentException e) {
+                        event.getChannel().sendMessage(errorEmbed(e + ": the object passed to Box#createBox(Object) was of an incompatible type")).queue();
                     }
                 } else {
                     try {
-                        Box.createBox(author, messagecontent[1]);
+                        Box.createBox(author, messageContent[1]);
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                                 .setColor(0x00FF00)
-                                .setDescription("box successfully created with item " + messagecontent[1] + "!")
+                                .setDescription("box successfully created with item " + messageContent[1] + "!")
                                 .build()
                         ).queue();
-                    } catch (ExistingBoxException e) {
-                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead.")).queue();
+                    } catch (InvalidParameterException e) {
+                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead!")).queue();
+                    } catch (IllegalArgumentException e) {
+                        event.getChannel().sendMessage(errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
                     }
                 }
                 frame.log(LogType.CMD, prefix + "open", author);

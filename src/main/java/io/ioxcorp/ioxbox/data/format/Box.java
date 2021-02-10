@@ -3,13 +3,12 @@ package io.ioxcorp.ioxbox.data.format;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
-import io.ioxcorp.ioxbox.data.exceptions.ExistingBoxException;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
-import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -189,10 +188,11 @@ public class Box {
      * adds a new {@link Box Box} to the {@link java.util.HashMap HashMap} created in Main with one item (item parameter), and saves to json
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}, will be used as the owner of the box
      * @param item a {@link java.lang.String String}, {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be the initial item in the box
-     * @throws ExistingBoxException if the owner already has a box
+     * @exception IllegalArgumentException if the owner or item objects are incompatible types
+     * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(Object)
      */
-    public static void createBox(Object owner, Object item) throws ExistingBoxException {
+    public static void createBox(Object owner, Object item) {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
@@ -200,7 +200,7 @@ public class Box {
         }
 
         if (((CustomUser) owner).hasBox()) {
-            throw new ExistingBoxException("user already has a box; could not create new one", new Exception());
+            throw new InvalidParameterException("user in \"owner\" passed as argument already has a box; could not create new one");
         }
 
         Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
@@ -211,10 +211,11 @@ public class Box {
     /**
      * adds a new empty {@link Box Box} to the {@link java.util.HashMap HashMap} created in Main, and saves to json
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}, will be used as the owner of the box
-     * @throws ExistingBoxException if the owner already has a box
+     * @exception IllegalArgumentException if the owner or item objects are incompatible types
+     * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(Object, Object)
      */
-    public static void createBox(Object owner) throws ExistingBoxException {
+    public static void createBox(Object owner) {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
@@ -222,7 +223,7 @@ public class Box {
         }
 
         if (((CustomUser) owner).hasBox()) {
-            throw new ExistingBoxException("user already has a box; could not create new one", new Exception());
+            throw new InvalidParameterException("\"user\" passed as argument already has a box; could not create new one");
         }
 
         Main.boxes.put(((CustomUser) owner).id, new Box(owner));
