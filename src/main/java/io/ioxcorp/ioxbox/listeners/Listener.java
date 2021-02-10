@@ -4,10 +4,10 @@ import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.Frame.LogType;
 
+import io.ioxcorp.ioxbox.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +25,8 @@ public class Listener extends ListenerAdapter {
         if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) return;
         String[] messageContent = messageContentRaw.split(prefix)[1].split(" ");
         CustomUser author = new CustomUser(event.getAuthor());
+
+        EmbedHelper helper = new EmbedHelper(author);
 
         switch (messageContent[0]) {
             //TODO: 0.4.0: make this not a mess
@@ -44,13 +46,13 @@ public class Listener extends ListenerAdapter {
                 if (event.getMessage().getMentionedUsers().isEmpty() && messageContent.length > 1) {
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(messageContent[1]);
-                        event.getChannel().sendMessage(successEmbed(
+                        event.getChannel().sendMessage(helper.successEmbed(
                                 "successfully added item to box!",
                                 "items:\n" + author.getBox().itemsToString()
                         )).queue();
                     } else {
                         Box.createBox(author, messageContent[1]);
-                        event.getChannel().sendMessage(successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
+                        event.getChannel().sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
                 //if we have a mention use it
                 } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
@@ -58,16 +60,16 @@ public class Listener extends ListenerAdapter {
                     CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(user);
-                        event.getChannel().sendMessage(successEmbed(
+                        event.getChannel().sendMessage(helper.successEmbed(
                                 "successfully added user to box!",
                                 "users:\n" + author.getBox().usersToString()
                         )).queue();
                     } else {
                         Box.createBox(author, user);
-                        event.getChannel().sendMessage(successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
+                        event.getChannel().sendMessage(helper.successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
                     }
                 } else {
-                    event.getChannel().sendMessage(errorEmbed("error adding to box: nothing found to add in message")).queue();
+                    event.getChannel().sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
                 break;
@@ -77,29 +79,29 @@ public class Listener extends ListenerAdapter {
                     if (boxes.containsKey(author.id)) {
                         if (author.getBox().contains(messageContent[1])) {
                             author.getBox().remove(messageContent[1]);
-                            event.getChannel().sendMessage(successEmbed(
+                            event.getChannel().sendMessage(helper.successEmbed(
                                     "successfully removed item from box!",
                                     "items:\n" + author.getBox().itemsToString()
                             )).queue();
                         } else {
-                            event.getChannel().sendMessage(errorEmbed("error removing from box: box does not contain item")).queue();
+                            event.getChannel().sendMessage(helper.errorEmbed("error removing from box: box does not contain item")).queue();
                         }
                     } else {
-                        event.getChannel().sendMessage(errorEmbed("error removing from box: box does not exist")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("error removing from box: box does not exist")).queue();
                     }
                 } else if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         if (author.getBox().contains(user)) author.getBox().remove(user);
-                        event.getChannel().sendMessage(successEmbed(
+                        event.getChannel().sendMessage(helper.successEmbed(
                                 "successfully removed user from box!",
                                 "users:\n" + author.getBox().usersToString()
                         )).queue();
                     } else {
-                        event.getChannel().sendMessage(errorEmbed("error removing from box: nothing found to remove in message")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                     }
                 } else {
-                    event.getChannel().sendMessage(errorEmbed("error removing from box: nothing found to remove in message")).queue();
+                    event.getChannel().sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
                 frame.log(LogType.CMD, prefix + "remove", author);
                 break;
@@ -108,11 +110,11 @@ public class Listener extends ListenerAdapter {
                 if (messageContent.length == 1) {
                     try {
                         Box.createBox(author);
-                        event.getChannel().sendMessage(successEmbed("empty box successfully created!")).queue();
+                        event.getChannel().sendMessage(helper.successEmbed("empty box successfully created!")).queue();
                     } catch (InvalidParameterException e) {
-                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead.")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead.")).queue();
                     } catch (IllegalArgumentException e) {
-                        event.getChannel().sendMessage(errorEmbed(e + ": the object passed to Box#createBox(Object) was of an incompatible type")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object) was of an incompatible type")).queue();
                     }
                 } else {
                     try {
@@ -124,9 +126,9 @@ public class Listener extends ListenerAdapter {
                                 .build()
                         ).queue();
                     } catch (InvalidParameterException e) {
-                        event.getChannel().sendMessage(errorEmbedWithRotater("you seem to already have a box. here have a rotater instead!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead!")).queue();
                     } catch (IllegalArgumentException e) {
-                        event.getChannel().sendMessage(errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
                     }
                 }
                 frame.log(LogType.CMD, prefix + "open", author);
@@ -136,9 +138,9 @@ public class Listener extends ListenerAdapter {
             case "delete":
                 if (boxes.containsKey(author.id)) {
                     boxes.remove(author.id);
-                    event.getChannel().sendMessage(successEmbed("your box was successfully deleted!")).queue();
+                    event.getChannel().sendMessage(helper.successEmbed("your box was successfully deleted!")).queue();
                 } else {
-                    event.getChannel().sendMessage(errorEmbed("no box found to remove")).queue();
+                    event.getChannel().sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
                 break;
@@ -150,13 +152,13 @@ public class Listener extends ListenerAdapter {
                     if (user.hasBox()) {
                         event.getChannel().sendMessage(user.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
                     }
                 } else {
                     if (author.hasBox()) {
                         event.getChannel().sendMessage(author.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
@@ -169,39 +171,5 @@ public class Listener extends ListenerAdapter {
                 frame.log(LogType.CMD, "ping", author);
                 break;
         }
-    }
-
-    private MessageEmbed errorEmbed(String error) {
-        return new EmbedBuilder()
-                .setColor(0xC91A00)
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setDescription(error)
-                .build();
-    }
-
-    private MessageEmbed errorEmbedWithRotater(String error) {
-        return new EmbedBuilder()
-                .setColor(0xC91A00)
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setDescription(error)
-                .setThumbnail("https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif")
-                .build();
-    }
-
-    private MessageEmbed successEmbed(String message) {
-        return new EmbedBuilder()
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setColor(0x00FF00)
-                .setDescription(message)
-                .build();
-    }
-
-    private MessageEmbed successEmbed(String title, String message) {
-        return new EmbedBuilder()
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setColor(0x00FF00)
-                .setDescription(message)
-                .setTitle(title)
-                .build();
     }
 }
