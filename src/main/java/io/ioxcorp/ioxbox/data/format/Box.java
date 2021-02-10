@@ -168,7 +168,7 @@ public class Box {
      * removes the Object passed to the {@link io.ioxcorp.ioxbox.data.format.Box} specified if it is a compatible format, then saves to json
      * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be removed from the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
-     * @see Box#add(Object) 
+     * @see Box#add(Object)
      */
     public void remove(Object object) {
         if (object instanceof String) {

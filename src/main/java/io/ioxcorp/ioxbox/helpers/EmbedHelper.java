@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbox;
+package io.ioxcorp.ioxbox.helpers;
 
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
