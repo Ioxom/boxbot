@@ -57,8 +57,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ConfirmationDialogListener.ThreadTest.h();
-
         //throw error if version is not found
         if (VERSION == null) {
             VERSION = "0.0.0";
