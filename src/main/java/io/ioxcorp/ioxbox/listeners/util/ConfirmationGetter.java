@@ -1,5 +1,6 @@
-package io.ioxcorp.ioxbox.listeners;
+package io.ioxcorp.ioxbox.listeners.util;
 
+import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

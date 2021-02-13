@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbox.listeners;
+package io.ioxcorp.ioxbox.data.format;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
 

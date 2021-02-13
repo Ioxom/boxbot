@@ -148,6 +148,7 @@ public class Listener extends ListenerAdapter {
                 if (boxes.containsKey(author.id)) {
                     System.out.println("handling delete");
                     channel.sendMessage("confirm delete?").queue();
+                    //TODO: look into ThreadPool or other solutions instead of creating a new Thread every time
                     HandleDelete yes = new HandleDelete(author);
                     new Thread(yes).start();
                     break;
