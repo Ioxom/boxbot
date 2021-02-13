@@ -29,6 +29,11 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         this.attempts = 0;
     }
 
+    public ConfirmationGetter() {
+        this.latch = new CountDownLatch(0);
+        this.id = 0;
+    }
+
     public static ArrayList<Boolean> booleans;
     //TODO: this shouldn't be static - probably needs conversion to a list
     private static int pos;
