@@ -36,7 +36,7 @@ public class EmbedHelper {
         return new EmbedBuilder()
                 .setColor(0xC91A00)
                 .setAuthor(author[0], author[1], author[2])
-                .setDescription(error + (rotater? "have a rotater" : "\"https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif\""))
+                .setDescription(error + (rotater? "have a rotater!" : ""))
                 .setThumbnail(rotater? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
                 .build();
