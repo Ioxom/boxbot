@@ -1,11 +1,11 @@
 package io.ioxcorp.ioxbox.listeners;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 public class ConfirmationGetter extends ListenerAdapter implements Runnable {
@@ -28,6 +28,25 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         this.attempts = 0;
     }
 
+    public static ArrayList<Boolean> booleans;
+    private static int pos;
+
+    public static boolean crab(long id) {
+        if (booleans == null) {
+            pos = 0;
+            booleans = new ArrayList<>();
+        } else {
+            pos = booleans.size();
+        }
+        booleans.add(pos, false);
+
+        CountDownLatch crabDownLatch = new CountDownLatch(1);
+        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
+        new Thread(confirmationGetter).start();
+
+        return booleans.get(pos);
+    }
+
     @Override
     public void run() {
         try {
@@ -37,13 +56,11 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         }
 
         if (this.timedOut) {
-            this.channel.sendMessage("").queue();
+            this.channel.sendMessage("no proper response received, assuming no").queue();
+            booleans.add(pos, false);
+        } else {
+            booleans.add(pos, response);
         }
-    }
-
-    @JsonIgnore
-    public void setStuffAndThings() {
-
     }
 
     @Override
@@ -64,4 +81,6 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             this.attempts ++;
         }
     }
+
+
 }
