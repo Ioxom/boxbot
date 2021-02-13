@@ -19,7 +19,8 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     private final long id;
     private boolean response;
     private int attempts;
-    private MessageChannel channel;
+    //TODO: this shouldn't be static - probably needs conversion to a list
+    private static MessageChannel channel;
     private boolean timedOut;
 
     public ConfirmationGetter(CountDownLatch latch, long id) {
@@ -29,9 +30,11 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     }
 
     public static ArrayList<Boolean> booleans;
+    //TODO: this shouldn't be static - probably needs conversion to a list
     private static int pos;
 
-    public static boolean crab(long id) {
+    public static WhatAmIDoing crab(long id) {
+        System.out.println("started crab");
         if (booleans == null) {
             pos = 0;
             booleans = new ArrayList<>();
@@ -39,12 +42,19 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             pos = booleans.size();
         }
         booleans.add(pos, false);
+        System.out.println("added to list");
 
         CountDownLatch crabDownLatch = new CountDownLatch(1);
         ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
         new Thread(confirmationGetter).start();
 
-        return booleans.get(pos);
+        try {
+            crabDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new WhatAmIDoing(channel, booleans.get(pos));
     }
 
     @Override
@@ -56,7 +66,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         }
 
         if (this.timedOut) {
-            this.channel.sendMessage("no proper response received, assuming no").queue();
+            channel.sendMessage("no proper response received, assuming no").queue();
             booleans.add(pos, false);
         } else {
             booleans.add(pos, response);
@@ -65,22 +75,28 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        System.out.println("got message");
+
         if (this.attempts > 5) {
-            this.response = false;
-            this.channel = event.getChannel();
+            System.out.println("too many attempts");
+            this.timedOut = true;
+            channel = event.getChannel();
             this.latch.countDown();
         }
 
-        if (!(event.getAuthor().getIdLong() == id)) return;
+        if (!(event.getAuthor().getIdLong() == id)) {
+            System.out.println("incorrect author");
+            return;
+        }
 
         if (event.getMessage().getContentRaw().equals("yes") || event.getMessage().getContentRaw().equals("true")) {
+            System.out.println("got true response");
             this.response = true;
-            this.channel = event.getChannel();
+            channel = event.getChannel();
             this.latch.countDown();
         } else if (event.getMessage().getContentRaw().equals("false") || event.getMessage().getContentRaw().equals("no")) {
+            System.out.println("got true response");
             this.attempts ++;
         }
     }
-
-
 }

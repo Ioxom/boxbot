@@ -146,8 +146,10 @@ public class Listener extends ListenerAdapter {
             //TODO: 0.3.0: require confirmation
             case "delete":
                 if (boxes.containsKey(author.id)) {
-                    boxes.remove(author.id);
-                    channel.sendMessage(helper.successEmbed("your box was successfully deleted!")).queue();
+                    System.out.println("handling delete");
+                    HandleDelete yes = new HandleDelete(author);
+                    new Thread(yes).start();
+                    break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
