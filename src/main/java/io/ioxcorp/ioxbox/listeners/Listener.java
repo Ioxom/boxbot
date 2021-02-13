@@ -22,8 +22,11 @@ import java.security.InvalidParameterException;
 
 //unfinished, being worked on by Thonkman
 public class Listener extends ListenerAdapter {
+
+
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        boolean activateConfirmationDialongListener = false;
 
         final String prefix = "-box ";
         final Message eventMessage = event.getMessage();
@@ -50,6 +53,8 @@ public class Listener extends ListenerAdapter {
                 frame.log(LogType.CMD, "help", author);
                 break;
             case "add":
+
+                String messageAuthor = eventMessage.getAuthor().getAsTag();
                 //if there are no mentioned users, use the first argument
                 if (!hasPing(eventMessage) && messageContent.length > 1) {
                     if (boxes.containsKey(author.id)) {
@@ -65,9 +70,13 @@ public class Listener extends ListenerAdapter {
                     }
                 //if we have a mention use it
                 } else if (hasPing(eventMessage)) {
+
                     //TODO: 0.3.0: require confirmation from the user being boxed
+
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
+                        channel.sendMessage(user + " Would you like to join " + messageAuthor + "'s box?").queue();
+
                         author.getBox().add(user);
                         channel.sendMessage(helper.successEmbed(
                                 "successfully added user to box!",
