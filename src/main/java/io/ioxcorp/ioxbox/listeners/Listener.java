@@ -147,6 +147,7 @@ public class Listener extends ListenerAdapter {
             case "delete":
                 if (boxes.containsKey(author.id)) {
                     System.out.println("handling delete");
+                    channel.sendMessage("confirm delete?").queue();
                     HandleDelete yes = new HandleDelete(author);
                     new Thread(yes).start();
                     break;

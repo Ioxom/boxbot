@@ -17,7 +17,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     public final long id;
     public boolean response;
     public int attempts;
-    public static HashMap<Long, MessageChannel> channels;
+    public static HashMap<Long, MessageChannel> channels = new HashMap<>();
     public boolean timedOut;
 
     public ConfirmationGetter(CountDownLatch latch, long id) {
@@ -34,6 +34,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         if (booleans == null) {
             booleans = new HashMap<>();
         }
+        if (confirmationGetters == null) confirmationGetters = new HashMap<>();
         booleans.put(id, false);
         System.out.println("added to list");
 
@@ -47,13 +48,13 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             e.printStackTrace();
         }
 
-        boolean b = booleans.get(id);
+        return new WhatAmIDoing(channels.get(id), booleans.get(id));
+    }
+
+    public static void clean(long id) {
         booleans.remove(id);
-        MessageChannel channel = channels.get(id);
         channels.remove(id);
         confirmationGetters.remove(id);
-
-        return new WhatAmIDoing(channel, b);
     }
 
     @Override

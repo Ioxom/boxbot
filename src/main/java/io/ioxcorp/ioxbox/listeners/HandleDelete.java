@@ -14,6 +14,7 @@ public class HandleDelete implements Runnable {
     public void run() {
         System.out.println("started");
         WhatAmIDoing response = ConfirmationGetter.crab(user.id);
+        ConfirmationGetter.clean(user.id);
         if (response.getB()) {
             Main.boxes.remove(user.id);
             response.getChannel().sendMessage("deleted").queue();

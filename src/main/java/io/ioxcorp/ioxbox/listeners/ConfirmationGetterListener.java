@@ -10,6 +10,7 @@ public class ConfirmationGetterListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (ConfirmationGetter.confirmationGetters == null || ConfirmationGetter.confirmationGetters.isEmpty()) return;
         for (ConfirmationGetter confirmationGetter : ConfirmationGetter.confirmationGetters.values()) {
             System.out.println("got message");
             System.out.println("h" + event.getAuthor().getIdLong());
