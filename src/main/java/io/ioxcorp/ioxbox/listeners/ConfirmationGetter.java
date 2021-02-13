@@ -15,13 +15,13 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     //
     // should be used like this
 
-    private final CountDownLatch latch;
-    private final long id;
-    private boolean response;
-    private int attempts;
+    public final CountDownLatch latch;
+    public final long id;
+    public boolean response;
+    public int attempts;
     //TODO: this shouldn't be static - probably needs conversion to a list
-    private static MessageChannel channel;
-    private boolean timedOut;
+    public static MessageChannel channel;
+    public boolean timedOut;
 
     public ConfirmationGetter(CountDownLatch latch, long id) {
         this.id = id;
@@ -29,15 +29,12 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         this.attempts = 0;
     }
 
-    public ConfirmationGetter() {
-        this.latch = new CountDownLatch(0);
-        this.id = 0;
-    }
-
     public static ArrayList<Boolean> booleans;
     //TODO: this shouldn't be static - probably needs conversion to a list
-    private static int pos;
+    public static int pos;
 
+    //TODO: no
+    public static ConfirmationGetter confirmationGetter;
     public static WhatAmIDoing crab(long id) {
         System.out.println("started crab");
         if (booleans == null) {
@@ -50,7 +47,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         System.out.println("added to list");
 
         CountDownLatch crabDownLatch = new CountDownLatch(1);
-        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
+        confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
         new Thread(confirmationGetter).start();
 
         try {
@@ -75,33 +72,6 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             booleans.add(pos, false);
         } else {
             booleans.add(pos, response);
-        }
-    }
-
-    @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        System.out.println("got message");
-
-        if (this.attempts > 5) {
-            System.out.println("too many attempts");
-            this.timedOut = true;
-            channel = event.getChannel();
-            this.latch.countDown();
-        }
-
-        if (!(event.getAuthor().getIdLong() == id)) {
-            System.out.println("incorrect author");
-            return;
-        }
-
-        if (event.getMessage().getContentRaw().equals("yes") || event.getMessage().getContentRaw().equals("true")) {
-            System.out.println("got true response");
-            this.response = true;
-            channel = event.getChannel();
-            this.latch.countDown();
-        } else if (event.getMessage().getContentRaw().equals("false") || event.getMessage().getContentRaw().equals("no")) {
-            System.out.println("got true response");
-            this.attempts ++;
         }
     }
 }
