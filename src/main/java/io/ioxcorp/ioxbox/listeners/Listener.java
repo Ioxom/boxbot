@@ -3,8 +3,6 @@ package io.ioxcorp.ioxbox.listeners;
 import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.Frame.LogType;
-import static io.ioxcorp.ioxbox.helpers.MessageHelper.getFirstMention;
-import static io.ioxcorp.ioxbox.helpers.MessageHelper.hasPing;
 
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
@@ -16,7 +14,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.awt.Color;
 import java.security.InvalidParameterException;
 
@@ -51,7 +48,7 @@ public class Listener extends ListenerAdapter {
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
-                if (!hasPing(eventMessage) && messageContent.length > 1) {
+                if (eventMessage.getMentionedUsers().isEmpty()) {
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(messageContent[1]);
                         channel.sendMessage(helper.successEmbed(
@@ -64,7 +61,7 @@ public class Listener extends ListenerAdapter {
                         channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
                 //if we have a mention use it
-                } else if (hasPing(eventMessage)) {
+                } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     //TODO: 0.3.0: require confirmation from the user being boxed
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
@@ -159,19 +156,18 @@ public class Listener extends ListenerAdapter {
                 break;
 
             case "list":
-                try {
-                    CustomUser user = getFirstMention(eventMessage);
+                if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
+                    CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (user.hasBox()) {
-                        channel.sendMessage(user.getBox().embed()).queue();
+                        event.getChannel().sendMessage(user.getBox().embed()).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
                     }
-                //if we find no mentioned user, show the author's box
-                } catch (AccountNotFoundException e) {
+                } else {
                     if (author.hasBox()) {
-                        channel.sendMessage(author.getBox().embed()).queue();
+                        event.getChannel().sendMessage(author.getBox().embed()).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
