@@ -1,11 +1,9 @@
 package io.ioxcorp.ioxbox.listeners;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 public class ConfirmationGetter extends ListenerAdapter implements Runnable {
@@ -19,8 +17,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     public final long id;
     public boolean response;
     public int attempts;
-    //TODO: this shouldn't be static - probably needs conversion to a list
-    public static MessageChannel channel;
+    public static HashMap<Long, MessageChannel> channels;
     public boolean timedOut;
 
     public ConfirmationGetter(CountDownLatch latch, long id) {
@@ -29,26 +26,20 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         this.attempts = 0;
     }
 
-    public static ArrayList<Boolean> booleans;
-    //TODO: this shouldn't be static - probably needs conversion to a list
-    public static int pos;
+    public static HashMap<Long, Boolean> booleans;
 
-    //TODO: no
-    public static ConfirmationGetter confirmationGetter;
+    public static HashMap<Long, ConfirmationGetter> confirmationGetters;
     public static WhatAmIDoing crab(long id) {
         System.out.println("started crab");
         if (booleans == null) {
-            pos = 0;
-            booleans = new ArrayList<>();
-        } else {
-            pos = booleans.size();
+            booleans = new HashMap<>();
         }
-        booleans.add(pos, false);
+        booleans.put(id, false);
         System.out.println("added to list");
 
         CountDownLatch crabDownLatch = new CountDownLatch(1);
-        confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
-        new Thread(confirmationGetter).start();
+        confirmationGetters.put(id, new ConfirmationGetter(crabDownLatch, id));
+        new Thread(confirmationGetters.get(id)).start();
 
         try {
             crabDownLatch.await();
@@ -56,7 +47,13 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             e.printStackTrace();
         }
 
-        return new WhatAmIDoing(channel, booleans.get(pos));
+        boolean b = booleans.get(id);
+        booleans.remove(id);
+        MessageChannel channel = channels.get(id);
+        channels.remove(id);
+        confirmationGetters.remove(id);
+
+        return new WhatAmIDoing(channel, b);
     }
 
     @Override
@@ -68,10 +65,10 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         }
 
         if (this.timedOut) {
-            channel.sendMessage("no proper response received, assuming no").queue();
-            booleans.add(pos, false);
+            channels.get(this.id).sendMessage("no proper response received, assuming no").queue();
+            booleans.put(this.id, false);
         } else {
-            booleans.add(pos, response);
+            booleans.put(this.id, response);
         }
     }
 }
