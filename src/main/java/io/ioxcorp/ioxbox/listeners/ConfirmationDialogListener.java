@@ -1,9 +1,15 @@
 package io.ioxcorp.ioxbox.listeners;
 
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 //TODO: 0.3.0: implement confirmation dialogue that doesn't break the main thread
 public class ConfirmationDialogListener extends ListenerAdapter {
+    boolean awaitingConfirmation = false;
+    public  void onMessageRecieved(@NotNull MessageReceivedEvent event) {
+
+    }
     //plan:
     //make this class use its own dedicated thread so it can properly sleep while awaiting confirmation
     //use a private boolean object that saves whether we're awaiting confirmation
