@@ -1,9 +1,9 @@
-package io.ioxcorp.ioxbox.listeners;
+package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
-import io.ioxcorp.ioxbox.listeners.util.ConfirmationGetter;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 
 public class HandleDelete implements Runnable {
     private final CustomUser user;

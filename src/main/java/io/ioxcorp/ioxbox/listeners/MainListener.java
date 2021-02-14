@@ -7,6 +7,7 @@ import static io.ioxcorp.ioxbox.Frame.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -17,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.Color;
 import java.security.InvalidParameterException;
 
-//unfinished, being worked on by Thonkman
-public class Listener extends ListenerAdapter {
+public class MainListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 

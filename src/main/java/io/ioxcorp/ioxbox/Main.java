@@ -2,8 +2,8 @@ package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
-import io.ioxcorp.ioxbox.listeners.ConfirmationGetterListener;
-import io.ioxcorp.ioxbox.listeners.Listener;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
+import io.ioxcorp.ioxbox.listeners.MainListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -81,7 +81,7 @@ public class Main {
 
         //add event listeners
         if (api != null) {
-            api.addEventListener(new Listener(), new ConfirmationGetterListener());
+            api.addEventListener(new MainListener(), new ConfirmationGetterListener());
             frame.log(LogType.INIT, "initialized jda");
         } else {
             frame.log(LogType.ERROR, "failed to create JDA object for unknown reasons");
