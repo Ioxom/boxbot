@@ -64,15 +64,14 @@ public class Listener extends ListenerAdapter {
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     //TODO: 0.3.0: require confirmation from the user being boxed
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                    CustomUser authorUser = new CustomUser(eventMessage.getAuthor());
                     if (boxes.containsKey(author.id)) {
-                        author.getBox().add(user);
-                        channel.sendMessage(helper.successEmbed(
-                                "successfully added user to box!",
-                                "users:\n" + author.getBox().usersToString()
-                        )).queue();
+                        channel.sendMessage(user + " would you like to join " + authorUser + "'s box? (Type yes to accept)").queue();
+                        HandleAdd yes = new HandleAdd(author);
+                        new Thread(yes).start();
+                        break;
                     } else {
-                        Box.createBox(author, user);
-                        channel.sendMessage(helper.successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
+                        channel.sendMessage("They declined").queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
