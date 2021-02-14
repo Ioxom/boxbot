@@ -1,6 +1,5 @@
-package io.ioxcorp.ioxbox.listeners;
+package io.ioxcorp.ioxbox.listeners.confirmation;
 
-import io.ioxcorp.ioxbox.listeners.util.ConfirmationGetter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

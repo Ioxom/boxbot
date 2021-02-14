@@ -1,4 +1,4 @@
-package io.ioxcorp.ioxbox.listeners.util;
+package io.ioxcorp.ioxbox.listeners.confirmation;
 
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
 import net.dv8tion.jda.api.entities.MessageChannel;
