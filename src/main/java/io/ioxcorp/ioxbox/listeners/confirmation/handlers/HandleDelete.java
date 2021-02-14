@@ -24,7 +24,6 @@ public class HandleDelete implements Runnable {
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(user.id);
-        ConfirmationGetter.clean(user.id);
         EmbedHelper helper = new EmbedHelper(user);
         if (response.getB()) {
             Main.boxes.remove(user.id);

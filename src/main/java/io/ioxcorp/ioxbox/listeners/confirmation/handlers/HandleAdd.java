@@ -28,7 +28,6 @@ public class HandleAdd implements Runnable {
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(user.id);
-        ConfirmationGetter.clean(user.id);
         EmbedHelper helper = new EmbedHelper(user);
         if (response.getB()) {
             asker.getBox().add(user);
