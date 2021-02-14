@@ -1,17 +1,16 @@
-package io.ioxcorp.ioxbox.listeners;
+package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 
-import io.ioxcorp.ioxbox.Main;
-import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
-import io.ioxcorp.ioxbox.listeners.util.ConfirmationGetter;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 
 public class HandleAdd implements Runnable {
     private final CustomUser user;
+    private final CustomUser asker;
 
-
-    public HandleAdd(CustomUser user) {
+    public HandleAdd(CustomUser user, CustomUser asker) {
         this.user = user;
+        this.asker = asker;
     }
 
     @Override
@@ -20,10 +19,10 @@ public class HandleAdd implements Runnable {
         WhatAmIDoing response = ConfirmationGetter.crab(user.id);
         ConfirmationGetter.clean(user.id);
         if (response.getB()) {
-            Main.boxes.put(user.id, )
-            response.getChannel().sendMessage("deleted").queue();
+            asker.getBox().add(user);
+            response.getChannel().sendMessage("accepted, added to box").queue();
         } else {
-            response.getChannel().sendMessage("no").queue();
+            response.getChannel().sendMessage("refused").queue();
         }
     }
 }

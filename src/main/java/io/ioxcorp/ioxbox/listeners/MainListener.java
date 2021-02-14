@@ -7,6 +7,7 @@ import static io.ioxcorp.ioxbox.Frame.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -64,10 +65,9 @@ public class MainListener extends ListenerAdapter {
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     //TODO: 0.3.0: require confirmation from the user being boxed
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    CustomUser authorUser = new CustomUser(eventMessage.getAuthor());
                     if (boxes.containsKey(author.id)) {
-                        channel.sendMessage(user + " would you like to join " + authorUser + "'s box? (Type yes to accept)").queue();
-                        HandleAdd yes = new HandleAdd(author);
+                        channel.sendMessage(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)").queue();
+                        HandleAdd yes = new HandleAdd(user, author);
                         new Thread(yes).start();
                         break;
                     } else {
@@ -139,7 +139,6 @@ public class MainListener extends ListenerAdapter {
                 frame.log(LogType.CMD, prefix + "open", author);
                 break;
 
-            //TODO: 0.3.0: require confirmation
             case "delete":
                 if (boxes.containsKey(author.id)) {
                     System.out.println("handling delete");
