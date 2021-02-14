@@ -42,14 +42,14 @@ public class Main {
         }
     }
 
-    public static Frame frame;
+    public static final Frame frame;
     static {
         //create frame
         frame = new Frame();
         frame.init();
     }
 
-    public static HashMap<Long, Box> boxes;
+    public static final HashMap<Long, Box> boxes;
     static {
         //read saved box data
         boxes = JacksonYeehawHelper.read();

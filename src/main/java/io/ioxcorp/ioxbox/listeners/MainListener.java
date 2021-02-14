@@ -67,7 +67,7 @@ public class MainListener extends ListenerAdapter {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         channel.sendMessage(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)").queue();
-                        HandleAdd yes = new HandleAdd(user, author);
+                        HandleAdd yes = new HandleAdd(user, author, channel);
                         new Thread(yes).start();
                         break;
                     } else {
@@ -144,7 +144,7 @@ public class MainListener extends ListenerAdapter {
                     System.out.println("handling delete");
                     channel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
                     //TODO: look into ThreadPool or other solutions instead of creating a new Thread every time
-                    HandleDelete yes = new HandleDelete(author);
+                    HandleDelete yes = new HandleDelete(author, channel);
                     new Thread(yes).start();
                     break;
                 } else {
