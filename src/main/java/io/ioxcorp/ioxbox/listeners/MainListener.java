@@ -144,7 +144,7 @@ public class MainListener extends ListenerAdapter {
             case "delete":
                 if (boxes.containsKey(author.id)) {
                     System.out.println("handling delete");
-                    channel.sendMessage("confirm delete?").queue();
+                    channel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
                     //TODO: look into ThreadPool or other solutions instead of creating a new Thread every time
                     HandleDelete yes = new HandleDelete(author);
                     new Thread(yes).start();
