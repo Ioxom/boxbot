@@ -63,7 +63,6 @@ public class MainListener extends ListenerAdapter {
                     }
                 //if we have a mention use it
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                    //TODO: 0.3.0: require confirmation from the user being boxed
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
                         channel.sendMessage(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)").queue();
@@ -143,7 +142,7 @@ public class MainListener extends ListenerAdapter {
                 if (boxes.containsKey(author.id)) {
                     System.out.println("handling delete");
                     channel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
-                    //TODO: look into ThreadPool or other solutions instead of creating a new Thread every time
+                    //TODO: 0.5.0: look into ThreadPool or other solutions instead of creating a new Thread every time
                     HandleDelete yes = new HandleDelete(author, channel);
                     new Thread(yes).start();
                     break;
