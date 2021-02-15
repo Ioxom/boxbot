@@ -20,6 +20,7 @@ public class CustomUser {
     /**
      * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
      * @param user the {@link User User} object to be converted
+     * @author ioxom
      */
     public CustomUser(User user) {
         this.id = user.getIdLong();
@@ -41,6 +42,7 @@ public class CustomUser {
 
     /**
      * @return the formatting most users see in discord of a {@link User User}: something like bob#1000
+     * @author ioxom
      */
     @JsonIgnore
     public String getTag() {
@@ -50,6 +52,7 @@ public class CustomUser {
     /**
      * checks the {@link java.util.HashMap HashMap} contained in {@link Main Main} for a box owned by the user
      * @return true, if the {@link CustomUser CustomUser} has a box; false, if they do not
+     * @author ioxom
      */
     public boolean hasBox() {
         return Main.boxes.containsKey(this.id);
@@ -58,6 +61,7 @@ public class CustomUser {
     /**
      * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of boxes
      * @return the found {@link Box Box}, null if there is no box owned by the user
+     * @author ioxom
      */
     @JsonIgnore
     public Box getBox() {

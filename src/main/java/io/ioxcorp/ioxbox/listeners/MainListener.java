@@ -3,12 +3,12 @@ package io.ioxcorp.ioxbox.listeners;
 import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.Frame.LogType;
-import static io.ioxcorp.ioxbox.helpers.MessageHelper.getFirstMention;
-import static io.ioxcorp.ioxbox.helpers.MessageHelper.hasPing;
 
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
+import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -16,14 +16,27 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.awt.Color;
 import java.security.InvalidParameterException;
+import java.util.Random;
 
-//unfinished, being worked on by Thonkman
-public class Listener extends ListenerAdapter {
+public class MainListener extends ListenerAdapter {
+    public static final Random random = new Random();
+    protected static final String[] pickups = {
+            "are you a time traveler?\nbecause I see you in my future ;)",
+            "you remind me of my pinkie toe,\nlittle, cute and I\"ll probably bang you on the coffee table later tonight.",
+            "there must be a lightswitch on my forehead,\nbecause everytime I see you, you turn me on.",
+            "somethings wrong with my eye\"s,\nbecause I can\"t take them off you.",
+            "somebody better call God\nbecause he\"s missing an angel.",
+            "you should be called wifi,\nbecause I\"m starting to feel a real connection.",
+            "I would never play hide and seek with you,\nbecause someone like you is hard to find (;",
+            "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
+            "if i told you that you had a great body, would you hold it against me?"
+    };
+    
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+
 
         final String prefix = "-box ";
         final Message eventMessage = event.getMessage();
@@ -51,7 +64,7 @@ public class Listener extends ListenerAdapter {
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
-                if (!hasPing(eventMessage) && messageContent.length > 1) {
+                if (eventMessage.getMentionedUsers().isEmpty()) {
                     if (boxes.containsKey(author.id)) {
                         author.getBox().add(messageContent[1]);
                         channel.sendMessage(helper.successEmbed(
@@ -64,18 +77,15 @@ public class Listener extends ListenerAdapter {
                         channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
                 //if we have a mention use it
-                } else if (hasPing(eventMessage)) {
-                    //TODO: 0.3.0: require confirmation from the user being boxed
+                } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
-                        author.getBox().add(user);
-                        channel.sendMessage(helper.successEmbed(
-                                "successfully added user to box!",
-                                "users:\n" + author.getBox().usersToString()
-                        )).queue();
+                        channel.sendMessage(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)").queue();
+                        HandleAdd yes = new HandleAdd(user, author, channel);
+                        new Thread(yes).start();
+                        break;
                     } else {
-                        Box.createBox(author, user);
-                        channel.sendMessage(helper.successEmbed("box successfully created with user " + user.getTag() + "!")).queue();
+                        channel.sendMessage("They declined").queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
@@ -143,11 +153,13 @@ public class Listener extends ListenerAdapter {
                 frame.log(LogType.CMD, prefix + "open", author);
                 break;
 
-            //TODO: 0.3.0: require confirmation
             case "delete":
                 if (boxes.containsKey(author.id)) {
-                    boxes.remove(author.id);
-                    channel.sendMessage(helper.successEmbed("your box was successfully deleted!")).queue();
+                    channel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
+                    //TODO: 0.5.0: look into ThreadPool or other solutions instead of creating a new Thread every time
+                    HandleDelete yes = new HandleDelete(author, channel);
+                    new Thread(yes).start();
+                    break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
@@ -155,19 +167,18 @@ public class Listener extends ListenerAdapter {
                 break;
 
             case "list":
-                try {
-                    CustomUser user = getFirstMention(eventMessage);
+                if (event.getMessage().getMentionedUsers().stream().findFirst().isPresent()) {
+                    CustomUser user = new CustomUser(event.getMessage().getMentionedUsers().stream().findFirst().get());
                     if (user.hasBox()) {
-                        channel.sendMessage(user.getBox().embed()).queue();
+                        event.getChannel().sendMessage(user.getBox().embed()).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
                     }
-                //if we find no mentioned user, show the author's box
-                } catch (AccountNotFoundException e) {
+                } else {
                     if (author.hasBox()) {
-                        channel.sendMessage(author.getBox().embed()).queue();
+                        event.getChannel().sendMessage(author.getBox().embed()).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
@@ -178,6 +189,9 @@ public class Listener extends ListenerAdapter {
                 channel.sendMessage("calculating ping...").queue(message ->
                         message.editMessageFormat("ioxbot's ping is: %dms", System.currentTimeMillis() - time).queue());
                 frame.log(LogType.CMD, "ping", author);
+                break;
+            case "pickup" :
+                event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();
                 break;
         }
     }

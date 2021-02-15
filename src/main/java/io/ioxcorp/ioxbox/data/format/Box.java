@@ -25,6 +25,7 @@ public class Box {
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User};
      * @param object must be a {@link java.lang.String String}, {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the object that is inside the newly created box
      * @exception IllegalArgumentException if the owner or object parameters are incompatible types
+     * @author ioxom
      */
     public Box(Object owner, Object object) {
         //convert the owner object to a CustomUser and save
@@ -62,6 +63,7 @@ public class Box {
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the owner of the box
      * @exception IllegalArgumentException if the owner object passed is an incompatible type
      * @see Box#Box(Object, Object)
+     * @author ioxom
      */
     public Box(Object owner) {
         //convert the owner object to a CustomUser and save
@@ -80,6 +82,7 @@ public class Box {
 
     /**
      * do not use this, it is a constructor used only for jackson to be able to parse Box objects from json
+     * @author ioxom
      */
     @JsonCreator
     public Box() {}
@@ -91,6 +94,7 @@ public class Box {
     /**
      * a method for making a discord-sendable representation of a box
      * @return a {@link net.dv8tion.jda.api.entities.MessageEmbed MessageEmbed} that can be sent in discord showing the contents of the referenced box
+     * @author ioxom
      */
     public MessageEmbed embed() {
         EmbedBuilder e = new EmbedBuilder()
@@ -106,6 +110,7 @@ public class Box {
 
     /**
      * @return a readable {@link java.lang.String String} of the items in the specified box
+     * @author ioxom
      */
     public String itemsToString() {
         StringBuilder itemsAsString = new StringBuilder();
@@ -126,6 +131,7 @@ public class Box {
 
     /**
      * @return a readable {@link java.lang.String String} of the users in the specified box
+     * @author ioxom
      */
     public String usersToString() {
         StringBuilder usersAsString = new StringBuilder();
@@ -148,7 +154,8 @@ public class Box {
      * adds the Object passed to the {@link io.ioxcorp.ioxbox.data.format.Box} specified if it is a compatible format, then saves to json
      * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be added to the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
-     * @see Box#remove(Object) 
+     * @see Box#remove(Object)
+     * @author ioxom
      */
     public void add(Object object) {
         if (object instanceof String) {
@@ -169,6 +176,7 @@ public class Box {
      * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be removed from the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#add(Object)
+     * @author ioxom
      */
     public void remove(Object object) {
         if (object instanceof String) {
@@ -191,6 +199,7 @@ public class Box {
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(Object)
+     * @author ioxom
      */
     public static void createBox(Object owner, Object item) {
         if (owner instanceof User) {
@@ -214,6 +223,7 @@ public class Box {
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(Object, Object)
+     * @author ioxom
      */
     public static void createBox(Object owner) {
         if (owner instanceof User) {
@@ -235,6 +245,7 @@ public class Box {
      * checks if a box contains the object specified
      * @param object must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser}, {@link net.dv8tion.jda.api.entities.User User} or {@link java.lang.String}; the object to be checked for
      * @return true, if the object is found; false, if the object is not found
+     * @author ioxom
      */
     public boolean contains(Object object) {
         if (object instanceof CustomUser) {

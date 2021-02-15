@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbox.helpers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -20,11 +21,21 @@ public class EmbedHelper {
         this.random = new Random();
     }
 
+    @JsonIgnore
     private String getBoxID() {
         if (user.hasBox()) {
-            return  "" + user.id;
+            return "" + user.id;
         } else {
-            return  "null - no box";
+            return "null - no box";
+        }
+    }
+
+    @JsonIgnore
+    public static String getBoxID(CustomUser user) {
+        if (user.hasBox()) {
+            return "" + user.id;
+        } else {
+            return "null - no box";
         }
     }
 
@@ -36,7 +47,7 @@ public class EmbedHelper {
         return new EmbedBuilder()
                 .setColor(0xC91A00)
                 .setAuthor(author[0], author[1], author[2])
-                .setDescription(error + (rotater? "have a rotater" : "\"https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif\""))
+                .setDescription(error + (rotater? "have a rotater!" : ""))
                 .setThumbnail(rotater? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
                 .build();
