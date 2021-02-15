@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = "io.ioxcorp.ioxbox.Main"
 group 'io.ioxcorp'
-version '0.2.1'
+version '0.3.0'
 def jdaVersion = '4.2.0_228'
 def jacksonVersion = '2.12.1'
 
@@ -22,7 +22,9 @@ dependencies {
     //json parsing library
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     //integration with discord
-    implementation group: 'net.dv8tion', name: 'JDA', version: jdaVersion
+    implementation (group: 'net.dv8tion', name: 'JDA', version: jdaVersion) {
+        exclude module: "opus-java"
+    }
 }
 
 test {
