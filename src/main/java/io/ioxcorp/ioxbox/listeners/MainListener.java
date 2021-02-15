@@ -18,10 +18,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.security.InvalidParameterException;
+import java.util.Random;
 
 public class MainListener extends ListenerAdapter {
+    public static final Random random = new Random();
+    protected static final String[] pickups = {
+            "are you a time traveler?\nbecause I see you in my future ;)",
+            "you remind me of my pinkie toe,\nlittle, cute and I\"ll probably bang you on the coffee table later tonight.",
+            "there must be a lightswitch on my forehead,\nbecause everytime I see you, you turn me on.",
+            "somethings wrong with my eye\"s,\nbecause I can\"t take them off you.",
+            "somebody better call God\nbecause he\"s missing an angel.",
+            "you should be called wifi,\nbecause I\"m starting to feel a real connection.",
+            "I would never play hide and seek with you,\nbecause someone like you is hard to find (;",
+            "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
+            "if i told you that you had a great body, would you hold it against me?"
+    };
+
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+
 
         final String prefix = "-box ";
         final Message eventMessage = event.getMessage();
@@ -175,6 +190,9 @@ public class MainListener extends ListenerAdapter {
                 channel.sendMessage("calculating ping...").queue(message ->
                         message.editMessageFormat("ioxbot's ping is: %dms", System.currentTimeMillis() - time).queue());
                 frame.log(LogType.CMD, "ping", author);
+                break;
+            case "pickup" :
+                event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();
                 break;
         }
     }
