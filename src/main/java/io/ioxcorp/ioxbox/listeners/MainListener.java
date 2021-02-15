@@ -33,7 +33,27 @@ public class MainListener extends ListenerAdapter {
             "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
             "if i told you that you had a great body, would you hold it against me?"
     };
+    protected static final String[] annoying = {
+            "you do realise im a bot right?",
+            "what could you possibly want?",
+            "WHAT DO YOU WANT. I'M TRYING TO SLEEP",
+            "beep boop shut the hell up beep boop",
+            "no pls",
+            "im trying to thonk be quiet",
+            "if you're not Mr. Keller I don't wanna talk",
+            "have you no manners?",
+            "hmmmmm?",
+            "OwO, Whats this?"
+    };
 
+
+    /*public void onMessageRecieved(@NotNull MessageReceivedEvent event) {
+        switch (event.getMessage().getContentRaw().toLowerCase()) {
+            case "@boxbot#3888" :
+                event.getChannel().sendMessage(annoying[random.nextInt(annoying.length)]).queue();
+
+        }
+    }*/
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 
