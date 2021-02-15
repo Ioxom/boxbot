@@ -7,13 +7,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
-public class ConfirmationGetter extends ListenerAdapter implements Runnable {
+public class ConfirmationGetter extends ListenerAdapter {
 
     public final CountDownLatch latch;
     public final long id;
     public boolean response;
     public int attempts;
-    public boolean timedOut;
 
     public ConfirmationGetter(CountDownLatch latch, long id) {
         this.id = id;
@@ -42,15 +41,19 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
      * @author ioxom
      */
     public static WhatAmIDoing crab(long id) {
-        if (gettingConfirmationFrom(id)) return new WhatAmIDoing(channels.get(id), false);
+        //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
+        //ideally this has already been checked for
+        if (gettingConfirmationFrom(id)) return null;
 
+        //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
         confirmationGetters.put(id, new ConfirmationGetter(crabDownLatch, id));
-        new Thread(confirmationGetters.get(id)).start();
+        confirmationGetters.get(id).run();
 
         try {
+            //ensure that we've gotten our confirmation before returning a response
             crabDownLatch.await();
-            return new WhatAmIDoing(channels.get(id), booleans.get(id));
+            return new WhatAmIDoing(channels.get(id), booleans.getOrDefault(id, false));
         } catch (InterruptedException e) {
             e.printStackTrace();
             return new WhatAmIDoing(channels.get(id), false);
@@ -71,7 +74,6 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         confirmationGetters.remove(id);
     }
 
-    @Override
     public void run() {
         try {
             latch.await();
@@ -79,7 +81,7 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
             e.printStackTrace();
         }
 
-        if (this.timedOut) {
+        if (this.attempts >= 5) {
             channels.get(this.id).sendMessage("no proper response received, assuming no").queue();
             booleans.put(this.id, false);
         } else {

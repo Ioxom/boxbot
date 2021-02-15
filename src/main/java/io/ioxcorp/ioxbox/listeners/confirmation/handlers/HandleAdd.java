@@ -22,13 +22,19 @@ public class HandleAdd implements Runnable {
 
     @Override
     public void run() {
+        EmbedHelper helper = new EmbedHelper(user);
         if (ConfirmationGetter.gettingConfirmationFrom(user.id)) {
-            initialChannel.sendMessage("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them").queue();
+            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(user.id);
-        EmbedHelper helper = new EmbedHelper(user);
+
+        if (response == null) {
+            this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            return;
+        }
+
         if (response.getB()) {
             asker.getBox().add(user);
             response.getChannel().sendMessage(helper.successEmbed("user accepted, added them to your box")).queue();

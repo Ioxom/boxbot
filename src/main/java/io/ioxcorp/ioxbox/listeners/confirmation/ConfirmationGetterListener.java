@@ -12,8 +12,7 @@ public class ConfirmationGetterListener extends ListenerAdapter {
         for (ConfirmationGetter confirmationGetter : ConfirmationGetter.confirmationGetters.values()) {
 
             //with over 5 attempts we assume no
-            if (confirmationGetter.attempts > 5) {
-                confirmationGetter.timedOut = true;
+            if (confirmationGetter.attempts >= 5) {
                 ConfirmationGetter.channels.put(confirmationGetter.id, event.getChannel());
                 confirmationGetter.latch.countDown();
             }
