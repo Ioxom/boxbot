@@ -21,6 +21,12 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         this.attempts = 0;
     }
 
+    /**
+     * convenience method to check if we're getting confirmation from a user
+     * @param id the id of the user we want to check if we're getting confirmation from
+     * @return whether or not we're getting confirmation from the user
+     * @author ioxom
+     */
     public static boolean gettingConfirmationFrom(long id) {
         return booleans.containsKey(id) || confirmationGetters.containsKey(id) || channels.containsKey(id);
     }
@@ -29,6 +35,12 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
     public static final HashMap<Long, Boolean> booleans = new HashMap<>();
     public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
+    /**
+     * gets confirmation from a user - warning: blocks the thread it's running on until confirmation is given - proceed with caution
+     * @param id the id of the user we want confirmation from
+     * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
+     * @author ioxom
+     */
     public static WhatAmIDoing crab(long id) {
         if (gettingConfirmationFrom(id)) return new WhatAmIDoing(channels.get(id), false);
 
@@ -47,6 +59,12 @@ public class ConfirmationGetter extends ListenerAdapter implements Runnable {
         }
     }
 
+    /**
+     * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps
+     * this normally runs after getting confirmation from that user
+     * @param id the id of the user we want to clean from our maps
+     * @author ioxom
+     */
     public static void clean(long id) {
         booleans.remove(id);
         channels.remove(id);
