@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import java.util.Random;
 
 /**
- * adds a user to another user's box, after asking for confirmation
+ * adds a user to another user's box, after asking for confirmation<br>
  * usage: new {@link Thread}(instance of {@link HandleAdd}).start();
  * @author ioxom, thonkman
  */

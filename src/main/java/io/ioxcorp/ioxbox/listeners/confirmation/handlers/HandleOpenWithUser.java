@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import java.util.Random;
 
 /**
- * opens a new {@link Box} containing a user owned by the the asking user, after asking for confirmation
+ * opens a new {@link Box} containing a user owned by the the asking user, after asking for confirmation<br>
  * usage: new {@link Thread}(instance of {@link HandleOpenWithUser}).start();
  * @author ioxom
  */

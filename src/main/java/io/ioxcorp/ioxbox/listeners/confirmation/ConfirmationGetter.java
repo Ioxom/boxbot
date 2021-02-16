@@ -45,7 +45,8 @@ public class ConfirmationGetter extends ListenerAdapter {
     public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
     /**
-     * gets confirmation from a user - warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
+     * gets confirmation from a user<br>
+     * warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
      * @param id the id of the user we want confirmation from
      * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
      * @author ioxom

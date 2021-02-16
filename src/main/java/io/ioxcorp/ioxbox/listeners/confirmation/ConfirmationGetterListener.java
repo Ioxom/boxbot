@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * runs through the {@link ConfirmationGetter ConfirmationGetters} contained in the static {@code confirmationGetters} {@link java.util.HashMap} contained in the {@link ConfirmationGetter ConfirmationGetter} class and checks if we've gotten confirmation from the referenced users
+ * runs through the {@link ConfirmationGetter ConfirmationGetters} contained in the static {@code confirmationGetters} {@link java.util.HashMap} contained in the {@link ConfirmationGetter ConfirmationGetter} class and checks if we've gotten confirmation from the referenced users <br>
  * if so, closes that getter and saves the response
  * @author ioxom
  */

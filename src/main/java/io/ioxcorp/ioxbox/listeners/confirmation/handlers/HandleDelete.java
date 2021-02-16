@@ -8,7 +8,7 @@ import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 /**
- * deletes a user's box, after asking for confirmation
+ * deletes a user's box, after asking for confirmation <br>
  * usage: new {@link Thread}(instance of {@link HandleDelete}).start();
  * @author ioxom
  */
