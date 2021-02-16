@@ -129,6 +129,7 @@ public class MainListener extends ListenerAdapter {
             case "open":
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                    channel.sendMessage(helper.successEmbed("<!" + user.id + ">, do you want to be added to <!" + author.id + ">'s new box?")).queue();
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
                     new Thread(handleOpenWithUser).start();
                     break;
