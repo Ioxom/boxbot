@@ -9,6 +9,7 @@ import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
+import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleOpenWithUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -80,12 +81,12 @@ public class MainListener extends ListenerAdapter {
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
-                        channel.sendMessage(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)").queue();
+                        channel.sendMessage(helper.successEmbed(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)")).queue();
                         HandleAdd yes = new HandleAdd(user, author, channel);
                         new Thread(yes).start();
                         break;
                     } else {
-                        channel.sendMessage("They declined").queue();
+                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with -box open?")).queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
@@ -126,15 +127,11 @@ public class MainListener extends ListenerAdapter {
                 break;
 
             case "open":
-                if (messageContent.length == 1) {
-                    try {
-                        Box.createBox(author);
-                        channel.sendMessage(helper.successEmbed("empty box successfully created!")).queue();
-                    } catch (InvalidParameterException e) {
-                        channel.sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead.")).queue();
-                    } catch (IllegalArgumentException e) {
-                        channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object) was of an incompatible type")).queue();
-                    }
+                if (!eventMessage.getMentionedUsers().isEmpty()) {
+                    CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                    HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
+                    new Thread(handleOpenWithUser).start();
+                    break;
                 } else {
                     try {
                         Box.createBox(author, messageContent[1]);
