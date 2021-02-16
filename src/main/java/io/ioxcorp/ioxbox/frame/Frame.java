@@ -1,5 +1,6 @@
-package io.ioxcorp.ioxbox;
+package io.ioxcorp.ioxbox.frame;
 
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.entities.User;
 
@@ -17,10 +18,16 @@ import java.io.InputStream;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+/**
+ * a bad swing gui
+ * @author ioxom
+ */
+//TODO: 1.0.0: (thonkman) make this look good, maybe move away from swing to javaFX
 public class Frame {
     private final JTextArea console;
     private final JFrame jFrame;
     private final JPanel panel;
+
     public Frame() {
         this.jFrame = new JFrame("ioxbox v " + Main.VERSION);
         this.console = new JTextArea("[init] loading ioxbox");
@@ -64,14 +71,6 @@ public class Frame {
         this.jFrame.setSize(new Dimension(600, 275));
         this.jFrame.setVisible(true);
         this.log(LogType.INIT, "finished initialising frame");
-    }
-
-    public enum LogType {
-        MAIN,
-        INIT,
-        ERROR,
-        FATAL_ERROR,
-        CMD
     }
 
     public void log(LogType type, String message) {

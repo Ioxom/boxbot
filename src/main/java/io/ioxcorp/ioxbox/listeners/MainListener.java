@@ -2,8 +2,8 @@ package io.ioxcorp.ioxbox.listeners;
 
 import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
-import static io.ioxcorp.ioxbox.Frame.LogType;
 
+import io.ioxcorp.ioxbox.frame.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
@@ -17,18 +17,20 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
 import java.security.InvalidParameterException;
 import java.util.Random;
 
+/**
+ * the main listener for ioxbox<br>
+ * executes commands from text channels
+ */
 public class MainListener extends ListenerAdapter {
     public static final Random random = new Random();
+    public static final String prefix = "-box ";
     
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 
-
-        final String prefix = "-box ";
         final Message eventMessage = event.getMessage();
         final String messageContentRaw = eventMessage.getContentRaw().toLowerCase();
 
@@ -44,13 +46,29 @@ public class MainListener extends ListenerAdapter {
             case "help":
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(new Color(0xfc03df))
+                        .setColor(0xfc03df)
                         .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
-                        .addField("commands", "prefix is " + prefix + "\n commands are the following; yes, add", false)
+                        .addField("commands", "use " + prefix + "commands for a list", false)
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 channel.sendMessage(helpEmbed.build()).queue();
                 frame.log(LogType.CMD, "help", author);
+                break;
+            case "commands":
+            case "cmds":
+                EmbedBuilder commandEmbed = new EmbedBuilder()
+                        .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                        .setColor(0x00ff00)
+                        .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + prefix + "add [ping or item]`", false)
+                        .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + prefix + "remove [ping or item]`", false)
+                        .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + prefix + "ping`", false)
+                        .addField("open", "opens a new box for you, with items if specified.\nsyntax:\n`" + prefix + "open`,\n`" + prefix + "open [ping or item]`", false)
+                        .addField("delete", "deletes your box from our files permanently.\nsyntax: `" + prefix + "delete`", false)
+                        .addField("list", "shows you all users and items in your or another user's box.\nsyntax:\n`" + prefix + "list`,\n`" + prefix + "list [ping]`", false)
+                        .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + prefix + "commands`", false)
+                        .addField("help", "general information about ioxbox.\nsyntax: `" + prefix + "help`", false);
+                channel.sendMessage(commandEmbed.build()).queue();
+                frame.log(LogType.CMD, "commands", author);
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
@@ -75,7 +93,7 @@ public class MainListener extends ListenerAdapter {
                         new Thread(yes).start();
                         break;
                     } else {
-                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with -box open?")).queue();
+                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + prefix + "open?")).queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();

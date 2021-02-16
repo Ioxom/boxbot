@@ -43,7 +43,15 @@ public class HandleOpenWithUser implements Runnable {
 
         if (response.getB()) {
             Box.createBox(askingUser, user);
-            response.getChannel().sendMessage(helper.successEmbed("user accepted, added them to your box")).queue();
+            response.getChannel().sendMessage(new EmbedBuilder()
+                    .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                    .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
+                    .setTitle("put <!" + user.id + "> in your new box!")
+                    .setDescription("the user allowed you to put them in the box!")
+                    .setColor(0x00ff00)
+                    .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
+                    .build()
+            ).queue();
         } else {
             Random r = new Random();
             if (r.nextInt(4) == 0) {
@@ -51,8 +59,9 @@ public class HandleOpenWithUser implements Runnable {
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0x00FF00)
-                        .setFooter("requested by user " + user.getTag() + "\nbox id: " + EmbedHelper.getBoxID(user))
+                        .setColor(0x00ff00)
+                        .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
+                        .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
             } else {

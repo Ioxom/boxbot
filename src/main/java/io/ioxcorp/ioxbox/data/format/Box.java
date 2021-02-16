@@ -98,7 +98,7 @@ public class Box {
      */
     public MessageEmbed embed() {
         EmbedBuilder e = new EmbedBuilder()
-                .setColor(0x00FF00)
+                .setColor(0x00ff00)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                 .setTitle(this.owner.getTag() + "'s box contents:")
                 .addField("items:", this.itemsToString(), false)

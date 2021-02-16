@@ -45,7 +45,7 @@ public class EmbedHelper {
         boolean rotater = random.nextInt(100 + 1) - 1 > 95;
 
         return new EmbedBuilder()
-                .setColor(0xC91A00)
+                .setColor(0xc91a00)
                 .setAuthor(author[0], author[1], author[2])
                 .setDescription(error + (rotater? "have a rotater!" : ""))
                 .setThumbnail(rotater? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
@@ -56,7 +56,7 @@ public class EmbedHelper {
     public MessageEmbed successEmbed(String message) {
         return new EmbedBuilder()
                 .setAuthor(author[0], author[1], author[2])
-                .setColor(0x00FF00)
+                .setColor(0x00ff00)
                 .setDescription(message)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
                 .build();
@@ -65,7 +65,7 @@ public class EmbedHelper {
     public MessageEmbed successEmbed(String title, String message) {
         return new EmbedBuilder()
                 .setAuthor(author[0], author[1], author[2])
-                .setColor(0x00FF00)
+                .setColor(0x00ff00)
                 .setDescription(message)
                 .setTitle(title)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
@@ -75,7 +75,7 @@ public class EmbedHelper {
     public static MessageEmbed simpleErrorEmbed(long id, String message) {
         return new EmbedBuilder()
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setColor(0xC91A00)
+                .setColor(0xc91a00)
                 .setDescription(message)
                 .setFooter("requested by user with id: " + id)
                 .build();

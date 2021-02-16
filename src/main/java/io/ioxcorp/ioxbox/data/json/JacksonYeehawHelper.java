@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static io.ioxcorp.ioxbox.Frame.LogType;
+import io.ioxcorp.ioxbox.frame.LogType;
 
 public class JacksonYeehawHelper {
 

@@ -2,8 +2,10 @@ package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
+import io.ioxcorp.ioxbox.frame.Frame;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
 import io.ioxcorp.ioxbox.listeners.MainListener;
+import io.ioxcorp.ioxbox.listeners.status.StatusSetter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -16,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
-import static io.ioxcorp.ioxbox.Frame.LogType;
+import io.ioxcorp.ioxbox.frame.LogType;
 
 public class Main {
 
@@ -60,7 +62,7 @@ public class Main {
         //throw error if version is not found
         if (VERSION == null) {
             VERSION = "0.0.0";
-            frame.log(Frame.LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
+            frame.log(LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
         }
 
         //log in
@@ -81,7 +83,7 @@ public class Main {
 
         //add event listeners
         if (api != null) {
-            api.addEventListener(new MainListener(), new ConfirmationGetterListener());
+            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter());
             frame.log(LogType.INIT, "initialized jda");
         } else {
             frame.log(LogType.ERROR, "failed to create JDA object for unknown reasons");
