@@ -136,18 +136,23 @@ public class MainListener extends ListenerAdapter {
             case "open":
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    channel.sendMessage(helper.successEmbed("<!" + user.id + ">, do you want to be added to <!" + author.id + ">'s new box?")).queue();
+                    channel.sendMessage(helper.successEmbed("<@!" + user.id + ">, do you want to be added to <@!" + author.id + ">'s new box?")).queue();
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
                     new Thread(handleOpenWithUser).start();
                     break;
                 } else {
-                    try {
-                        Box.createBox(author, messageContent[1]);
-                        channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
-                    } catch (InvalidParameterException e) {
-                        channel.sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead!")).queue();
-                    } catch (IllegalArgumentException e) {
-                        channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
+                    if (messageContent.length == 1) {
+                        Box.createBox(author);
+                        channel.sendMessage(helper.successEmbed("new empty box successfully created for owner <@!" + author.id + ">")).queue();
+                    } else {
+                        try {
+                            Box.createBox(author, messageContent[1]);
+                            channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
+                        } catch (InvalidParameterException e) {
+                            channel.sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead!")).queue();
+                        } catch (IllegalArgumentException e) {
+                            channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
+                        }
                     }
                 }
                 frame.log(LogType.CMD, prefix + "open", author);

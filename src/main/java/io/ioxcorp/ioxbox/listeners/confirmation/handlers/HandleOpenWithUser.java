@@ -46,7 +46,7 @@ public class HandleOpenWithUser implements Runnable {
             response.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                    .setTitle("put <!" + user.id + "> in your new box!")
+                    .setTitle("put <@!" + user.id + "> in your new box!")
                     .setDescription("the user allowed you to put them in the box!")
                     .setColor(0x00ff00)
                     .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
