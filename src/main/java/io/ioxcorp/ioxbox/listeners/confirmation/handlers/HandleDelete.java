@@ -7,6 +7,11 @@ import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
+/**
+ * deletes a user's box, after asking for confirmation
+ * usage: new {@link Thread}(instance of {@link HandleDelete}).start();
+ * @author ioxom
+ */
 public class HandleDelete implements Runnable {
     private final CustomUser user;
     private final MessageChannel initialChannel;

@@ -8,6 +8,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * a class used to get confirmation from a user in discord
+ * @author ioxom
+ */
 public class ConfirmationGetter extends ListenerAdapter {
 
     public final CountDownLatch latch;
@@ -15,6 +19,12 @@ public class ConfirmationGetter extends ListenerAdapter {
     public boolean response;
     public int attempts;
 
+    /**
+     * creates a {@link ConfirmationGetter} for the specified user with the specified lock
+     * @param latch a {@link CountDownLatch} that will keep the thread locked until we have confirmation
+     * @param id the id of the user we want confirmation from
+     * @author ioxom
+     */
     public ConfirmationGetter(CountDownLatch latch, long id) {
         this.id = id;
         this.latch = latch;
@@ -35,7 +45,7 @@ public class ConfirmationGetter extends ListenerAdapter {
     public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
     /**
-     * gets confirmation from a user - warning: blocks the thread it's running on until confirmation is given - proceed with caution
+     * gets confirmation from a user - warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
      * @param id the id of the user we want confirmation from
      * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
      * @author ioxom

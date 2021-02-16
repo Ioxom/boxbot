@@ -9,6 +9,11 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.util.Random;
 
+/**
+ * adds a user to another user's box, after asking for confirmation
+ * usage: new {@link Thread}(instance of {@link HandleAdd}).start();
+ * @author ioxom, thonkman
+ */
 public class HandleAdd implements Runnable {
     private final CustomUser user;
     private final CustomUser askingUser;

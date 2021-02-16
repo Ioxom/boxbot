@@ -10,6 +10,11 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.util.Random;
 
+/**
+ * opens a new {@link Box} containing a user owned by the the asking user, after asking for confirmation
+ * usage: new {@link Thread}(instance of {@link HandleOpenWithUser}).start();
+ * @author ioxom
+ */
 public class HandleOpenWithUser implements Runnable {
     private final CustomUser user;
     private final CustomUser askingUser;
