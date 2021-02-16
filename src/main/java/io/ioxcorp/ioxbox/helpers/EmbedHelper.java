@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.Random;
 
@@ -18,6 +19,11 @@ public class EmbedHelper {
 
     public EmbedHelper(CustomUser user) {
         this.user = user;
+        this.random = new Random();
+    }
+
+    public EmbedHelper(long id) {
+        this.user = new CustomUser(User.fromId(id));
         this.random = new Random();
     }
 

@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox.listeners.confirmation;
 
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
+import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -27,11 +28,10 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @author ioxom
      */
     public static boolean gettingConfirmationFrom(long id) {
-        return booleans.containsKey(id) || confirmationGetters.containsKey(id) || channels.containsKey(id);
+        return confirmationGetters.containsKey(id) || channels.containsKey(id);
     }
 
     public static final HashMap<Long, MessageChannel> channels = new HashMap<>();
-    public static final HashMap<Long, Boolean> booleans = new HashMap<>();
     public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
     /**
@@ -48,16 +48,36 @@ public class ConfirmationGetter extends ListenerAdapter {
         //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
         confirmationGetters.put(id, new ConfirmationGetter(crabDownLatch, id));
-        confirmationGetters.get(id).run();
+
+        EmbedHelper e = new EmbedHelper(id);
 
         try {
             //ensure that we've gotten our confirmation before returning a response
             crabDownLatch.await();
-            return new WhatAmIDoing(channels.get(id), booleans.getOrDefault(id, false));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+            boolean response;
+            ConfirmationGetter confirmationGetter = confirmationGetters.get(id);
+            //safeguard: if it's null we assume no
+            if (confirmationGetter == null) {
+                channels.get(id).sendMessage(e.errorEmbed("confirmation getter for user" + id + " is null, assuming false response")).queue();
+                response = false;
+            } else {
+                //if there were more than five messages from the user we assume they won't answer
+                if (confirmationGetter.attempts >= 5) {
+                    channels.get(id).sendMessage("no proper response received, assuming no").queue();
+                    response = false;
+                //otherwise they've answered and we take that
+                } else {
+                    response = confirmationGetter.response;
+                }
+            }
+
+            return new WhatAmIDoing(channels.get(id), response);
+        } catch (InterruptedException ie) {
+            channels.get(id).sendMessage(e.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
             return new WhatAmIDoing(channels.get(id), false);
         } finally {
+            //ensure that we remove references of the id from our HashMaps so we can check from this user again
             ConfirmationGetter.clean(id);
         }
     }
@@ -69,23 +89,7 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @author ioxom
      */
     public static void clean(long id) {
-        booleans.remove(id);
         channels.remove(id);
         confirmationGetters.remove(id);
-    }
-
-    public void run() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (this.attempts >= 5) {
-            channels.get(this.id).sendMessage("no proper response received, assuming no").queue();
-            booleans.put(this.id, false);
-        } else {
-            booleans.put(this.id, response);
-        }
     }
 }
