@@ -44,10 +44,8 @@ public class Main {
         }
     }
 
-    public static final Frame frame;
+    public static final Frame frame = new Frame();
     static {
-        //create frame
-        frame = new Frame();
         frame.init();
     }
 
