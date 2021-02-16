@@ -11,12 +11,12 @@ import java.util.Random;
 
 public class HandleAdd implements Runnable {
     private final CustomUser user;
-    private final CustomUser asker;
+    private final CustomUser askingUser;
     private final MessageChannel initialChannel;
 
-    public HandleAdd(CustomUser user, CustomUser asker, MessageChannel initialChannel) {
+    public HandleAdd(CustomUser user, CustomUser askingUser, MessageChannel initialChannel) {
         this.user = user;
-        this.asker = asker;
+        this.askingUser = askingUser;
         this.initialChannel = initialChannel;
     }
 
@@ -36,12 +36,12 @@ public class HandleAdd implements Runnable {
         }
 
         if (response.getB()) {
-            asker.getBox().add(user);
+            askingUser.getBox().add(user);
             response.getChannel().sendMessage(helper.successEmbed("user accepted, added them to your box")).queue();
         } else {
             Random r = new Random();
             if (r.nextInt(4) == 0) {
-                asker.getBox().add(user);
+                askingUser.getBox().add(user);
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")

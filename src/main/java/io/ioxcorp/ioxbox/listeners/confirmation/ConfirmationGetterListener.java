@@ -22,6 +22,7 @@ public class ConfirmationGetterListener extends ListenerAdapter {
                 return;
             }
 
+            //if our other checks passed handle the response
             if (event.getMessage().getContentRaw().equals("yes") || event.getMessage().getContentRaw().equals("true")) {
                 confirmationGetter.response = true;
                 ConfirmationGetter.channels.put(confirmationGetter.id, event.getChannel());

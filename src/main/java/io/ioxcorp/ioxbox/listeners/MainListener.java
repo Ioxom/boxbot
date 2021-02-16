@@ -23,17 +23,6 @@ import java.util.Random;
 
 public class MainListener extends ListenerAdapter {
     public static final Random random = new Random();
-    protected static final String[] pickups = {
-            "are you a time traveler?\nbecause I see you in my future ;)",
-            "you remind me of my pinkie toe,\nlittle, cute and I\"ll probably bang you on the coffee table later tonight.",
-            "there must be a lightswitch on my forehead,\nbecause everytime I see you, you turn me on.",
-            "somethings wrong with my eye\"s,\nbecause I can\"t take them off you.",
-            "somebody better call God\nbecause he\"s missing an angel.",
-            "you should be called wifi,\nbecause I\"m starting to feel a real connection.",
-            "I would never play hide and seek with you,\nbecause someone like you is hard to find (;",
-            "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
-            "if i told you that you had a great body, would you hold it against me?"
-    };
     
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
@@ -136,12 +125,7 @@ public class MainListener extends ListenerAdapter {
                 } else {
                     try {
                         Box.createBox(author, messageContent[1]);
-                        channel.sendMessage(new EmbedBuilder()
-                                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                                .setColor(0x00FF00)
-                                .setDescription("box successfully created with item " + messageContent[1] + "!")
-                                .build()
-                        ).queue();
+                        channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     } catch (InvalidParameterException e) {
                         channel.sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead!")).queue();
                     } catch (IllegalArgumentException e) {
@@ -184,13 +168,25 @@ public class MainListener extends ListenerAdapter {
 
             case "ping":
                 long time = System.currentTimeMillis();
-                channel.sendMessage("calculating ping...").queue(message ->
-                        message.editMessageFormat("ioxbot's ping is: %dms", System.currentTimeMillis() - time).queue());
+                channel.sendMessage(helper.successEmbed("calculating ping...")).queue(message ->
+                        message.editMessage(helper.successEmbed("ioxbox's ping is: " + (System.currentTimeMillis() - time) + "ms")).queue());
                 frame.log(LogType.CMD, "ping", author);
                 break;
-            case "pickup" :
+            case "pickup":
                 event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();
                 break;
         }
     }
+
+    private static final String[] pickups = {
+            "are you a time traveler?\nbecause I see you in my future ;)",
+            "you remind me of my pinkie toe,\nlittle, cute and I\"ll probably bang you on the coffee table later tonight.",
+            "there must be a lightswitch on my forehead,\nbecause everytime I see you, you turn me on.",
+            "somethings wrong with my eye\"s,\nbecause I can\"t take them off you.",
+            "somebody better call God\nbecause he\"s missing an angel.",
+            "you should be called wifi,\nbecause I\"m starting to feel a real connection.",
+            "I would never play hide and seek with you,\nbecause someone like you is hard to find (;",
+            "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
+            "if i told you that you had a great body, would you hold it against me?"
+    };
 }

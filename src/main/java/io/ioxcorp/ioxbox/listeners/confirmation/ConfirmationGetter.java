@@ -47,49 +47,40 @@ public class ConfirmationGetter extends ListenerAdapter {
 
         //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
-        confirmationGetters.put(id, new ConfirmationGetter(crabDownLatch, id));
-
-        EmbedHelper e = new EmbedHelper(id);
+        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
+        confirmationGetters.put(id, confirmationGetter);
 
         try {
             //ensure that we've gotten our confirmation before returning a response
             crabDownLatch.await();
-
             boolean response;
-            ConfirmationGetter confirmationGetter = confirmationGetters.get(id);
-            //safeguard: if it's null we assume no
-            if (confirmationGetter == null) {
-                channels.get(id).sendMessage(e.errorEmbed("confirmation getter for user" + id + " is null, assuming false response")).queue();
+
+            //if there were more than five messages from the user we assume they won't answer
+            if (confirmationGetter.attempts >= 5) {
+                channels.get(id).sendMessage(EmbedHelper.simpleErrorEmbed(id, "no proper response received, assuming no")).queue();
                 response = false;
+            //otherwise they've answered and we take that
             } else {
-                //if there were more than five messages from the user we assume they won't answer
-                if (confirmationGetter.attempts >= 5) {
-                    channels.get(id).sendMessage("no proper response received, assuming no").queue();
-                    response = false;
-                //otherwise they've answered and we take that
-                } else {
-                    response = confirmationGetter.response;
-                }
+                response = confirmationGetter.response;
             }
 
             return new WhatAmIDoing(channels.get(id), response);
         } catch (InterruptedException ie) {
-            channels.get(id).sendMessage(e.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
+            channels.get(id).sendMessage(EmbedHelper.simpleErrorEmbed(id, "`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
             return new WhatAmIDoing(channels.get(id), false);
         } finally {
             //ensure that we remove references of the id from our HashMaps so we can check from this user again
-            ConfirmationGetter.clean(id);
+            confirmationGetter.clean();
         }
     }
 
     /**
      * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps
      * this normally runs after getting confirmation from that user
-     * @param id the id of the user we want to clean from our maps
      * @author ioxom
      */
-    public static void clean(long id) {
-        channels.remove(id);
+    public void clean() {
+        channels.remove(this.id);
         confirmationGetters.remove(id);
     }
 }

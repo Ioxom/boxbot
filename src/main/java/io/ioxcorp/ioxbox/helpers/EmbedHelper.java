@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 
 import java.util.Random;
 
@@ -19,11 +18,6 @@ public class EmbedHelper {
 
     public EmbedHelper(CustomUser user) {
         this.user = user;
-        this.random = new Random();
-    }
-
-    public EmbedHelper(long id) {
-        this.user = new CustomUser(User.fromId(id));
         this.random = new Random();
     }
 
@@ -75,6 +69,15 @@ public class EmbedHelper {
                 .setDescription(message)
                 .setTitle(title)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
+                .build();
+    }
+
+    public static MessageEmbed simpleErrorEmbed(long id, String message) {
+        return new EmbedBuilder()
+                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
+                .setColor(0xC91A00)
+                .setDescription(message)
+                .setFooter("requested by user with id: " + id)
                 .build();
     }
 }
