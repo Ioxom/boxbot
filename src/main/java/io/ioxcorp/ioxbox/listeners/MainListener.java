@@ -142,14 +142,20 @@ public class MainListener extends ListenerAdapter {
                     break;
                 } else {
                     if (messageContent.length == 1) {
-                        Box.createBox(author);
-                        channel.sendMessage(helper.successEmbed("new empty box successfully created for owner <@!" + author.id + ">")).queue();
+                        try {
+                            Box.createBox(author);
+                            channel.sendMessage(helper.successEmbed("new empty box successfully created for owner <@!" + author.id + ">")).queue();
+                        } catch (InvalidParameterException e) {
+                            channel.sendMessage(helper.errorEmbed("you seem to already have a box.")).queue();
+                        } catch (IllegalArgumentException e) {
+                            channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
+                        }
                     } else {
                         try {
                             Box.createBox(author, messageContent[1]);
                             channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                         } catch (InvalidParameterException e) {
-                            channel.sendMessage(helper.errorEmbed("you seem to already have a box. here have a rotater instead!")).queue();
+                            channel.sendMessage(helper.errorEmbed("you seem to already have a box.")).queue();
                         } catch (IllegalArgumentException e) {
                             channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
                         }
