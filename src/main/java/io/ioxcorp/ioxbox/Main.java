@@ -63,11 +63,7 @@ public class Main {
             frame.log(LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
         }
 
-        try {
-            fileCreator.main();
-        } catch (IOException e) {
-            frame.log(LogType.WRTR, "OwO, whats this? An IOException...");
-        }
+        FileCreator.main();
         try {
             FileEditor.main();
         } catch (IOException e) {
