@@ -2,6 +2,8 @@ package io.ioxcorp.ioxbox.frame;
 
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.frame.logging.FileLogger;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
@@ -18,9 +20,6 @@ import java.io.InputStream;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-import static io.ioxcorp.ioxbox.FileEditor.*;
-import io.ioxcorp.ioxbox.FileEditor.*;
-
 /**
  * a bad swing gui
  * @author ioxom
@@ -30,17 +29,16 @@ public class Frame {
     private final JTextArea console;
     private final JFrame jFrame;
     private final JPanel panel;
+    private final FileLogger logger;
 
     public Frame() {
         this.jFrame = new JFrame("ioxbox v " + Main.VERSION);
         this.console = new JTextArea("[init] loading ioxbox");
         this.panel = new JPanel(new BorderLayout());
+        this.logger = new FileLogger();
     }
 
     public void init() {
-
-
-
         //set icon
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
@@ -85,35 +83,19 @@ public class Frame {
         switch (type) {
             case INIT:
                 this.console.append("\n[init] " + message);
-                try {
-                    myWriter.write("\n [init] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case MAIN:
                 this.console.append("\n[main] " + message);
-                try {
-                    myWriter.write("\n [main] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case ERROR:
                 this.console.append("\n[err] " + message);
-                try {
-                    myWriter.write("\n [err] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case FATAL_ERROR:
                 this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
-                try {
-                    myWriter.write("\n [err/FATAL] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 //wait for five seconds to allow for reading the error
                 try {
                     Thread.sleep(5000);
@@ -122,13 +104,6 @@ public class Frame {
                     System.exit(1);
                 }
                 break;
-            case WRTR:
-                this.console.append("\n[wrtr] " + message);
-                try {
-                    myWriter.write("\n [wrtr] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
         }
     }
 
@@ -136,35 +111,19 @@ public class Frame {
         switch (type) {
             case INIT:
                 this.console.append("\n[init] " + message);
-                try {
-                    myWriter.write("\n [init] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case MAIN:
                 this.console.append("\n[main] " + message);
-                try {
-                    myWriter.write("\n [main] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case ERROR:
                 this.console.append("\n[err] " + message);
-                try {
-                    myWriter.write("\n [err] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 break;
             case FATAL_ERROR:
                 this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
-                try {
-                    myWriter.write("\n [err/FATAL] " + message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.logger.log(type, message);
                 //wait for five seconds to allow for reading the error
                 try {
                     Thread.sleep(5000);
@@ -180,11 +139,7 @@ public class Frame {
 
                 if (author instanceof CustomUser) {
                     this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
-                    try {
-                        myWriter.write("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    this.logger.log(type, message, author);
                 } else {
                     throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
                 }

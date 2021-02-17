@@ -2,6 +2,7 @@
 /build/
 .idea
 .run
+/logs/
 box_data.json
 token.txt
 

@@ -1,6 +1,6 @@
 package io.ioxcorp.ioxbox;
 
-import io.ioxcorp.ioxbox.frame.LogType;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import static io.ioxcorp.ioxbox.Main.frame;
 
 import java.io.FileWriter;
@@ -22,6 +22,6 @@ public class FileEditor {
             FileWriter myWriter = new FileWriter("files/loggers.txt", true);
             myWriter.write("e");
             myWriter.close();
-            frame.log(LogType.WRTR, "Successfully wrote command to file");
+            frame.log(LogType.INIT, "Successfully wrote command to file");
     }
 }

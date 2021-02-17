@@ -4,7 +4,7 @@ import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 import static io.ioxcorp.ioxbox.FileEditor.*;
 
-import io.ioxcorp.ioxbox.frame.LogType;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
@@ -55,11 +55,6 @@ public class MainListener extends ListenerAdapter {
                         .setFooter("powered by ioxcorp™");
                 channel.sendMessage(helpEmbed.build()).queue();
                 frame.log(LogType.CMD, "help", author);
-                try {
-                    myWriter.write("[cmd] " + author + " needed help uwu");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
             case "commands":
             case "cmds":
@@ -76,12 +71,6 @@ public class MainListener extends ListenerAdapter {
                         .addField("help", "general information about ioxbox.\nsyntax: `" + prefix + "help`", false);
                 channel.sendMessage(commandEmbed.build()).queue();
                 frame.log(LogType.CMD, "commands", author);
-                try {
-                    myWriter.write("[cmd] " + author + " said \"OwO, are these the commands?\"");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 break;
             case "add":
                 //if there are no mentioned users, use the first argument
@@ -112,11 +101,6 @@ public class MainListener extends ListenerAdapter {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
-                try {
-                    myWriter.write("[cmd] " + author + " added something to their box");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
             case "remove":
                 //if there are no mentioned users, use the first argument
@@ -149,11 +133,6 @@ public class MainListener extends ListenerAdapter {
                     channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
                 frame.log(LogType.CMD, prefix + "remove", author);
-                try {
-                    myWriter.write("[cmd] " + author + " removed something from their box");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
 
             case "open":
@@ -185,11 +164,6 @@ public class MainListener extends ListenerAdapter {
                     }
                 }
                 frame.log(LogType.CMD, prefix + "open", author);
-                try {
-                    myWriter.write("[cmd] " + author + " made a box, hope they have fun UwY");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
 
             case "delete":
@@ -221,11 +195,6 @@ public class MainListener extends ListenerAdapter {
                     }
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
-                try {
-                    myWriter.write("[cmd] " + author + " deleted their box TwT");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
 
             case "ping":
@@ -233,11 +202,6 @@ public class MainListener extends ListenerAdapter {
                 channel.sendMessage(helper.successEmbed("calculating ping...")).queue(message ->
                         message.editMessage(helper.successEmbed("ioxbox's ping is: " + (System.currentTimeMillis() - time) + "ms")).queue());
                 frame.log(LogType.CMD, "ping", author);
-                try {
-                    myWriter.write("[cmd] " + author + " asked for ping, it was: " + time);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
             case "pickup":
                 event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();

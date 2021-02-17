@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
-import io.ioxcorp.ioxbox.frame.LogType;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 
 public class Main {
 
@@ -61,13 +61,6 @@ public class Main {
         if (VERSION == null) {
             VERSION = "0.0.0";
             frame.log(LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
-        }
-
-        FileCreator.main();
-        try {
-            FileEditor.main();
-        } catch (IOException e) {
-            frame.log(LogType.WRTR, "UwU, there was an IOException....");
         }
 
         //log in
