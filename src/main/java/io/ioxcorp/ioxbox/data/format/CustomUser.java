@@ -50,6 +50,15 @@ public class CustomUser {
     }
 
     /**
+     * @return a string that if sent in discord will ping the user
+     * @author ioxom
+     */
+    @JsonIgnore
+    public String getPing() {
+        return "<@" + this.id + ">";
+    }
+
+    /**
      * checks the {@link java.util.HashMap HashMap} contained in {@link Main Main} for a box owned by the user
      * @return true, if the {@link CustomUser CustomUser} has a box; false, if they do not
      * @author ioxom
