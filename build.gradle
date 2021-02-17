@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 mainClassName = "io.ioxcorp.ioxbox.Main"
@@ -13,6 +14,11 @@ def jacksonVersion = '2.12.1'
 repositories {
     mavenCentral()
     jcenter()
+}
+
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls' ]
 }
 
 dependencies {
