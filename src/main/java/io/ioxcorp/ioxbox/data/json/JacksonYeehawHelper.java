@@ -6,7 +6,10 @@ import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
@@ -25,9 +28,30 @@ public class JacksonYeehawHelper {
     }
 
     public static HashMap<Long, Box> read() {
+        String fileName = "box_data.json";
+
+        //if the file doesn't exist create it
+        if (!Files.exists(Paths.get(fileName))) {
+            File file = new File(fileName);
+            boolean created = false;
+            try {
+                created = file.createNewFile();
+                FileWriter writer = new FileWriter(file);
+                writer.write("{\n   \n}");
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (created) {
+                Main.frame.log(LogType.INIT ,"created new file: " + fileName);
+            }
+            return new HashMap<>();
+        }
+
         FrickYouJackson data = null;
         try {
-            data = mapper.readValue(new File("box_data.json"), FrickYouJackson.class);
+            data = mapper.readValue(new File(fileName), FrickYouJackson.class);
         } catch (IOException e) {
             Main.frame.log(LogType.FATAL_ERROR, "failed to read box_data.json: "  + e);
         }

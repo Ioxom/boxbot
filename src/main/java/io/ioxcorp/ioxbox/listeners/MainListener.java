@@ -2,7 +2,6 @@ package io.ioxcorp.ioxbox.listeners;
 
 import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
-import static io.ioxcorp.ioxbox.FileEditor.*;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
@@ -18,7 +17,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Random;
 
@@ -205,11 +203,6 @@ public class MainListener extends ListenerAdapter {
                 break;
             case "pickup":
                 event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();
-                try {
-                    myWriter.write("[cmd] " + author + " wanted to get with somebody OwO");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 break;
         }
     }

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
 import javax.security.auth.login.LoginException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,13 +67,7 @@ public class Main {
         //log in
         JDA api = null;
         try {
-            String token = null;
-            try {
-                token = Files.readString(Paths.get("token.txt"));
-                if (token == null) frame.log(LogType.FATAL_ERROR, "could not get token");
-            } catch (IOException e) {
-                frame.log(LogType.FATAL_ERROR, "token.txt not found");
-            }
+            String token = getToken();
             api = JDABuilder.createDefault(token).build();
             Main.frame.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
@@ -86,5 +81,26 @@ public class Main {
         } else {
             frame.log(LogType.ERROR, "failed to create JDA object for unknown reasons");
         }
+    }
+
+    public static String getToken() {
+        String token = null;
+        String fileName = "token.txt";
+        try {
+            if (!Files.exists(Paths.get(fileName))) {
+                boolean created = new File(fileName).createNewFile();
+                if (created) {
+                    frame.log(LogType.FATAL_ERROR, "could not find token file and created token.txt: paste in your token and rerun the bot");
+                } else {
+                    frame.log(LogType.FATAL_ERROR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
+                }
+            }
+            token = Files.readString(Paths.get(fileName));
+            if (token == null) frame.log(LogType.FATAL_ERROR, "could not get token");
+        } catch (IOException e) {
+            frame.log(LogType.FATAL_ERROR, "token.txt not found");
+        }
+
+        return token;
     }
 }
