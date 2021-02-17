@@ -5,5 +5,6 @@ public enum LogType {
     INIT,
     ERROR,
     FATAL_ERROR,
-    CMD
+    CMD,
+    WRTR
 }

@@ -18,6 +18,9 @@ import java.io.InputStream;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+import static io.ioxcorp.ioxbox.FileEditor.*;
+import io.ioxcorp.ioxbox.FileEditor.*;
+
 /**
  * a bad swing gui
  * @author ioxom
@@ -35,6 +38,9 @@ public class Frame {
     }
 
     public void init() {
+
+
+
         //set icon
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
@@ -71,21 +77,43 @@ public class Frame {
         this.jFrame.setSize(new Dimension(600, 275));
         this.jFrame.setVisible(true);
         this.log(LogType.INIT, "finished initialising frame");
+
+
     }
 
     public void log(LogType type, String message) {
         switch (type) {
             case INIT:
                 this.console.append("\n[init] " + message);
+                try {
+                    myWriter.write("\n [init] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case MAIN:
                 this.console.append("\n[main] " + message);
+                try {
+                    myWriter.write("\n [main] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case ERROR:
                 this.console.append("\n[err] " + message);
+                try {
+                    myWriter.write("\n [err] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case FATAL_ERROR:
                 this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
+                try {
+                    myWriter.write("\n [err/FATAL] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 //wait for five seconds to allow for reading the error
                 try {
                     Thread.sleep(5000);
@@ -94,6 +122,13 @@ public class Frame {
                     System.exit(1);
                 }
                 break;
+            case WRTR:
+                this.console.append("\n[wrtr] " + message);
+                try {
+                    myWriter.write("\n [wrtr] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
@@ -101,15 +136,35 @@ public class Frame {
         switch (type) {
             case INIT:
                 this.console.append("\n[init] " + message);
+                try {
+                    myWriter.write("\n [init] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case MAIN:
                 this.console.append("\n[main] " + message);
+                try {
+                    myWriter.write("\n [main] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case ERROR:
                 this.console.append("\n[err] " + message);
+                try {
+                    myWriter.write("\n [err] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case FATAL_ERROR:
                 this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
+                try {
+                    myWriter.write("\n [err/FATAL] " + message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 //wait for five seconds to allow for reading the error
                 try {
                     Thread.sleep(5000);
@@ -125,6 +180,11 @@ public class Frame {
 
                 if (author instanceof CustomUser) {
                     this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                    try {
+                        myWriter.write("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
                 }
