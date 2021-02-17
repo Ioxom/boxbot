@@ -1,6 +1,0 @@
-[log #5 on 16-02-2021]
-[init] added icon to frame
-[init] added console to frame
-[init] finished initialising frame
-[init] successfully logged in JDA
-[init] initialized jda

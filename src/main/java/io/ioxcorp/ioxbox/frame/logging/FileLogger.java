@@ -32,7 +32,7 @@ public class FileLogger {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                this.write("[log #" + i + " on " + date);
+                this.write("[log #" + i + " on " + date + "]");
             }
         }
     }

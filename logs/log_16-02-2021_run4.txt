@@ -1,7 +1,0 @@
-
-[init] added icon to frame
-[init] added console to frame
-[init] finished initialising frame
-[init] successfully logged in JDA
-[init] initialized jda
-[cmd] Ioxom#9099 used -box add
