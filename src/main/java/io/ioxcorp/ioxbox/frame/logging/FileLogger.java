@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.User;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,9 +25,13 @@ public class FileLogger {
             if (!f.exists()) {
                 validFileName = true;
                 this.file = new File("logs/" + fileName);
+                boolean createdFolder = false;
+                if (!Files.exists(Paths.get("logs"))) {
+                    createdFolder = new File("logs/").mkdirs();
+                }
                 try {
                     if (this.file.createNewFile()) {
-                        System.out.println("File created: " + this.file.getName());
+                        System.out.println("File created: " + this.file.getName() + (createdFolder? "\ncreated logs folder" : ""));
                     } else {
                         System.out.println("File already exists.");
                     }
