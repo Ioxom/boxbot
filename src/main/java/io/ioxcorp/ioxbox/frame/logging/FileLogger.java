@@ -16,6 +16,7 @@ public class FileLogger {
 
     /**
      * creates a new {@link FileLogger} that writes to a file in /logs/ with a filename corresponding to the date and program run
+     * @author ioxom
      */
     public FileLogger() {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
@@ -66,9 +67,9 @@ public class FileLogger {
     }
 
     /**
-     *
      * @param type a {@link LogType} that tells what to put before the message<br>note: this will throw {@link IllegalArgumentException} if you pass LogType.CMD without using the method where a user is passed
      * @param message the message to be printed to the file
+     * @author ioxom
      */
     public void log(LogType type, String message) {
         switch (type) {
@@ -98,6 +99,7 @@ public class FileLogger {
 
     /**
      * supplementary method for {@link FileLogger#log(LogType, String)} that provides a user object, allowing CMD to be used
+     * @author ioxom
      */
     public void log(LogType type, String message, Object author) {
         switch (type) {

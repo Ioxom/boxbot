@@ -5,7 +5,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
-mainClassName = "io.ioxcorp.ioxbox.Main"
+mainClassName = "io.ioxcorp.ioxbox.HelloFX"
 group 'io.ioxcorp'
 version '0.3.1'
 def jdaVersion = '4.2.0_228'
@@ -17,8 +17,8 @@ repositories {
 }
 
 javafx {
-    version = "13"
-    modules = [ 'javafx.controls' ]
+    version = "15"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
