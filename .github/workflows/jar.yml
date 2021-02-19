@@ -1,4 +1,4 @@
-name: build
+name: jar
 
 on: [push, pull_request]
 
