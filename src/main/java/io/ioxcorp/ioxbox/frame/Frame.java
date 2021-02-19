@@ -94,7 +94,7 @@ public class Frame {
                 this.logger.log(type, message);
                 break;
             case FATAL_ERR:
-                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
+                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox\n[err/FATAL] you can read this message in " + this.logger.getFileName());
                 this.logger.log(type, message);
                 //wait for five seconds to allow for reading the error
                 try {

@@ -12,6 +12,9 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * a container for items (instances of {@link String} and {@link CustomUser}.
+ */
 public class Box {
     @JsonProperty("owner")
     public CustomUser owner;
@@ -22,8 +25,8 @@ public class Box {
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
-     * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User};
-     * @param object must be a {@link java.lang.String String}, {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the object that is inside the newly created box
+     * @param owner must be a {@link CustomUser CustomUser} or {@link User User}; the owner of the box
+     * @param object must be a {@link String String}, {@link CustomUser CustomUser} or {@link User User}; the object that is inside the newly created box
      * @exception IllegalArgumentException if the owner or object parameters are incompatible types
      * @author ioxom
      */

@@ -53,6 +53,7 @@ public class MainListener extends ListenerAdapter {
                 channel.sendMessage(helpEmbed.build()).queue();
                 frame.log(LogType.CMD, "help", author);
                 break;
+
             case "commands":
             case "cmds":
                 EmbedBuilder commandEmbed = new EmbedBuilder()
@@ -69,6 +70,7 @@ public class MainListener extends ListenerAdapter {
                 channel.sendMessage(commandEmbed.build()).queue();
                 frame.log(LogType.CMD, "commands", author);
                 break;
+
             case "add":
                 //if there are no mentioned users, use the first argument
                 if (eventMessage.getMentionedUsers().isEmpty()) {
@@ -99,6 +101,7 @@ public class MainListener extends ListenerAdapter {
                 }
                 frame.log(LogType.CMD, prefix + "add", author);
                 break;
+
             case "remove":
                 //if there are no mentioned users, use the first argument
                 if (eventMessage.getMentionedUsers().isEmpty() && messageContent.length > 1) {
