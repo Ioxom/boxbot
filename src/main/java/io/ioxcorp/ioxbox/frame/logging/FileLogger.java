@@ -79,7 +79,7 @@ public class FileLogger {
      * @author ioxom
      */
     public int getRun() {
-        return Integer.parseInt((this.file.getName().split("run"))[1]);
+        return Integer.parseInt((this.file.getName().split("run"))[1].split(".txt")[0]);
     }
 
     /**
