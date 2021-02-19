@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -50,6 +51,7 @@ public class HandleAdd implements Runnable {
                     .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                     .build()
             ).queue();
+            Main.frame.log(LogType.CMD, "add " + user.getTag() + " to their box", askingUser);
         } else {
             if (Main.random.nextInt(4) == 0) {
                 askingUser.getBox().add(user);
@@ -61,6 +63,7 @@ public class HandleAdd implements Runnable {
                         .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
+                Main.frame.log(LogType.CMD, "add " + user.getTag() + " to their box", askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

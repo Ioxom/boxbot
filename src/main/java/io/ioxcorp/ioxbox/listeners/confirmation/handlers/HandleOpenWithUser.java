@@ -4,6 +4,7 @@ import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -51,6 +52,7 @@ public class HandleOpenWithUser implements Runnable {
                     .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                     .build()
             ).queue();
+            Main.frame.log(LogType.CMD, "open a new box with user " + user.getTag(), askingUser);
         } else {
             if (Main.random.nextInt(4) == 0) {
                 Box.createBox(askingUser, user);
@@ -62,6 +64,7 @@ public class HandleOpenWithUser implements Runnable {
                         .setFooter("requested by user " + askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
+                Main.frame.log(LogType.CMD, "open a new box with user " + user.getTag(), askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

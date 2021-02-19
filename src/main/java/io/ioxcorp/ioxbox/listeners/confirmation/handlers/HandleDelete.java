@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -39,6 +40,7 @@ public class HandleDelete implements Runnable {
         if (response.getResult()) {
             Main.boxes.remove(user.id);
             response.getChannel().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
+            Main.frame.log(LogType.CMD, "delete box", user);
         } else {
             response.getChannel().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
         }
