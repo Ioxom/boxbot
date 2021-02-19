@@ -18,10 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 
 public class Main {
+    public static final Random random = new Random();
 
     //get the version from a .properties that's saved in the .jar that gradle produces
     public static String VERSION;
@@ -61,7 +63,7 @@ public class Main {
         //throw error if version is not found
         if (VERSION == null) {
             VERSION = "0.0.0";
-            frame.log(LogType.ERROR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
+            frame.log(LogType.ERR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
         }
 
         //log in
@@ -71,7 +73,7 @@ public class Main {
             api = JDABuilder.createDefault(token).build();
             Main.frame.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
-            frame.log(LogType.FATAL_ERROR, "invalid token");
+            frame.log(LogType.FATAL_ERR, "invalid token");
         }
 
         //add event listeners
@@ -79,7 +81,7 @@ public class Main {
             api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter());
             frame.log(LogType.INIT, "initialized jda");
         } else {
-            frame.log(LogType.ERROR, "failed to create JDA object for unknown reasons");
+            frame.log(LogType.ERR, "failed to create JDA object for unknown reasons");
         }
     }
 
@@ -90,15 +92,15 @@ public class Main {
             if (!Files.exists(Paths.get(fileName))) {
                 boolean created = new File(fileName).createNewFile();
                 if (created) {
-                    frame.log(LogType.FATAL_ERROR, "could not find token file and created token.txt: paste in your token and rerun the bot");
+                    frame.log(LogType.FATAL_ERR, "could not find token file and created token.txt: paste in your token and rerun the bot");
                 } else {
-                    frame.log(LogType.FATAL_ERROR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
+                    frame.log(LogType.FATAL_ERR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
                 }
             }
             token = Files.readString(Paths.get(fileName));
-            if (token == null) frame.log(LogType.FATAL_ERROR, "could not get token");
+            if (token == null) frame.log(LogType.FATAL_ERR, "could not get token");
         } catch (IOException e) {
-            frame.log(LogType.FATAL_ERROR, "token.txt not found");
+            frame.log(LogType.FATAL_ERR, "token.txt not found");
         }
 
         return token;

@@ -47,10 +47,10 @@ public class Frame {
                 this.jFrame.setIconImage(image);
                 this.log(LogType.INIT, "added icon to frame");
             } else {
-                this.log(LogType.ERROR, "failed to add icon to frame; resources may be broken");
+                this.log(LogType.ERR, "failed to add icon to frame; resources may be broken");
             }
         } catch (IOException e) {
-            this.log(LogType.FATAL_ERROR, "an IOException occurred while reading file \"images/box.png\"");
+            this.log(LogType.FATAL_ERR, "an IOException occurred while reading file \"images/box.png\"");
         }
 
         //configure the console, adding a scroll bar and setting the colour
@@ -79,7 +79,7 @@ public class Frame {
 
     }
 
-    public void log(LogType type, String message) {
+    public void handleNormalLogs(LogType type, String message) {
         switch (type) {
             case INIT:
                 this.console.append("\n[init] " + message);
@@ -89,11 +89,11 @@ public class Frame {
                 this.console.append("\n[main] " + message);
                 this.logger.log(type, message);
                 break;
-            case ERROR:
+            case ERR:
                 this.console.append("\n[err] " + message);
                 this.logger.log(type, message);
                 break;
-            case FATAL_ERROR:
+            case FATAL_ERR:
                 this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
                 this.logger.log(type, message);
                 //wait for five seconds to allow for reading the error
@@ -107,42 +107,27 @@ public class Frame {
         }
     }
 
-    public void log(LogType type, String message, Object author) {
-        switch (type) {
-            case INIT:
-                this.console.append("\n[init] " + message);
-                this.logger.log(type, message);
-                break;
-            case MAIN:
-                this.console.append("\n[main] " + message);
-                this.logger.log(type, message);
-                break;
-            case ERROR:
-                this.console.append("\n[err] " + message);
-                this.logger.log(type, message);
-                break;
-            case FATAL_ERROR:
-                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox");
-                this.logger.log(type, message);
-                //wait for five seconds to allow for reading the error
-                try {
-                    Thread.sleep(5000);
-                    System.exit(1);
-                } catch (Exception e) {
-                    System.exit(1);
-                }
-                break;
-            case CMD:
-                if (author instanceof User) {
-                    author = new CustomUser((User) author);
-                }
-
-                if (author instanceof CustomUser) {
-                    this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
-                    this.logger.log(type, message, author);
-                } else {
-                    throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
-                }
+    public void log(LogType type, String message) {
+        if (type == LogType.CMD) {
+            throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
+        } else {
+            this.handleNormalLogs(type, message);
         }
+    }
+
+    public void log(LogType type, String message, Object author) {
+        if (type == LogType.CMD) {
+            if (author instanceof User) {
+                author = new CustomUser((User) author);
+            }
+
+            if (author instanceof CustomUser) {
+                this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                this.logger.log(type, message, author);
+            } else {
+                throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
+            }
+        }
+        this.handleNormalLogs(type, message);
     }
 }

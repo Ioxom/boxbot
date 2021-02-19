@@ -23,7 +23,7 @@ public class JacksonYeehawHelper {
         try {
             mapper.writeValue(new File("box_data.json"), yeehaw);
         } catch (IOException e) {
-            Main.frame.log(LogType.ERROR, "failed to write to box_data.json: " + e);
+            Main.frame.log(LogType.ERR, "failed to write to box_data.json: " + e);
         }
     }
 
@@ -53,11 +53,11 @@ public class JacksonYeehawHelper {
         try {
             data = mapper.readValue(new File(fileName), FrickYouJackson.class);
         } catch (IOException e) {
-            Main.frame.log(LogType.FATAL_ERROR, "failed to read box_data.json: "  + e);
+            Main.frame.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
         }
 
         if (data == null) {
-            Main.frame.log(LogType.FATAL_ERROR, "failed to read json data for unknown reasons");
+            Main.frame.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
             return null;
         } else {
             return data.map;

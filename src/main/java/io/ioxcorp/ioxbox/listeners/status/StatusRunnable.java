@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.managers.Presence;
 
 /**
  * when run, swaps the status between statuses[0] and statuses[1]
+ * @author ioxom
  */
 public class StatusRunnable implements Runnable {
     private int i;

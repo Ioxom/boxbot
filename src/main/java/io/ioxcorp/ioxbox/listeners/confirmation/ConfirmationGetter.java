@@ -14,10 +14,11 @@ import java.util.concurrent.CountDownLatch;
  */
 public class ConfirmationGetter extends ListenerAdapter {
 
-    public final CountDownLatch latch;
-    public final long id;
-    public boolean response;
+    private final CountDownLatch latch;
+    private final long id;
+    private boolean response;
     public int attempts;
+    private MessageChannel channel;
 
     /**
      * creates a {@link ConfirmationGetter} for the specified user with the specified lock
@@ -29,7 +30,10 @@ public class ConfirmationGetter extends ListenerAdapter {
         this.id = id;
         this.latch = latch;
         this.attempts = 0;
+        confirmationGetters.put(id, this);
     }
+
+    public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
     /**
      * convenience method to check if we're getting confirmation from a user
@@ -38,11 +42,8 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @author ioxom
      */
     public static boolean gettingConfirmationFrom(long id) {
-        return confirmationGetters.containsKey(id) || channels.containsKey(id);
+        return confirmationGetters.containsKey(id);
     }
-
-    public static final HashMap<Long, MessageChannel> channels = new HashMap<>();
-    public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
 
     /**
      * gets confirmation from a user<br>
@@ -59,7 +60,6 @@ public class ConfirmationGetter extends ListenerAdapter {
         //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
         ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
-        confirmationGetters.put(id, confirmationGetter);
 
         try {
             //ensure that we've gotten our confirmation before returning a response
@@ -68,17 +68,17 @@ public class ConfirmationGetter extends ListenerAdapter {
 
             //if there were more than five messages from the user we assume they won't answer
             if (confirmationGetter.attempts >= 5) {
-                channels.get(id).sendMessage(EmbedHelper.simpleErrorEmbed(id, "no proper response received, assuming no")).queue();
+                confirmationGetter.channel.sendMessage(EmbedHelper.simpleErrorEmbed(id, "no proper response received, assuming no")).queue();
                 response = false;
             //otherwise they've answered and we take that
             } else {
                 response = confirmationGetter.response;
             }
 
-            return new WhatAmIDoing(channels.get(id), response);
+            return new WhatAmIDoing(confirmationGetter.channel, response);
         } catch (InterruptedException ie) {
-            channels.get(id).sendMessage(EmbedHelper.simpleErrorEmbed(id, "`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
-            return new WhatAmIDoing(channels.get(id), false);
+            confirmationGetter.channel.sendMessage(EmbedHelper.simpleErrorEmbed(id, "`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
+            return new WhatAmIDoing(confirmationGetter.channel, false);
         } finally {
             //ensure that we remove references of the id from our HashMaps so we can check from this user again
             confirmationGetter.clean();
@@ -88,10 +88,26 @@ public class ConfirmationGetter extends ListenerAdapter {
     /**
      * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps
      * this normally runs after getting confirmation from that user
+     * this isn't necessary after the cleanup but yes
      * @author ioxom
      */
     public void clean() {
-        channels.remove(this.id);
         confirmationGetters.remove(id);
+    }
+
+    public CountDownLatch getLatch() {
+        return this.latch;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setResponse(boolean response) {
+        this.response = response;
+    }
+
+    public void setChannel(MessageChannel channel) {
+        this.channel = channel;
     }
 }

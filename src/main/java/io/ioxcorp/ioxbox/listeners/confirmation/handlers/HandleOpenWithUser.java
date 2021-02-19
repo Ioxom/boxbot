@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
@@ -7,8 +8,6 @@ import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
-
-import java.util.Random;
 
 /**
  * opens a new {@link Box} containing a user owned by the the asking user, after asking for confirmation<br>
@@ -41,7 +40,7 @@ public class HandleOpenWithUser implements Runnable {
             return;
         }
 
-        if (response.getB()) {
+        if (response.getResult()) {
             Box.createBox(askingUser, user);
             response.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -53,8 +52,7 @@ public class HandleOpenWithUser implements Runnable {
                     .build()
             ).queue();
         } else {
-            Random r = new Random();
-            if (r.nextInt(4) == 0) {
+            if (Main.random.nextInt(4) == 0) {
                 Box.createBox(askingUser, user);
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")

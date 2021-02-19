@@ -9,6 +9,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * a simple {@link net.dv8tion.jda.api.hooks.EventListener} that swaps statuses every 20 seconds
+ * @author ioxom
  */
 public class StatusSetter extends ListenerAdapter {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

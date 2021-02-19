@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.listeners;
 import static io.ioxcorp.ioxbox.Main.boxes;
 import static io.ioxcorp.ioxbox.Main.frame;
 
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
@@ -18,14 +19,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
-import java.util.Random;
 
 /**
  * the main listener for ioxbox<br>
  * executes commands from text channels
  */
 public class MainListener extends ListenerAdapter {
-    public static final Random random = new Random();
     public static final String prefix = "-box ";
     
     @Override
@@ -202,7 +201,7 @@ public class MainListener extends ListenerAdapter {
                 frame.log(LogType.CMD, "ping", author);
                 break;
             case "pickup":
-                event.getChannel().sendMessage(pickups[random.nextInt(pickups.length)]).queue();
+                event.getChannel().sendMessage(pickups[Main.random.nextInt(pickups.length)]).queue();
                 break;
         }
     }

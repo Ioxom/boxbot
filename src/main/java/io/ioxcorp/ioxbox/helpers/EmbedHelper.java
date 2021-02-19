@@ -1,15 +1,13 @@
 package io.ioxcorp.ioxbox.helpers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-import java.util.Random;
-
 public class EmbedHelper {
     private final CustomUser user;
-    private final Random random;
     private final String[] author = {
             "ioxbox",
             "https://ioxom.github.io/ioxbox/",
@@ -18,7 +16,6 @@ public class EmbedHelper {
 
     public EmbedHelper(CustomUser user) {
         this.user = user;
-        this.random = new Random();
     }
 
     @JsonIgnore
@@ -42,7 +39,7 @@ public class EmbedHelper {
     public MessageEmbed errorEmbed(String error) {
 
         //5% chance for rotater
-        boolean rotater = random.nextInt(100 + 1) - 1 > 95;
+        boolean rotater = Main.random.nextInt(100 + 1) - 1 > 95;
 
         return new EmbedBuilder()
                 .setColor(0xc91a00)

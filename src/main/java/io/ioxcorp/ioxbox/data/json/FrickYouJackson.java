@@ -6,7 +6,6 @@ import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
-//this is used so we can clean up the JSON file a bit
 public class FrickYouJackson {
     @JsonProperty("boxes")
     public HashMap<Long, Box> map;

@@ -66,12 +66,7 @@ public class FileLogger {
         }
     }
 
-    /**
-     * @param type a {@link LogType} that tells what to put before the message<br>note: this will throw {@link IllegalArgumentException} if you pass LogType.CMD without using the method where a user is passed
-     * @param message the message to be printed to the file
-     * @author ioxom
-     */
-    public void log(LogType type, String message) {
+    public void handleNormalLogs(LogType type, String message) {
         switch (type) {
             case INIT:
                 this.write("\n[init] " + message);
@@ -79,10 +74,10 @@ public class FileLogger {
             case MAIN:
                 this.write("\n[main] " + message);
                 break;
-            case ERROR:
+            case ERR:
                 this.write("\n[err] " + message);
                 break;
-            case FATAL_ERROR:
+            case FATAL_ERR:
                 this.write("\n[err/FATAL] " + message + "; closing ioxbox");
                 //wait for five seconds to allow for reading the error
                 try {
@@ -92,8 +87,19 @@ public class FileLogger {
                     System.exit(1);
                 }
                 break;
-            case CMD:
-                throw new IllegalArgumentException("cannot execute case of CMD without author information, use FileLogger#log(LogType, String, Object)");
+        }
+    }
+
+    /**
+     * @param type a {@link LogType} that tells what to put before the message<br>note: this will throw {@link IllegalArgumentException} if you pass LogType.CMD without using the method where a user is passed
+     * @param message the message to be printed to the file
+     * @author ioxom
+     */
+    public void log(LogType type, String message) {
+        if (type == LogType.CMD) {
+            throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
+        } else {
+            this.handleNormalLogs(type, message);
         }
     }
 
@@ -102,36 +108,17 @@ public class FileLogger {
      * @author ioxom
      */
     public void log(LogType type, String message, Object author) {
-        switch (type) {
-            case INIT:
-                this.write("\n[init] " + message);
-                break;
-            case MAIN:
-                this.write("\n[main] " + message);
-                break;
-            case ERROR:
-                this.write("\n[err] " + message);
-                break;
-            case FATAL_ERROR:
-                this.write("\n[err/FATAL] " + message + "; closing ioxbox");
-                //wait for five seconds to allow for reading the error
-                try {
-                    Thread.sleep(5000);
-                    System.exit(1);
-                } catch (Exception e) {
-                    System.exit(1);
-                }
-                break;
-            case CMD:
-                if (author instanceof User) {
-                    author = new CustomUser((User) author);
-                }
+        if (type == LogType.CMD) {
+            if (author instanceof User) {
+                author = new CustomUser((User) author);
+            }
 
-                if (author instanceof CustomUser) {
-                    this.write("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
-                } else {
-                    throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
-                }
+            if (author instanceof CustomUser) {
+                this.write("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+            } else {
+                throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
+            }
         }
+        this.handleNormalLogs(type, message);
     }
 }

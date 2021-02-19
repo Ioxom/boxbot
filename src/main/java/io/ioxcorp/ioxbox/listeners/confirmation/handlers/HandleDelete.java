@@ -36,7 +36,7 @@ public class HandleDelete implements Runnable {
             return;
         }
 
-        if (response.getB()) {
+        if (response.getResult()) {
             Main.boxes.remove(user.id);
             response.getChannel().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
         } else {

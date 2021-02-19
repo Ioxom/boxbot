@@ -18,24 +18,24 @@ public class ConfirmationGetterListener extends ListenerAdapter {
 
             //with over 5 attempts we assume no
             if (confirmationGetter.attempts >= 5) {
-                ConfirmationGetter.channels.put(confirmationGetter.id, event.getChannel());
-                confirmationGetter.latch.countDown();
+                confirmationGetter.setChannel(event.getChannel());
+                confirmationGetter.getLatch().countDown();
             }
 
             //has to be the right person of course
-            if (!(event.getAuthor().getIdLong() == confirmationGetter.id)) {
+            if (!(event.getAuthor().getIdLong() == confirmationGetter.getId())) {
                 return;
             }
 
             //if our other checks passed handle the response
             if (event.getMessage().getContentRaw().equals("yes") || event.getMessage().getContentRaw().equals("true")) {
-                confirmationGetter.response = true;
-                ConfirmationGetter.channels.put(confirmationGetter.id, event.getChannel());
-                confirmationGetter.latch.countDown();
+                confirmationGetter.setResponse(true);
+                confirmationGetter.setChannel(event.getChannel());
+                confirmationGetter.getLatch().countDown();
             } else if (event.getMessage().getContentRaw().equals("false") || event.getMessage().getContentRaw().equals("no")) {
-                confirmationGetter.response = false;
-                ConfirmationGetter.channels.put(confirmationGetter.id, event.getChannel());
-                confirmationGetter.latch.countDown();
+                confirmationGetter.setResponse(false);
+                confirmationGetter.setChannel(event.getChannel());
+                confirmationGetter.getLatch().countDown();
             } else {
                 confirmationGetter.attempts ++;
             }

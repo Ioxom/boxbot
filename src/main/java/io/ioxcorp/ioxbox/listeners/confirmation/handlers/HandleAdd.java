@@ -1,13 +1,12 @@
 package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
-
-import java.util.Random;
 
 /**
  * adds a user to another user's box, after asking for confirmation<br>
@@ -40,7 +39,7 @@ public class HandleAdd implements Runnable {
             return;
         }
 
-        if (response.getB()) {
+        if (response.getResult()) {
             askingUser.getBox().add(user);
             response.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -52,8 +51,7 @@ public class HandleAdd implements Runnable {
                     .build()
             ).queue();
         } else {
-            Random r = new Random();
-            if (r.nextInt(4) == 0) {
+            if (Main.random.nextInt(4) == 0) {
                 askingUser.getBox().add(user);
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")
