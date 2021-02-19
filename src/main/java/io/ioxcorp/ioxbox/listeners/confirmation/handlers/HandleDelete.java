@@ -13,24 +13,21 @@ import net.dv8tion.jda.api.entities.MessageChannel;
  * usage: new {@link Thread}(instance of {@link HandleDelete}).start();
  * @author ioxom
  */
-public class HandleDelete implements Runnable {
-    private final CustomUser user;
-    private final MessageChannel initialChannel;
+public class HandleDelete extends Handler {
 
     public HandleDelete(CustomUser user, MessageChannel initialChannel) {
-        this.user = user;
-        this.initialChannel = initialChannel;
+        super(user, initialChannel);
     }
 
     @Override
     public void run() {
-        EmbedHelper helper = new EmbedHelper(user);
-        if (ConfirmationGetter.gettingConfirmationFrom(user.id)) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
+        EmbedHelper helper = new EmbedHelper(this.user);
+        if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
+            this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(user.id);
+        WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);
 
         if (response == null) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
@@ -38,9 +35,9 @@ public class HandleDelete implements Runnable {
         }
 
         if (response.getResult()) {
-            Main.boxes.remove(user.id);
+            Main.boxes.remove(this.user.id);
             response.getChannel().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
-            Main.frame.log(LogType.CMD, "delete box", user);
+            Main.frame.log(LogType.CMD, "delete box", this.user);
         } else {
             response.getChannel().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
         }
