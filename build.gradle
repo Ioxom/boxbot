@@ -44,6 +44,29 @@ task('addVersion') {
                 "# ioxbox's version. this is stored here to allow project-wide version syncing\n" +
                         "version=$version"
         )
+        file(".github/workflows/upload-artifact.yml").write(
+                "name: upload-artifact\n"
+                + "\n"
+                + "on: [ push, pull_request ]\n"
+                + "\n"
+                + "jobs:\n"
+                + "  upload-artifact:\n"
+                + "\n"
+                + "    runs-on: windows-latest\n"
+                + "    steps:\n"
+                + "    - uses: actions/checkout@v2\n"
+                + "    - name: Set up JDK 11\n"
+                + "      uses: actions/setup-java@v1\n"
+                + "      with:\n"
+                + "          java-version: 11\n"
+                + "    - name: grant execute permission for gradlew\n"
+                + "      run: chmod +x gradlew\n"
+                + "    - run: ./gradlew build\n"
+                + "    - uses: actions/upload-artifact@v2\n"
+                + "      with:\n"
+                + "        name: package\n"
+                + "        path: build/libs/ioxbox-$version" + ".jar"
+        )
     }
 }
 
