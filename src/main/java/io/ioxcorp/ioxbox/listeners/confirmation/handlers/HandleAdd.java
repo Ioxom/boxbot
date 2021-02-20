@@ -28,6 +28,8 @@ public class HandleAdd extends Handler {
         if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
+        } else {
+            this.initialChannel.sendMessage(helper.successEmbed(this.user + " would you like to join " + this.askingUser.getTag() + "'s box? (Type yes to accept)")).queue();
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);

@@ -8,6 +8,7 @@ import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleOpenWithUser;
@@ -89,9 +90,8 @@ public class MainListener extends ListenerAdapter {
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (boxes.containsKey(author.id)) {
-                        channel.sendMessage(helper.successEmbed(user + " would you like to join " + author.getTag() + "'s box? (Type yes to accept)")).queue();
                         HandleAdd yes = new HandleAdd(user, author, channel);
-                        new Thread(yes).start();
+                        ConfirmationGetter.executor.submit(yes);
                         break;
                     } else {
                         channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + prefix + "open?")).queue();
@@ -138,9 +138,8 @@ public class MainListener extends ListenerAdapter {
             case "open":
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    channel.sendMessage(helper.successEmbed(user.getPing() + ", do you want to be added to " + author.getPing() + "'s new box?")).queue();
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
-                    new Thread(handleOpenWithUser).start();
+                    ConfirmationGetter.executor.submit(handleOpenWithUser);
                     break;
                 } else {
                     if (messageContent.length == 1) {
@@ -168,10 +167,8 @@ public class MainListener extends ListenerAdapter {
 
             case "delete":
                 if (boxes.containsKey(author.id)) {
-                    channel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
-                    //TODO: 0.5.0: look into ThreadPool or other solutions instead of creating a new Thread every time
                     HandleDelete yes = new HandleDelete(author, channel);
-                    new Thread(yes).start();
+                    ConfirmationGetter.executor.submit(yes);
                     break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();

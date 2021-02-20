@@ -34,6 +34,8 @@ public class FileLogger {
 
         //if the logs folder doesn't exist create it
         //this prevents FileNotFoundExceptions
+        //we should be able to use this.file.mkdir() but that doesn't seem to work
+        //hence a new file whose only purpose is to create the logs folder
         boolean createdFolder = false;
         if (!Files.exists(Paths.get("logs"))) {
             createdFolder = new File("logs/").mkdirs();

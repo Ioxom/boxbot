@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,8 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-
-import io.ioxcorp.ioxbox.frame.logging.LogType;
 
 public class JacksonYeehawHelper {
 
@@ -30,7 +29,7 @@ public class JacksonYeehawHelper {
     public static HashMap<Long, Box> read() {
         String fileName = "box_data.json";
 
-        //if the file doesn't exist create it
+        //if the file doesn't exist create it and return an empty HashMap
         if (!Files.exists(Paths.get(fileName))) {
             File file = new File(fileName);
             boolean created = false;

@@ -25,6 +25,8 @@ public class HandleDelete extends Handler {
         if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
             return;
+        } else {
+            this.initialChannel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);

@@ -7,12 +7,16 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * a class used to get confirmation from a user in discord
  * @author ioxom
  */
 public class ConfirmationGetter extends ListenerAdapter {
+
+    public static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     private final CountDownLatch latch;
     private final long id;

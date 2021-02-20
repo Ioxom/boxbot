@@ -29,6 +29,8 @@ public class HandleOpenWithUser extends Handler {
         if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
             initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
+        } else {
+            this.initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you want to be added to " + this.askingUser.getPing() + "'s new box?")).queue();
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);
@@ -52,7 +54,7 @@ public class HandleOpenWithUser extends Handler {
             Main.frame.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
         } else {
             if (Main.random.nextInt(4) == 0) {
-                Box.createBox(this.askingUser, user);
+                Box.createBox(this.askingUser, this.user);
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -61,7 +63,7 @@ public class HandleOpenWithUser extends Handler {
                         .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
                 ).queue();
-                Main.frame.log(LogType.CMD, "open a new box with user " + user.getTag(), this.askingUser);
+                Main.frame.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }
