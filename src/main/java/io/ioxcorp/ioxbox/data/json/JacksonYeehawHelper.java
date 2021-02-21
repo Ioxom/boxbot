@@ -9,8 +9,6 @@ import io.ioxcorp.ioxbox.frame.logging.LogType;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class JacksonYeehawHelper {
@@ -48,11 +46,10 @@ public class JacksonYeehawHelper {
      * @author ioxom
      */
     public static HashMap<Long, Box> read() {
-        String fileName = "box_data.json";
+        File file = new File("box_data.json");
 
         //if the file doesn't exist create it and return an empty HashMap
-        if (!Files.exists(Paths.get(fileName))) {
-            File file = new File(fileName);
+        if (file.exists()) {
             try {
                 boolean created = file.createNewFile();
                 FileWriter writer = new FileWriter(file);
@@ -60,7 +57,7 @@ public class JacksonYeehawHelper {
                 writer.close();
 
                 if (created) {
-                    Main.frame.log(LogType.MAIN ,"created new file: " + fileName);
+                    Main.frame.log(LogType.MAIN ,"created new file: " + file.getName());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -70,7 +67,7 @@ public class JacksonYeehawHelper {
         } else {
             FrickYouJackson data = null;
             try {
-                data = mapper.readValue(new File(fileName), FrickYouJackson.class);
+                data = mapper.readValue(file, FrickYouJackson.class);
             } catch (IOException e) {
                 Main.frame.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
             }
