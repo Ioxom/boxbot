@@ -17,49 +17,70 @@ public class JacksonYeehawHelper {
 
     private static final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
+    /**
+     * saves the data currently stored in {@link Main#boxes} to box_data.json
+     * if box_data.json doesn't exist create it
+     * @author ioxom
+     */
     public static void save() {
         FrickYouJackson yeehaw = new FrickYouJackson(Main.boxes);
+
+        File file = new File("box_data.json");
         try {
-            mapper.writeValue(new File("box_data.json"), yeehaw);
-        } catch (IOException e) {
+            if (!file.exists()) {
+                boolean created = file.createNewFile();
+                mapper.writeValue(file, yeehaw);
+
+                if (created) {
+                    Main.frame.log(LogType.MAIN ,"created new file: " + file.getName() + " and saved the stored data to it");
+                }
+            } else {
+                mapper.writeValue(file, yeehaw);
+            }
+        } catch(IOException e) {
             Main.frame.log(LogType.ERR, "failed to write to box_data.json: " + e);
         }
     }
 
+    /**
+     * gets the stored data in box_data.json
+     * @return a {@link HashMap<>} of the stored boxes in box_data.json
+     * @author ioxom
+     */
     public static HashMap<Long, Box> read() {
         String fileName = "box_data.json";
 
         //if the file doesn't exist create it and return an empty HashMap
         if (!Files.exists(Paths.get(fileName))) {
             File file = new File(fileName);
-            boolean created = false;
             try {
-                created = file.createNewFile();
+                boolean created = file.createNewFile();
                 FileWriter writer = new FileWriter(file);
                 writer.write("{\n   \n}");
                 writer.close();
+
+                if (created) {
+                    Main.frame.log(LogType.MAIN ,"created new file: " + fileName);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if (created) {
-                Main.frame.log(LogType.INIT ,"created new file: " + fileName);
-            }
             return new HashMap<>();
-        }
-
-        FrickYouJackson data = null;
-        try {
-            data = mapper.readValue(new File(fileName), FrickYouJackson.class);
-        } catch (IOException e) {
-            Main.frame.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
-        }
-
-        if (data == null) {
-            Main.frame.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
-            return null;
         } else {
-            return data.map;
+            FrickYouJackson data = null;
+            try {
+                data = mapper.readValue(new File(fileName), FrickYouJackson.class);
+            } catch (IOException e) {
+                Main.frame.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
+            }
+
+            if (data == null) {
+                Main.frame.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
+                return null;
+            } else {
+                return data.map;
+            }
         }
     }
 }
