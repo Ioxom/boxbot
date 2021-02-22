@@ -6,5 +6,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Super-Linter
+      - name: super-linter
         uses: github/super-linter@v3.14.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
