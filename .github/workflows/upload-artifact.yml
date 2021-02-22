@@ -14,7 +14,7 @@ jobs:
           java-version: 11
     - name: grant execute permission for gradlew
       run: chmod +x gradlew
-    - run: ./gradlew uberJar
+    - run: ./gradlew shadowJar
     - uses: actions/upload-artifact@v2
       with:
         name: package

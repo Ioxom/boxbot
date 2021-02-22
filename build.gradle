@@ -55,7 +55,7 @@ task('addVersion') {
                 + "          java-version: 11\n"
                 + "    - name: grant execute permission for gradlew\n"
                 + "      run: chmod +x gradlew\n"
-                + "    - run: ./gradlew uberJar\n"
+                + "    - run: ./gradlew shadowJar\n"
                 + "    - uses: actions/upload-artifact@v2\n"
                 + "      with:\n"
                 + "        name: package\n"
