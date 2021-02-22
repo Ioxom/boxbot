@@ -14,7 +14,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public final class StatusSetter extends ListenerAdapter {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final int timeBetweenChanges;
-    public StatusSetter(int timeBetweenChanges) {
+    public StatusSetter(final int timeBetweenChanges) {
         this.timeBetweenChanges = timeBetweenChanges;
     }
 

@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public final class JacksonYeehawHelper {
+    private JacksonYeehawHelper() {
+
+    }
 
     private static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
