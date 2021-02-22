@@ -109,29 +109,6 @@ public class FileLogger {
     }
 
     /**
-     * handles all {@link LogType LogTypes} excluding {@link LogType#CMD}
-     * @param type the type of log to display before the sent message
-     * @param message the message to be displayed after the type
-     * @author ioxom
-     */
-    public void handleNormalLogs(LogType type, String message) {
-        switch (type) {
-            case INIT:
-                this.write("\n[init]: " + message);
-                break;
-            case MAIN:
-                this.write("\n[main]: " + message);
-                break;
-            case ERR:
-                this.write("\n[err]: " + message);
-                break;
-            case FATAL_ERR:
-                this.write("\n[err/FATAL]: " + message + "; closing ioxbox\n[err/FATAL]: you can read this message in " + this.file.getName());
-                break;
-        }
-    }
-
-    /**
      * @param type a {@link LogType} that tells what to put before the message<br>note: this will throw {@link IllegalArgumentException} if you pass {@link LogType#CMD} without using the method where a user is passed
      * @param message the message to be printed to the file
      * @author ioxom
@@ -140,7 +117,7 @@ public class FileLogger {
         if (type == LogType.CMD) {
             throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
         } else {
-            this.handleNormalLogs(type, message);
+            LogHelper.handleNormalLogs(LogHelper.LoggerType.WRITER, type, message);
         }
     }
 
@@ -155,11 +132,13 @@ public class FileLogger {
             }
 
             if (author instanceof CustomUser) {
-                this.write("\n[cmd]: " + ((CustomUser) author).getTag() + " used " + message);
+                message = LogHelper.getLogMessage(LogType.CMD, ((CustomUser) author).getTag() + " used " + message);
+                this.write(message);
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
+        } else {
+            LogHelper.handleNormalLogs(LogHelper.LoggerType.WRITER, type, message);
         }
-        this.handleNormalLogs(type, message);
     }
 }

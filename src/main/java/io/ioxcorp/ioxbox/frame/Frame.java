@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.frame;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.frame.logging.FileLogger;
+import io.ioxcorp.ioxbox.frame.logging.LogHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.entities.User;
 
@@ -80,39 +81,11 @@ public class Frame {
 
     }
 
-    public void handleNormalLogs(LogType type, String message) {
-        switch (type) {
-            case INIT:
-                this.console.append("\n[init]: " + message);
-                this.logger.log(type, message);
-                break;
-            case MAIN:
-                this.console.append("\n[main]: " + message);
-                this.logger.log(type, message);
-                break;
-            case ERR:
-                this.console.append("\n[err]: " + message);
-                this.logger.log(type, message);
-                break;
-            case FATAL_ERR:
-                this.console.append("\n[err/FATAL]: " + message + "; closing ioxbox\n[err/FATAL]: you can read this message in " + this.logger.getFileName());
-                this.logger.log(type, message);
-                //wait for five seconds to allow for reading the error
-                try {
-                    Thread.sleep(5000);
-                    System.exit(1);
-                } catch (Exception e) {
-                    System.exit(1);
-                }
-                break;
-        }
-    }
-
     public void log(LogType type, String message) {
         if (type == LogType.CMD) {
             throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
         } else {
-            this.handleNormalLogs(type, message);
+            LogHelper.handleNormalLogs(LogHelper.LoggerType.CONSOLE, type, message);
         }
     }
 
@@ -123,12 +96,22 @@ public class Frame {
             }
 
             if (author instanceof CustomUser) {
+                message = LogHelper.replaceNewlines(type, message);
                 this.console.append("\n[cmd]: " + ((CustomUser) author).getTag() + " used " + message);
                 this.logger.log(type, message, author);
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
+        } else {
+            LogHelper.handleNormalLogs(LogHelper.LoggerType.CONSOLE, type, message);
         }
-        this.handleNormalLogs(type, message);
+    }
+
+    public FileLogger getFileLogger() {
+        return this.logger;
+    }
+
+    public JTextArea getConsole() {
+        return this.console;
     }
 }
