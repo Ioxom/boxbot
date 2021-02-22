@@ -11,17 +11,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class JacksonYeehawHelper {
+public final class JacksonYeehawHelper {
 
     private static final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     /**
-     * saves the data currently stored in {@link Main#boxes} to box_data.json
+     * saves the data currently stored in {@link Main#BOXES} to box_data.json.
      * if box_data.json doesn't exist create it
      * @author ioxom
      */
     public static void save() {
-        FrickYouJackson yeehaw = new FrickYouJackson(Main.boxes);
+        FrickYouJackson yeehaw = new FrickYouJackson(Main.BOXES);
 
         File file = new File("box_data.json");
         try {
@@ -30,19 +30,19 @@ public class JacksonYeehawHelper {
                 mapper.writeValue(file, yeehaw);
 
                 if (created) {
-                    Main.frame.log(LogType.MAIN ,"created new file: " + file.getName() + " and saved the stored data to it");
+                    Main.FRAME.log(LogType.MAIN, "created new file: " + file.getName() + " and saved the stored data to it");
                 }
             } else {
                 mapper.writeValue(file, yeehaw);
             }
         } catch(IOException e) {
-            Main.frame.log(LogType.ERR, "failed to write to box_data.json: " + e);
+            Main.FRAME.log(LogType.ERR, "failed to write to box_data.json: " + e);
         }
     }
 
     /**
      * gets the stored data in box_data.json
-     * @return a {@link HashMap<>} of the stored boxes in box_data.json
+     * @return a {@link HashMap<>} of the stored BOXES in box_data.json
      * @author ioxom
      */
     public static HashMap<Long, Box> read() {
@@ -57,7 +57,7 @@ public class JacksonYeehawHelper {
                 writer.close();
 
                 if (created) {
-                    Main.frame.log(LogType.MAIN ,"created new file: " + file.getName());
+                    Main.FRAME.log(LogType.MAIN, "created new file: " + file.getName());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -69,14 +69,14 @@ public class JacksonYeehawHelper {
             try {
                 data = mapper.readValue(file, FrickYouJackson.class);
             } catch (IOException e) {
-                Main.frame.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
+                Main.FRAME.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
             }
 
             if (data == null) {
-                Main.frame.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
+                Main.FRAME.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
                 return null;
             } else {
-                return data.map;
+                return data.getMap();
             }
         }
     }

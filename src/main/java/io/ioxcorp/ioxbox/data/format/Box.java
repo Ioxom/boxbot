@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.data.format;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
+import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -14,10 +15,19 @@ import java.util.Objects;
 /**
  * a container for items (instances of {@link String} and {@link CustomUser}.
  */
-public class Box {
-    public CustomUser owner;
-    public ArrayList<String> items;
-    public ArrayList<CustomUser> users;
+public final class Box {
+    /**
+     * the owner of the box
+     */
+    private CustomUser owner;
+    /**
+     * an {@link ArrayList} of {@link String Strings}: the items in the box
+     */
+    private ArrayList<String> items;
+    /**
+     * an {@link ArrayList} of {@link String Strings}: the items in the box
+     */
+    private ArrayList<CustomUser> users;
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
@@ -84,7 +94,9 @@ public class Box {
      * @author ioxom
      */
     @JsonCreator
-    public Box() {}
+    public Box() {
+
+    }
 
     public String toString() {
         return this.owner.getTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
@@ -97,12 +109,12 @@ public class Box {
      */
     public MessageEmbed embed() {
         EmbedBuilder e = new EmbedBuilder()
-                .setColor(0x00ff00)
+                .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                 .setTitle(this.owner.getTag() + "'s box contents:")
                 .addField("items:", this.itemsToString(), false)
                 .addField("users:", this.usersToString(), false)
-                .setFooter("box id: " + this.owner.id);
+                .setFooter("box id: " + this.owner.getId());
 
         return e.build();
     }
@@ -116,7 +128,7 @@ public class Box {
         if (this.items.isEmpty()) {
             itemsAsString.append("none").append("\n");
         } else {
-            for (int i = 0; i < this.items.size(); i ++) {
+            for (int i = 0; i < this.items.size(); i++) {
                 if (i == this.items.size() - 1) {
                     itemsAsString.append(this.items.get(i)).append("\n\n");
                 } else {
@@ -137,7 +149,7 @@ public class Box {
         if (this.users.isEmpty()) {
             usersAsString.append("none").append("\n");
         } else {
-            for (int i = 0; i < this.users.size(); i ++) {
+            for (int i = 0; i < this.users.size(); i++) {
                 if (i == this.users.size() - 1) {
                     usersAsString.append("user ").append(i).append(":\n").append(this.users.get(i).toString()).append("\n\n");
                 } else {
@@ -156,7 +168,7 @@ public class Box {
      * @see Box#remove(Object)
      * @author ioxom
      */
-    public void add(Object object) {
+    public void add(final Object object) {
         if (object instanceof String) {
             this.items.add((String) object);
         } else if (object instanceof CustomUser) {
@@ -177,7 +189,7 @@ public class Box {
      * @see Box#add(Object)
      * @author ioxom
      */
-    public void remove(Object object) {
+    public void remove(final Object object) {
         if (object instanceof String) {
             this.items.remove(object);
         } else if (object instanceof CustomUser) {
@@ -200,7 +212,7 @@ public class Box {
      * @see Box#createBox(Object)
      * @author ioxom
      */
-    public static void createBox(Object owner, Object item) {
+    public static void createBox(Object owner, final Object item) {
         if (owner instanceof User) {
             owner = new CustomUser((User) owner);
         } else if (!(owner instanceof CustomUser)) {
@@ -211,7 +223,7 @@ public class Box {
             throw new InvalidParameterException("user in \"owner\" passed as argument already has a box; could not create new one");
         }
 
-        Main.boxes.put(((CustomUser) owner).id, new Box(owner, item));
+        Main.BOXES.put(((CustomUser) owner).getId(), new Box(owner, item));
 
         JacksonYeehawHelper.save();
     }
@@ -235,7 +247,7 @@ public class Box {
             throw new InvalidParameterException("\"user\" passed as argument already has a box; could not create new one");
         }
 
-        Main.boxes.put(((CustomUser) owner).id, new Box(owner));
+        Main.BOXES.put(((CustomUser) owner).getId(), new Box(owner));
 
         JacksonYeehawHelper.save();
     }
@@ -246,7 +258,7 @@ public class Box {
      * @return true, if the object is found; false, if the object is not found
      * @author ioxom
      */
-    public boolean contains(Object object) {
+    public boolean contains(final Object object) {
         if (object instanceof CustomUser) {
             return this.users.contains(object);
         } else if (object instanceof String) {
@@ -258,14 +270,24 @@ public class Box {
         }
     }
 
+    /**
+     * overridden equals method.
+     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Box box = (Box) o;
         return Objects.equals(owner, box.owner) && Objects.equals(items, box.items) && Objects.equals(users, box.users);
     }
 
+    /**
+     * overridden hashCode method.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(owner, items, users);

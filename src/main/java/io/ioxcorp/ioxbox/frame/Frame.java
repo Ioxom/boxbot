@@ -34,7 +34,7 @@ public class Frame {
     private final FileLogger logger;
 
     public Frame() {
-        this.jFrame = new JFrame("ioxbox v " + Main.VERSION);
+        this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
         this.console = new JTextArea("[init] loading ioxbox");
         this.panel = new JPanel(new BorderLayout());
         this.logger = new FileLogger();
@@ -47,9 +47,9 @@ public class Frame {
             if (inputStream != null) {
                 Image image = ImageIO.read(inputStream);
                 this.jFrame.setIconImage(image);
-                this.log(LogType.INIT, "added icon to frame");
+                this.log(LogType.INIT, "added icon to FRAME");
             } else {
-                this.log(LogType.ERR, "failed to add icon to frame; resources may be broken");
+                this.log(LogType.ERR, "failed to add icon to FRAME; resources may be broken");
             }
         } catch (IOException e) {
             this.log(LogType.FATAL_ERR, "an IOException occurred while reading file \"images/box.png\"");
@@ -70,13 +70,13 @@ public class Frame {
         this.panel.setPreferredSize(consoleSize);
         this.panel.add(pane);
         this.jFrame.setContentPane(this.panel);
-        this.log(LogType.INIT, "added console to frame");
+        this.log(LogType.INIT, "added console to FRAME");
 
-        //open the frame
+        //open the FRAME
         this.jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.jFrame.setSize(new Dimension(600, 275));
         this.jFrame.setVisible(true);
-        this.log(LogType.INIT, "finished initialising frame");
+        this.log(LogType.INIT, "finished initialising FRAME");
 
 
     }

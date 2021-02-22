@@ -66,7 +66,7 @@ public class FileLogger {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
         //iterate over file names until we have a valid one
-        for (int i = 0; true; i ++) {
+        for (int i = 0; true; i++) {
             String fileName = "log_" + date + "_run" + i + ".txt";
             File f = new File("logs/" + fileName);
             if (!f.exists()) {

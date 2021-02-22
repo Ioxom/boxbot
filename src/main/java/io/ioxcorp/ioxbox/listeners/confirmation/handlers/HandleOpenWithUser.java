@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 public class HandleOpenWithUser extends Handler {
     private final CustomUser askingUser;
 
-    public HandleOpenWithUser(CustomUser user, CustomUser askingUser, MessageChannel initialChannel) {
+    public HandleOpenWithUser(final CustomUser user, final CustomUser askingUser, final MessageChannel initialChannel) {
         super(user, initialChannel);
         this.askingUser = askingUser;
     }
@@ -26,14 +26,14 @@ public class HandleOpenWithUser extends Handler {
     @Override
     public void run() {
         EmbedHelper helper = new EmbedHelper(this.user);
-        if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
+        if (ConfirmationGetter.gettingConfirmationFrom(this.user.getId())) {
             initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
             this.initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you want to be added to " + this.askingUser.getPing() + "'s new box?")).queue();
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);
+        WhatAmIDoing response = ConfirmationGetter.crab(this.user.getId());
 
         if (response == null) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
@@ -51,9 +51,9 @@ public class HandleOpenWithUser extends Handler {
                     .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                     .build()
             ).queue();
-            Main.frame.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
+            Main.FRAME.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
         } else {
-            if (Main.random.nextInt(4) == 0) {
+            if (Main.RANDOM.nextInt(4) == 0) {
                 Box.createBox(this.askingUser, this.user);
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")
@@ -63,7 +63,7 @@ public class HandleOpenWithUser extends Handler {
                         .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
                 ).queue();
-                Main.frame.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
+                Main.FRAME.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

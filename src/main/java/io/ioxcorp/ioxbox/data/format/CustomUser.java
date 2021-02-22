@@ -8,10 +8,10 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.Objects;
 
 //the JDA User class is too convoluted to save to JSON, so we only keep what we need
-public class CustomUser {
-    public final long id;
-    public final String username;
-    public final int tag;
+public final class CustomUser {
+    private final long id;
+    private final String username;
+    private final int tag;
 
     /**
      * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
@@ -60,23 +60,31 @@ public class CustomUser {
      * @author ioxom
      */
     public boolean hasBox() {
-        return Main.boxes.containsKey(this.id);
+        return Main.BOXES.containsKey(this.id);
     }
 
     /**
-     * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of boxes
+     * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of BOXES
      * @return the found {@link Box Box}, null if there is no box owned by the user
      * @author ioxom
      */
     @JsonIgnore
     public Box getBox() {
-        return Main.boxes.get(this.id);
+        return Main.BOXES.get(this.id);
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CustomUser that = (CustomUser) o;
         return id == that.id && tag == that.tag && Objects.equals(username, that.username);
     }

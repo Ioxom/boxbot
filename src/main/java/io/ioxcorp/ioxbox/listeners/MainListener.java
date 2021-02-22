@@ -1,7 +1,7 @@
 package io.ioxcorp.ioxbox.listeners;
 
-import static io.ioxcorp.ioxbox.Main.boxes;
-import static io.ioxcorp.ioxbox.Main.frame;
+import static io.ioxcorp.ioxbox.Main.BOXES;
+import static io.ioxcorp.ioxbox.Main.FRAME;
 
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
@@ -52,7 +52,7 @@ public class MainListener extends ListenerAdapter {
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 channel.sendMessage(helpEmbed.build()).queue();
-                frame.log(LogType.CMD, "help", author);
+                FRAME.log(LogType.CMD, "help", author);
                 break;
 
             case "commands":
@@ -69,13 +69,13 @@ public class MainListener extends ListenerAdapter {
                         .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + prefix + "commands`", false)
                         .addField("help", "general information about ioxbox.\nsyntax: `" + prefix + "help`", false);
                 channel.sendMessage(commandEmbed.build()).queue();
-                frame.log(LogType.CMD, "commands", author);
+                FRAME.log(LogType.CMD, "commands", author);
                 break;
 
             case "add":
                 //if there are no mentioned users, use the first argument
                 if (eventMessage.getMentionedUsers().isEmpty()) {
-                    if (boxes.containsKey(author.id)) {
+                    if (BOXES.containsKey(author.getId())) {
                         author.getBox().add(messageContent[1]);
                         channel.sendMessage(helper.successEmbed(
                                 "successfully added item to box!",
@@ -89,7 +89,7 @@ public class MainListener extends ListenerAdapter {
                 //if we have a mention use it
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    if (boxes.containsKey(author.id)) {
+                    if (BOXES.containsKey(author.getId())) {
                         HandleAdd yes = new HandleAdd(user, author, channel);
                         ConfirmationGetter.executor.submit(yes);
                         break;
@@ -99,13 +99,13 @@ public class MainListener extends ListenerAdapter {
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
-                frame.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "remove":
                 //if there are no mentioned users, use the first argument
                 if (eventMessage.getMentionedUsers().isEmpty() && messageContent.length > 1) {
-                    if (boxes.containsKey(author.id)) {
+                    if (BOXES.containsKey(author.getId())) {
                         if (author.getBox().contains(messageContent[1])) {
                             author.getBox().remove(messageContent[1]);
                             channel.sendMessage(helper.successEmbed(
@@ -120,7 +120,7 @@ public class MainListener extends ListenerAdapter {
                     }
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    if (boxes.containsKey(author.id)) {
+                    if (BOXES.containsKey(author.getId())) {
                         if (author.getBox().contains(user)) author.getBox().remove(user);
                         channel.sendMessage(helper.successEmbed(
                                 "successfully removed user from box!",
@@ -132,7 +132,7 @@ public class MainListener extends ListenerAdapter {
                 } else {
                     channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
-                frame.log(LogType.CMD, prefix + "remove", author);
+                FRAME.log(LogType.CMD, prefix + "remove", author);
                 break;
 
             case "open":
@@ -162,18 +162,18 @@ public class MainListener extends ListenerAdapter {
                         }
                     }
                 }
-                frame.log(LogType.CMD, prefix + "open", author);
+                FRAME.log(LogType.CMD, prefix + "open", author);
                 break;
 
             case "delete":
-                if (boxes.containsKey(author.id)) {
+                if (BOXES.containsKey(author.getId())) {
                     HandleDelete yes = new HandleDelete(author, channel);
                     ConfirmationGetter.executor.submit(yes);
                     break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
-                frame.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "list":
@@ -191,17 +191,17 @@ public class MainListener extends ListenerAdapter {
                         event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
-                frame.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "ping":
                 long time = System.currentTimeMillis();
                 channel.sendMessage(helper.successEmbed("calculating ping...")).queue(message ->
                         message.editMessage(helper.successEmbed("ioxbox's ping is: " + (System.currentTimeMillis() - time) + "ms")).queue());
-                frame.log(LogType.CMD, "ping", author);
+                FRAME.log(LogType.CMD, "ping", author);
                 break;
             case "pickup":
-                event.getChannel().sendMessage(pickups[Main.random.nextInt(pickups.length)]).queue();
+                event.getChannel().sendMessage(pickups[Main.RANDOM.nextInt(pickups.length)]).queue();
                 break;
         }
     }

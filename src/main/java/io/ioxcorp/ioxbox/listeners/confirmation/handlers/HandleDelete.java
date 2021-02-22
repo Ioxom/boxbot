@@ -15,21 +15,21 @@ import net.dv8tion.jda.api.entities.MessageChannel;
  */
 public class HandleDelete extends Handler {
 
-    public HandleDelete(CustomUser user, MessageChannel initialChannel) {
+    public HandleDelete(final CustomUser user, final MessageChannel initialChannel) {
         super(user, initialChannel);
     }
 
     @Override
     public void run() {
         EmbedHelper helper = new EmbedHelper(this.user);
-        if (ConfirmationGetter.gettingConfirmationFrom(this.user.id)) {
+        if (ConfirmationGetter.gettingConfirmationFrom(this.user.getId())) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
             this.initialChannel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(this.user.id);
+        WhatAmIDoing response = ConfirmationGetter.crab(this.user.getId());
 
         if (response == null) {
             this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
@@ -37,9 +37,9 @@ public class HandleDelete extends Handler {
         }
 
         if (response.getResult()) {
-            Main.boxes.remove(this.user.id);
+            Main.BOXES.remove(this.user.getId());
             response.getChannel().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
-            Main.frame.log(LogType.CMD, "delete box", this.user);
+            Main.FRAME.log(LogType.CMD, "delete box", this.user);
         } else {
             response.getChannel().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
         }

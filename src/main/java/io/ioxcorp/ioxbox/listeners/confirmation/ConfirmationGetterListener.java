@@ -37,7 +37,7 @@ public class ConfirmationGetterListener extends ListenerAdapter {
                 confirmationGetter.setChannel(event.getChannel());
                 confirmationGetter.getLatch().countDown();
             } else {
-                confirmationGetter.attempts ++;
+                confirmationGetter.attempts++;
             }
         }
     }

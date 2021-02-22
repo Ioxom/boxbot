@@ -22,11 +22,15 @@ import java.util.Random;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 
-public class Main {
-    public static final Random random = new Random();
+public final class Main {
+    private Main() {
 
-    //get the version from a .properties that's saved in the .jar that gradle produces
-    public static String VERSION;
+    }
+
+    public static final Random RANDOM = new Random();
+
+    //get the version from a .properties that's saved in the .jar that shadowJar produces
+    private static String version;
     static {
         try {
             Properties properties = new Properties();
@@ -40,30 +44,34 @@ public class Main {
                 throw new FileNotFoundException("property file \"" + fileName + "\" not found in the classpath");
             }
 
-            VERSION = properties.getProperty("version");
+            version = properties.getProperty("version");
             properties.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static final Frame frame = new Frame();
-    static {
-        frame.init();
+    public static String getVersion() {
+        return Main.version;
     }
 
-    public static final HashMap<Long, Box> boxes;
+    public static final Frame FRAME = new Frame();
+    static {
+        FRAME.init();
+    }
+
+    public static final HashMap<Long, Box> BOXES;
     static {
         //read saved box data
-        boxes = JacksonYeehawHelper.read();
+        BOXES = JacksonYeehawHelper.read();
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         //throw error if version is not found
-        if (VERSION == null) {
-            VERSION = "0.0.0";
-            frame.log(LogType.ERR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
+        if (version == null) {
+            version = "0.0.0";
+            FRAME.log(LogType.ERR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
         }
 
         //log in
@@ -71,17 +79,17 @@ public class Main {
         try {
             String token = getToken();
             api = JDABuilder.createDefault(token).build();
-            Main.frame.log(LogType.INIT, "successfully logged in JDA");
+            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
-            frame.log(LogType.FATAL_ERR, "invalid token");
+            FRAME.log(LogType.FATAL_ERR, "invalid token");
         }
 
         //add event listeners
         if (api != null) {
             api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter());
-            frame.log(LogType.INIT, "initialized jda");
+            FRAME.log(LogType.INIT, "initialized jda");
         } else {
-            frame.log(LogType.ERR, "failed to create JDA object for unknown reasons");
+            FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");
         }
     }
 
@@ -92,15 +100,17 @@ public class Main {
             if (!Files.exists(Paths.get(fileName))) {
                 boolean created = new File(fileName).createNewFile();
                 if (created) {
-                    frame.log(LogType.FATAL_ERR, "could not find token file and created token.txt: paste in your token and rerun the bot");
+                    FRAME.log(LogType.FATAL_ERR, "could not find token file and created token.txt: paste in your token and rerun the bot");
                 } else {
-                    frame.log(LogType.FATAL_ERR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
+                    FRAME.log(LogType.FATAL_ERR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
                 }
             }
             token = Files.readString(Paths.get(fileName));
-            if (token == null) frame.log(LogType.FATAL_ERR, "could not get token");
+            if (token == null) {
+                FRAME.log(LogType.FATAL_ERR, "could not get token");
+            }
         } catch (IOException e) {
-            frame.log(LogType.FATAL_ERR, "token.txt not found");
+            FRAME.log(LogType.FATAL_ERR, "token.txt not found");
         }
 
         return token;

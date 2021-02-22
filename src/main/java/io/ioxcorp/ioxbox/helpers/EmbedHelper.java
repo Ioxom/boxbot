@@ -7,6 +7,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class EmbedHelper {
+    public static final int SUCCESS_EMBED_COLOUR = 0x00FF00;
+    public static final int ERROR_EMBED_COLOUR = 0xc91a00;
+
     private final CustomUser user;
     private final String[] author = {
             "ioxbox",
@@ -21,7 +24,7 @@ public class EmbedHelper {
     @JsonIgnore
     private String getBoxID() {
         if (user.hasBox()) {
-            return "" + user.id;
+            return "" + user.getId();
         } else {
             return "null - no box";
         }
@@ -30,7 +33,7 @@ public class EmbedHelper {
     @JsonIgnore
     public static String getBoxID(CustomUser user) {
         if (user.hasBox()) {
-            return "" + user.id;
+            return "" + user.getId();
         } else {
             return "null - no box";
         }
@@ -39,10 +42,10 @@ public class EmbedHelper {
     public MessageEmbed errorEmbed(String error) {
 
         //5% chance for rotater
-        boolean rotater = Main.random.nextInt(100 + 1) - 1 > 95;
+        boolean rotater = Main.RANDOM.nextInt(100 + 1) - 1 > 95;
 
         return new EmbedBuilder()
-                .setColor(0xc91a00)
+                .setColor(ERROR_EMBED_COLOUR)
                 .setAuthor(author[0], author[1], author[2])
                 .setDescription(error + (rotater? "have a rotater!" : ""))
                 .setThumbnail(rotater? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
@@ -53,7 +56,7 @@ public class EmbedHelper {
     public MessageEmbed successEmbed(String message) {
         return new EmbedBuilder()
                 .setAuthor(author[0], author[1], author[2])
-                .setColor(0x00ff00)
+                .setColor(SUCCESS_EMBED_COLOUR)
                 .setDescription(message)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
                 .build();
@@ -62,7 +65,7 @@ public class EmbedHelper {
     public MessageEmbed successEmbed(String title, String message) {
         return new EmbedBuilder()
                 .setAuthor(author[0], author[1], author[2])
-                .setColor(0x00ff00)
+                .setColor(SUCCESS_EMBED_COLOUR)
                 .setDescription(message)
                 .setTitle(title)
                 .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())

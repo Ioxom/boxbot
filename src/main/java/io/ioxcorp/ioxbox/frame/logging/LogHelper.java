@@ -34,7 +34,7 @@ public class LogHelper {
         String formattedMessage;
         switch (type) {
             case FATAL_ERR:
-                formattedMessage = "\n[err/FATAL]: " + replaceNewlines(type, message) + "\n[err/FATAL]: closing ioxbox. you can view this message in " + Main.frame.getFileLogger().getFileName() + ".";
+                formattedMessage = "\n[err/FATAL]: " + replaceNewlines(type, message) + "\n[err/FATAL]: closing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".";
                 break;
             case MAIN:
                 formattedMessage = "\n[main]: " + replaceNewlines(type, message);
@@ -69,10 +69,10 @@ public class LogHelper {
 
         message = getLogMessage(logType, message);
         if (loggerType == LoggerType.WRITER) {
-            Main.frame.getFileLogger().write(message);
+            Main.FRAME.getFileLogger().write(message);
         } else if (loggerType == LoggerType.CONSOLE) {
-            Main.frame.getConsole().append(message);
-            Main.frame.getFileLogger().write(message);
+            Main.FRAME.getConsole().append(message);
+            Main.FRAME.getFileLogger().write(message);
         }
     }
 
@@ -93,7 +93,7 @@ public class LogHelper {
      */
     public static void throwFatalError(String message) {
         message = getLogMessage(LogType.FATAL_ERR, message);
-        Main.frame.log(LogType.FATAL_ERR, message);
+        Main.FRAME.log(LogType.FATAL_ERR, message);
         try {
             Thread.sleep(5000);
             System.exit(1);
