@@ -34,7 +34,9 @@ public final class MainListener extends ListenerAdapter {
         final Message eventMessage = event.getMessage();
         final String messageContentRaw = eventMessage.getContentRaw().toLowerCase();
 
-        if (!messageContentRaw.startsWith(PREFIX) || event.getAuthor().isBot()) return;
+        if (!messageContentRaw.startsWith(PREFIX) || event.getAuthor().isBot()) {
+            return;
+        }
 
         final String[] messageContent = messageContentRaw.split(PREFIX)[1].split(" ");
         final CustomUser author = new CustomUser(event.getAuthor());

@@ -3,6 +3,10 @@ package io.ioxcorp.ioxbox.frame.logging;
 import io.ioxcorp.ioxbox.Main;
 
 public final class LogHelper {
+    private LogHelper() {
+
+    }
+
     public static String replaceNewlines(final LogType type, final String message) {
         String delimiter = null;
         switch (type) {

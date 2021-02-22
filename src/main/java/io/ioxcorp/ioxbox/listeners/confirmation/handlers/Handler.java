@@ -17,10 +17,18 @@ public class Handler implements Runnable {
 
     }
 
+    /**
+     * gets the user object
+     * @return a {@link CustomUser} being handled
+     */
     public CustomUser getUser() {
         return this.user;
     }
 
+    /**
+     * gets the initial channel object
+     * @return a {@link MessageChannel} object where we originally got the confirmation request
+     */
     public MessageChannel getInitialChannel() {
         return this.initialChannel;
     }

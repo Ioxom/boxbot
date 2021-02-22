@@ -97,7 +97,7 @@ public class FileLogger {
      * @param message the message to write
      * @author ioxom
      */
-    public void write(String message) {
+    public void write(final String message) {
         try {
             FileWriter writer = new FileWriter(this.file, true);
             writer.write(message);
