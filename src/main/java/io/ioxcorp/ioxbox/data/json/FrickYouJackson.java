@@ -5,7 +5,7 @@ import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
-public class FrickYouJackson {
+public final class FrickYouJackson {
     private HashMap<Long, Box> map;
 
     @JsonCreator
@@ -13,7 +13,7 @@ public class FrickYouJackson {
 
     }
 
-    public FrickYouJackson(HashMap<Long, Box> map) {
+    public FrickYouJackson(final HashMap<Long, Box> map) {
         this.map = map;
     }
 

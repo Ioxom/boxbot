@@ -8,16 +8,16 @@ import net.dv8tion.jda.api.managers.Presence;
  * when run, swaps the status between statuses[0] and statuses[1]
  * @author ioxom
  */
-public class StatusRunnable implements Runnable {
+public final class StatusRunnable implements Runnable {
     private int i;
     private final Presence presence;
     private final String[] statuses = {
-            "prefix | " + MainListener.prefix,
-            "help | " + MainListener.prefix + "commands"
+            "PREFIX | " + MainListener.PREFIX,
+            "help | " + MainListener.PREFIX + "commands"
     };
 
-    public StatusRunnable(Presence presence) {
-        this.presence = presence;
+    public StatusRunnable(final Presence jdaPresence) {
+        this.presence = jdaPresence;
         this.i = 0;
     }
 

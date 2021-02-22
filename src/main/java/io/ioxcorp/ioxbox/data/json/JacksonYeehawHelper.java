@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public final class JacksonYeehawHelper {
 
-    private static final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    private static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     /**
      * saves the data currently stored in {@link Main#BOXES} to box_data.json.
@@ -27,15 +27,15 @@ public final class JacksonYeehawHelper {
         try {
             if (!file.exists()) {
                 boolean created = file.createNewFile();
-                mapper.writeValue(file, yeehaw);
+                MAPPER.writeValue(file, yeehaw);
 
                 if (created) {
                     Main.FRAME.log(LogType.MAIN, "created new file: " + file.getName() + " and saved the stored data to it");
                 }
             } else {
-                mapper.writeValue(file, yeehaw);
+                MAPPER.writeValue(file, yeehaw);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             Main.FRAME.log(LogType.ERR, "failed to write to box_data.json: " + e);
         }
     }
@@ -67,7 +67,7 @@ public final class JacksonYeehawHelper {
         } else {
             FrickYouJackson data = null;
             try {
-                data = mapper.readValue(file, FrickYouJackson.class);
+                data = MAPPER.readValue(file, FrickYouJackson.class);
             } catch (IOException e) {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to read box_data.json: "  + e);
             }

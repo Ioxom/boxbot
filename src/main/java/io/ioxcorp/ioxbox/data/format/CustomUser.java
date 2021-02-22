@@ -18,7 +18,7 @@ public final class CustomUser {
      * @param user the {@link User User} object to be converted
      * @author ioxom
      */
-    public CustomUser(User user) {
+    public CustomUser(final User user) {
         this.id = user.getIdLong();
         String[] splitTag = user.getAsTag().split("#");
         this.tag = Integer.parseInt(splitTag[1]);

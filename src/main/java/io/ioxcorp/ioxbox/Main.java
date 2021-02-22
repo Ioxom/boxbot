@@ -86,7 +86,7 @@ public final class Main {
 
         //add event listeners
         if (api != null) {
-            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter());
+            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20));
             FRAME.log(LogType.INIT, "initialized jda");
         } else {
             FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");

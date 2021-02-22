@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
  * usage: new {@link Thread}(instance of {@link HandleOpenWithUser}).start();
  * @author ioxom
  */
-public class HandleOpenWithUser extends Handler {
+public final class HandleOpenWithUser extends Handler {
     private final CustomUser askingUser;
 
     public HandleOpenWithUser(final CustomUser user, final CustomUser askingUser, final MessageChannel initialChannel) {
@@ -25,45 +25,45 @@ public class HandleOpenWithUser extends Handler {
 
     @Override
     public void run() {
-        EmbedHelper helper = new EmbedHelper(this.user);
-        if (ConfirmationGetter.gettingConfirmationFrom(this.user.getId())) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+        EmbedHelper helper = new EmbedHelper(this.getUser());
+        if (ConfirmationGetter.gettingConfirmationFrom(this.getUser().getId())) {
+            this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            this.initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you want to be added to " + this.askingUser.getPing() + "'s new box?")).queue();
+            this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser().getPing() + ", do you want to be added to " + this.askingUser.getPing() + "'s new box?")).queue();
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(this.user.getId());
+        WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId());
 
         if (response == null) {
-            this.initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         if (response.getResult()) {
-            Box.createBox(this.askingUser, this.user);
+            Box.createBox(this.askingUser, this.getUser());
             response.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                    .setTitle("put " + user.getPing() + " in your new box!")
+                    .setTitle("put " + this.getUser().getPing() + " in your new box!")
                     .setDescription("the user allowed you to put them in the box!")
-                    .setColor(0x00ff00)
+                    .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                     .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
+            Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getTag(), this.askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
-                Box.createBox(this.askingUser, this.user);
+                Box.createBox(this.askingUser, this.getUser());
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0x00ff00)
+                        .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                         .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
                         .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "open a new box with user " + this.user.getTag(), this.askingUser);
+                Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getTag(), this.askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

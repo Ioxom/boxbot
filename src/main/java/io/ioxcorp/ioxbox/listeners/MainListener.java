@@ -25,18 +25,18 @@ import java.security.InvalidParameterException;
  * the main listener for ioxbox<br>
  * executes commands from text channels
  */
-public class MainListener extends ListenerAdapter {
-    public static final String prefix = "-box ";
-    
+public final class MainListener extends ListenerAdapter {
+    public static final String PREFIX = "-box ";
+
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
         final Message eventMessage = event.getMessage();
         final String messageContentRaw = eventMessage.getContentRaw().toLowerCase();
 
-        if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) return;
+        if (!messageContentRaw.startsWith(PREFIX) || event.getAuthor().isBot()) return;
 
-        final String[] messageContent = messageContentRaw.split(prefix)[1].split(" ");
+        final String[] messageContent = messageContentRaw.split(PREFIX)[1].split(" ");
         final CustomUser author = new CustomUser(event.getAuthor());
         final EmbedHelper helper = new EmbedHelper(author);
         final MessageChannel channel = eventMessage.getChannel();
@@ -48,7 +48,7 @@ public class MainListener extends ListenerAdapter {
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(0xfc03df)
                         .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
-                        .addField("commands", "use " + prefix + "commands for a list", false)
+                        .addField("commands", "use " + PREFIX + "commands for a list", false)
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 channel.sendMessage(helpEmbed.build()).queue();
@@ -60,14 +60,14 @@ public class MainListener extends ListenerAdapter {
                 EmbedBuilder commandEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(0x00ff00)
-                        .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + prefix + "add [ping or item]`", false)
-                        .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + prefix + "remove [ping or item]`", false)
-                        .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + prefix + "ping`", false)
-                        .addField("open", "opens a new box for you, with items if specified.\nsyntax:\n`" + prefix + "open`,\n`" + prefix + "open [ping or item]`", false)
-                        .addField("delete", "deletes your box from our files permanently.\nsyntax: `" + prefix + "delete`", false)
-                        .addField("list", "shows you all users and items in your or another user's box.\nsyntax:\n`" + prefix + "list`,\n`" + prefix + "list [ping]`", false)
-                        .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + prefix + "commands`", false)
-                        .addField("help", "general information about ioxbox.\nsyntax: `" + prefix + "help`", false);
+                        .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + PREFIX + "add [ping or item]`", false)
+                        .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + PREFIX + "remove [ping or item]`", false)
+                        .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + PREFIX + "ping`", false)
+                        .addField("open", "opens a new box for you, with items if specified.\nsyntax:\n`" + PREFIX + "open`,\n`" + PREFIX + "open [ping or item]`", false)
+                        .addField("delete", "deletes your box from our files permanently.\nsyntax: `" + PREFIX + "delete`", false)
+                        .addField("list", "shows you all users and items in your or another user's box.\nsyntax:\n`" + PREFIX + "list`,\n`" + PREFIX + "list [ping]`", false)
+                        .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + PREFIX + "commands`", false)
+                        .addField("help", "general information about ioxbox.\nsyntax: `" + PREFIX + "help`", false);
                 channel.sendMessage(commandEmbed.build()).queue();
                 FRAME.log(LogType.CMD, "commands", author);
                 break;
@@ -86,20 +86,20 @@ public class MainListener extends ListenerAdapter {
                         Box.createBox(author, messageContent[1]);
                         channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
-                //if we have a mention use it
+                    //if we have a mention use it
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (BOXES.containsKey(author.getId())) {
                         HandleAdd yes = new HandleAdd(user, author, channel);
-                        ConfirmationGetter.executor.submit(yes);
+                        ConfirmationGetter.EXECUTOR.submit(yes);
                         break;
                     } else {
-                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + prefix + "open?")).queue();
+                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + PREFIX + "open?")).queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
-                FRAME.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, PREFIX + "add", author);
                 break;
 
             case "remove":
@@ -121,7 +121,9 @@ public class MainListener extends ListenerAdapter {
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (BOXES.containsKey(author.getId())) {
-                        if (author.getBox().contains(user)) author.getBox().remove(user);
+                        if (author.getBox().contains(user)) {
+                            author.getBox().remove(user);
+                        }
                         channel.sendMessage(helper.successEmbed(
                                 "successfully removed user from box!",
                                 "users:\n" + author.getBox().usersToString()
@@ -132,14 +134,14 @@ public class MainListener extends ListenerAdapter {
                 } else {
                     channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
-                FRAME.log(LogType.CMD, prefix + "remove", author);
+                FRAME.log(LogType.CMD, PREFIX + "remove", author);
                 break;
 
             case "open":
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
-                    ConfirmationGetter.executor.submit(handleOpenWithUser);
+                    ConfirmationGetter.EXECUTOR.submit(handleOpenWithUser);
                     break;
                 } else {
                     if (messageContent.length == 1) {
@@ -162,18 +164,18 @@ public class MainListener extends ListenerAdapter {
                         }
                     }
                 }
-                FRAME.log(LogType.CMD, prefix + "open", author);
+                FRAME.log(LogType.CMD, PREFIX + "open", author);
                 break;
 
             case "delete":
                 if (BOXES.containsKey(author.getId())) {
                     HandleDelete yes = new HandleDelete(author, channel);
-                    ConfirmationGetter.executor.submit(yes);
+                    ConfirmationGetter.EXECUTOR.submit(yes);
                     break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
-                FRAME.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, PREFIX + "add", author);
                 break;
 
             case "list":
@@ -182,16 +184,16 @@ public class MainListener extends ListenerAdapter {
                     if (user.hasBox()) {
                         event.getChannel().sendMessage(user.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + PREFIX + "open!")).queue();
                     }
                 } else {
                     if (author.hasBox()) {
                         event.getChannel().sendMessage(author.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + PREFIX + "open!")).queue();
                     }
                 }
-                FRAME.log(LogType.CMD, prefix + "add", author);
+                FRAME.log(LogType.CMD, PREFIX + "add", author);
                 break;
 
             case "ping":
@@ -201,12 +203,12 @@ public class MainListener extends ListenerAdapter {
                 FRAME.log(LogType.CMD, "ping", author);
                 break;
             case "pickup":
-                event.getChannel().sendMessage(pickups[Main.RANDOM.nextInt(pickups.length)]).queue();
+                event.getChannel().sendMessage(PICKUPS[Main.RANDOM.nextInt(PICKUPS.length)]).queue();
                 break;
         }
     }
 
-    private static final String[] pickups = {
+    private static final String[] PICKUPS = {
             "are you a time traveler?\nbecause I see you in my future ;)",
             "you remind me of my pinkie toe,\nlittle, cute and I\"ll probably bang you on the coffee table later tonight.",
             "there must be a lightswitch on my forehead,\nbecause everytime I see you, you turn me on.",

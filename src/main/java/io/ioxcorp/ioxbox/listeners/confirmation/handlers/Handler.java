@@ -4,10 +4,10 @@ import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class Handler implements Runnable {
-    public final CustomUser user;
-    public final MessageChannel initialChannel;
+    private final CustomUser user;
+    private final MessageChannel initialChannel;
 
-    public Handler(CustomUser user, MessageChannel channel) {
+    public Handler(final CustomUser user, final MessageChannel channel) {
         this.user = user;
         this.initialChannel = channel;
     }
@@ -15,5 +15,13 @@ public class Handler implements Runnable {
     @Override
     public void run() {
 
+    }
+
+    public CustomUser getUser() {
+        return this.user;
+    }
+
+    public MessageChannel getInitialChannel() {
+        return this.initialChannel;
     }
 }

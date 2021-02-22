@@ -14,14 +14,14 @@ import java.util.concurrent.ThreadPoolExecutor;
  * a class used to get confirmation from a user in discord
  * @author ioxom
  */
-public class ConfirmationGetter extends ListenerAdapter {
+public final class ConfirmationGetter extends ListenerAdapter {
 
-    public static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    public static final ThreadPoolExecutor EXECUTOR = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     private final CountDownLatch latch;
     private final long id;
     private boolean response;
-    public int attempts;
+    private int attempts;
     private MessageChannel channel;
 
     /**
@@ -30,14 +30,14 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @param id the id of the user we want confirmation from
      * @author ioxom
      */
-    public ConfirmationGetter(CountDownLatch latch, long id) {
+    public ConfirmationGetter(final CountDownLatch latch, final long id) {
         this.id = id;
         this.latch = latch;
         this.attempts = 0;
-        confirmationGetters.put(id, this);
+        CONFIRMATION_GETTERS.put(id, this);
     }
 
-    public static final HashMap<Long, ConfirmationGetter> confirmationGetters = new HashMap<>();
+    public static final HashMap<Long, ConfirmationGetter> CONFIRMATION_GETTERS = new HashMap<>();
 
     /**
      * convenience method to check if we're getting confirmation from a user
@@ -45,8 +45,8 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @return whether or not we're getting confirmation from the user
      * @author ioxom
      */
-    public static boolean gettingConfirmationFrom(long id) {
-        return confirmationGetters.containsKey(id);
+    public static boolean gettingConfirmationFrom(final long id) {
+        return CONFIRMATION_GETTERS.containsKey(id);
     }
 
     /**
@@ -56,10 +56,12 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
      * @author ioxom
      */
-    public static WhatAmIDoing crab(long id) {
+    public static WhatAmIDoing crab(final long id) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
         //ideally this has already been checked for
-        if (gettingConfirmationFrom(id)) return null;
+        if (gettingConfirmationFrom(id)) {
+            return null;
+        }
 
         //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
@@ -96,7 +98,7 @@ public class ConfirmationGetter extends ListenerAdapter {
      * @author ioxom
      */
     public void clean() {
-        confirmationGetters.remove(id);
+        CONFIRMATION_GETTERS.remove(id);
     }
 
     public CountDownLatch getLatch() {
@@ -107,11 +109,19 @@ public class ConfirmationGetter extends ListenerAdapter {
         return this.id;
     }
 
-    public void setResponse(boolean response) {
+    public void setResponse(final boolean response) {
         this.response = response;
     }
 
-    public void setChannel(MessageChannel channel) {
+    public void setChannel(final MessageChannel channel) {
         this.channel = channel;
+    }
+
+    public int getAttempts() {
+        return this.attempts;
+    }
+
+    public void addAttempt() {
+        this.attempts++;
     }
 }

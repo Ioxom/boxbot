@@ -2,8 +2,8 @@ package io.ioxcorp.ioxbox.frame.logging;
 
 import io.ioxcorp.ioxbox.Main;
 
-public class LogHelper {
-    public static String replaceNewlines(LogType type, String message) {
+public final class LogHelper {
+    public static String replaceNewlines(final LogType type, final String message) {
         String delimiter = null;
         switch (type) {
             case CMD:
@@ -30,7 +30,7 @@ public class LogHelper {
      * @param message the message
      * @return the message formatted as what should be sent in the console
      */
-    public static String getLogMessage(LogType type, String message) {
+    public static String getLogMessage(final LogType type, final String message) {
         String formattedMessage;
         switch (type) {
             case FATAL_ERR:
@@ -62,17 +62,17 @@ public class LogHelper {
      * @param message the message to be displayed after the type
      * @author ioxom
      */
-    public static void handleNormalLogs(LoggerType loggerType, LogType logType, String message) {
+    public static void handleNormalLogs(final LoggerType loggerType, final LogType logType, final String message) {
         if (logType == LogType.FATAL_ERR) {
             throwFatalError(message);
         }
 
-        message = getLogMessage(logType, message);
+        String logMessage = getLogMessage(logType, message);
         if (loggerType == LoggerType.WRITER) {
-            Main.FRAME.getFileLogger().write(message);
+            Main.FRAME.getFileLogger().write(logMessage);
         } else if (loggerType == LoggerType.CONSOLE) {
-            Main.FRAME.getConsole().append(message);
-            Main.FRAME.getFileLogger().write(message);
+            Main.FRAME.getConsole().append(logMessage);
+            Main.FRAME.getFileLogger().write(logMessage);
         }
     }
 
@@ -91,9 +91,9 @@ public class LogHelper {
      * exists ioxbox after giving ample time to read the message
      * @param message the message to send before killing the process
      */
-    public static void throwFatalError(String message) {
-        message = getLogMessage(LogType.FATAL_ERR, message);
-        Main.FRAME.log(LogType.FATAL_ERR, message);
+    public static void throwFatalError(final String message) {
+        String logMessage = getLogMessage(LogType.FATAL_ERR, message);
+        Main.FRAME.log(LogType.FATAL_ERR, logMessage);
         try {
             Thread.sleep(5000);
             System.exit(1);

@@ -36,7 +36,7 @@ public final class Box {
      * @exception IllegalArgumentException if the owner or object parameters are incompatible types
      * @author ioxom
      */
-    public Box(Object owner, Object object) {
+    public Box(final Object owner, final Object object) {
         //convert the owner object to a CustomUser and save
         if (owner instanceof CustomUser) {
             this.owner = (CustomUser) owner;
@@ -74,7 +74,7 @@ public final class Box {
      * @see Box#Box(Object, Object)
      * @author ioxom
      */
-    public Box(Object owner) {
+    public Box(final Object owner) {
         //convert the owner object to a CustomUser and save
         if (owner instanceof CustomUser) {
             this.owner = (CustomUser) owner;
@@ -209,21 +209,15 @@ public final class Box {
      * @param item a {@link java.lang.String String}, {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be the initial item in the box
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
-     * @see Box#createBox(Object)
+     * @see Box#createBox(CustomUser)
      * @author ioxom
      */
-    public static void createBox(Object owner, final Object item) {
-        if (owner instanceof User) {
-            owner = new CustomUser((User) owner);
-        } else if (!(owner instanceof CustomUser)) {
-            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#createBox(Object owner, Object item), must be User or CustomUser");
-        }
-
-        if (((CustomUser) owner).hasBox()) {
+    public static void createBox(final CustomUser owner, final Object item) {
+        if (owner.hasBox()) {
             throw new InvalidParameterException("user in \"owner\" passed as argument already has a box; could not create new one");
         }
 
-        Main.BOXES.put(((CustomUser) owner).getId(), new Box(owner, item));
+        Main.BOXES.put(owner.getId(), new Box(owner, item));
 
         JacksonYeehawHelper.save();
     }
@@ -233,21 +227,15 @@ public final class Box {
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}, will be used as the owner of the box
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
-     * @see Box#createBox(Object, Object)
+     * @see Box#createBox(CustomUser, Object)
      * @author ioxom
      */
-    public static void createBox(Object owner) {
-        if (owner instanceof User) {
-            owner = new CustomUser((User) owner);
-        } else if (!(owner instanceof CustomUser)) {
-            throw new IllegalArgumentException("passed object of incompatible type to \"owner\" parameter of Box#createBox(Object owner), must be User or CustomUser");
-        }
-
-        if (((CustomUser) owner).hasBox()) {
+    public static void createBox(final CustomUser owner) {
+        if (owner.hasBox()) {
             throw new InvalidParameterException("\"user\" passed as argument already has a box; could not create new one");
         }
 
-        Main.BOXES.put(((CustomUser) owner).getId(), new Box(owner));
+        Main.BOXES.put(owner.getId(), new Box(owner));
 
         JacksonYeehawHelper.save();
     }

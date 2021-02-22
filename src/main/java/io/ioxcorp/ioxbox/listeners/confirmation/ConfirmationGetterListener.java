@@ -5,19 +5,21 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * runs through the {@link ConfirmationGetter ConfirmationGetters} contained in the static {@code confirmationGetters} {@link java.util.HashMap} contained in the {@link ConfirmationGetter ConfirmationGetter} class and checks if we've gotten confirmation from the referenced users <br>
+ * runs through the {@link ConfirmationGetter ConfirmationGetters} contained in the static {@code CONFIRMATION_GETTERS} {@link java.util.HashMap} contained in the {@link ConfirmationGetter ConfirmationGetter} class and checks if we've gotten confirmation from the referenced users <br>
  * if so, closes that getter and saves the response
  * @author ioxom
  */
-public class ConfirmationGetterListener extends ListenerAdapter {
+public final class ConfirmationGetterListener extends ListenerAdapter {
 
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        if (ConfirmationGetter.confirmationGetters.isEmpty()) return;
-        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.confirmationGetters.values()) {
+    public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
+        if (ConfirmationGetter.CONFIRMATION_GETTERS.isEmpty()) {
+            return;
+        }
+        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
 
             //with over 5 attempts we assume no
-            if (confirmationGetter.attempts >= 5) {
+            if (confirmationGetter.getAttempts() >= 5) {
                 confirmationGetter.setChannel(event.getChannel());
                 confirmationGetter.getLatch().countDown();
             }
@@ -37,7 +39,7 @@ public class ConfirmationGetterListener extends ListenerAdapter {
                 confirmationGetter.setChannel(event.getChannel());
                 confirmationGetter.getLatch().countDown();
             } else {
-                confirmationGetter.attempts++;
+                confirmationGetter.addAttempt();
             }
         }
     }

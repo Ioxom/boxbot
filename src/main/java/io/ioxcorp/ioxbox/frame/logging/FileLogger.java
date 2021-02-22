@@ -44,7 +44,7 @@ public class FileLogger {
         //log the name of the file
         try {
             if (this.file.createNewFile()) {
-                System.out.println("file created: " + this.file.getName() + (createdFolder? "\ncreated logs folder" : ""));
+                System.out.println("file created: " + this.file.getName() + (createdFolder ? "\ncreated logs folder" : ""));
             } else {
                 System.out.println("log file already existed, using old file.");
             }
@@ -113,7 +113,7 @@ public class FileLogger {
      * @param message the message to be printed to the file
      * @author ioxom
      */
-    public void log(LogType type, String message) {
+    public void log(final LogType type, final String message) {
         if (type == LogType.CMD) {
             throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
         } else {
@@ -125,18 +125,19 @@ public class FileLogger {
      * supplementary method for {@link FileLogger#log(LogType, String)} that provides a user object, allowing {@link LogType#CMD} to be used
      * @author ioxom
      */
-    public void log(LogType type, String message, Object author) {
+    public void log(final LogType type, final String message, final Object author) {
         if (type == LogType.CMD) {
+            CustomUser user;
             if (author instanceof User) {
-                author = new CustomUser((User) author);
-            }
-
-            if (author instanceof CustomUser) {
-                message = LogHelper.getLogMessage(LogType.CMD, ((CustomUser) author).getTag() + " used " + message);
-                this.write(message);
+                user = new CustomUser((User) author);
+            } else if (author instanceof CustomUser) {
+                user = (CustomUser) author;
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
+
+            String logMessage = LogHelper.getLogMessage(LogType.CMD, user.getTag() + " used " + message);
+            this.write(logMessage);
         } else {
             LogHelper.handleNormalLogs(LogHelper.LoggerType.WRITER, type, message);
         }

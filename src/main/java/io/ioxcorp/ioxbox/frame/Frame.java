@@ -27,7 +27,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  * @author ioxom
  */
 //TODO: 1.0.0: (thonkman) make this look good, maybe move away from swing to javaFX
-public class Frame {
+public final class Frame {
     private final JTextArea console;
     private final JFrame jFrame;
     private final JPanel panel;
@@ -81,7 +81,7 @@ public class Frame {
 
     }
 
-    public void log(LogType type, String message) {
+    public void log(final LogType type, final String message) {
         if (type == LogType.CMD) {
             throw new IllegalArgumentException("cannot execute case of CMD without author information, use Frame#log(LogType, String, Object)");
         } else {
@@ -89,19 +89,19 @@ public class Frame {
         }
     }
 
-    public void log(LogType type, String message, Object author) {
+    public void log(final LogType type, final String message, final Object author) {
         if (type == LogType.CMD) {
+            CustomUser user;
             if (author instanceof User) {
-                author = new CustomUser((User) author);
-            }
-
-            if (author instanceof CustomUser) {
-                message = LogHelper.replaceNewlines(type, message);
-                this.console.append("\n[cmd]: " + ((CustomUser) author).getTag() + " used " + message);
-                this.logger.log(type, message, author);
+                user = new CustomUser((User) author);
+            } else if (author instanceof CustomUser) {
+                user = (CustomUser) author;
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
+
+            String logMessage = LogHelper.getLogMessage(LogType.CMD, user.getTag() + " used " + message);
+            this.console.append(logMessage);
         } else {
             LogHelper.handleNormalLogs(LogHelper.LoggerType.CONSOLE, type, message);
         }
