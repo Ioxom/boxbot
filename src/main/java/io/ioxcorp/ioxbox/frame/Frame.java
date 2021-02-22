@@ -83,19 +83,19 @@ public class Frame {
     public void handleNormalLogs(LogType type, String message) {
         switch (type) {
             case INIT:
-                this.console.append("\n[init] " + message);
+                this.console.append("\n[init]: " + message);
                 this.logger.log(type, message);
                 break;
             case MAIN:
-                this.console.append("\n[main] " + message);
+                this.console.append("\n[main]: " + message);
                 this.logger.log(type, message);
                 break;
             case ERR:
-                this.console.append("\n[err] " + message);
+                this.console.append("\n[err]: " + message);
                 this.logger.log(type, message);
                 break;
             case FATAL_ERR:
-                this.console.append("\n[err/FATAL] " + message + "; closing ioxbox\n[err/FATAL] you can read this message in " + this.logger.getFileName());
+                this.console.append("\n[err/FATAL]: " + message + "; closing ioxbox\n[err/FATAL]: you can read this message in " + this.logger.getFileName());
                 this.logger.log(type, message);
                 //wait for five seconds to allow for reading the error
                 try {
@@ -123,7 +123,7 @@ public class Frame {
             }
 
             if (author instanceof CustomUser) {
-                this.console.append("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                this.console.append("\n[cmd]: " + ((CustomUser) author).getTag() + " used " + message);
                 this.logger.log(type, message, author);
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");

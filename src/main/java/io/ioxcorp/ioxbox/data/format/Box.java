@@ -1,7 +1,6 @@
 package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,11 +15,8 @@ import java.util.Objects;
  * a container for items (instances of {@link String} and {@link CustomUser}.
  */
 public class Box {
-    @JsonProperty("owner")
     public CustomUser owner;
-    @JsonProperty("items")
     public ArrayList<String> items;
-    @JsonProperty("users")
     public ArrayList<CustomUser> users;
 
     /**

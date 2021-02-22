@@ -2,7 +2,6 @@ package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
 import net.dv8tion.jda.api.entities.User;
 
@@ -10,11 +9,8 @@ import java.util.Objects;
 
 //the JDA User class is too convoluted to save to JSON, so we only keep what we need
 public class CustomUser {
-    @JsonProperty("id")
     public final long id;
-    @JsonProperty("username")
     public final String username;
-    @JsonProperty("tag")
     public final int tag;
 
     /**

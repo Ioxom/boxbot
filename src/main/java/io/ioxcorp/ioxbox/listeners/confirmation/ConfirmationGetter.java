@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ConfirmationGetter extends ListenerAdapter {
 
-    public static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    public static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     private final CountDownLatch latch;
     private final long id;

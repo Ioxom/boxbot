@@ -117,16 +117,16 @@ public class FileLogger {
     public void handleNormalLogs(LogType type, String message) {
         switch (type) {
             case INIT:
-                this.write("\n[init] " + message);
+                this.write("\n[init]: " + message);
                 break;
             case MAIN:
-                this.write("\n[main] " + message);
+                this.write("\n[main]: " + message);
                 break;
             case ERR:
-                this.write("\n[err] " + message);
+                this.write("\n[err]: " + message);
                 break;
             case FATAL_ERR:
-                this.write("\n[err/FATAL] " + message + "; closing ioxbox\n[err/FATAL] you can read this message in " + this.file.getName());
+                this.write("\n[err/FATAL]: " + message + "; closing ioxbox\n[err/FATAL]: you can read this message in " + this.file.getName());
                 break;
         }
     }
@@ -155,7 +155,7 @@ public class FileLogger {
             }
 
             if (author instanceof CustomUser) {
-                this.write("\n[cmd] " + ((CustomUser) author).getTag() + " used " + message);
+                this.write("\n[cmd]: " + ((CustomUser) author).getTag() + " used " + message);
             } else {
                 throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
