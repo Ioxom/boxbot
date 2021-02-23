@@ -1,6 +1,8 @@
 package io.ioxcorp.ioxbox.frame;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -18,11 +20,17 @@ public class ConsoleScrapEdition extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Scrap time");
 
+        btn.setOnAction(event -> System.out.println("fun"));
+
         StackPane layout = new StackPane();
         layout.getChildren().add(btn);
+
         Scene scene = new Scene(layout, 500, 300);
         primaryStage.setScene(scene);
+
         primaryStage.show();
 
     }
+
+
 }
