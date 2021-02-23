@@ -51,8 +51,7 @@ public class ConsoleCrapEdition extends Application {
         Group group = new Group(pane, imageView);
 
         Scene scene = new Scene(group, 300, 300);
-        scene.getStylesheets().add("console.css");
-        pane.setStyle("console.css");
+
         primaryStage.setScene(scene);
         primaryStage.setTitle(System.getProperty("javafx.version"));
         primaryStage.setMaximized(true);

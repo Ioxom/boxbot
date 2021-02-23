@@ -20,12 +20,19 @@ public class ConsoleScrapEdition extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Scrap time");
 
-        btn.setOnAction(event -> System.out.println("fun"));
+        btn.setOnAction(event -> {
+            System.out.println("yesh");
+            setUserAgentStylesheet(STYLESHEET_MODENA);
+            System.out.println("yesh 2 electric boogalo");
+
+        });
+
 
         StackPane layout = new StackPane();
         layout.getChildren().add(btn);
 
         Scene scene = new Scene(layout, 500, 300);
+        scene.getStylesheets().add("scrap.css");
         primaryStage.setScene(scene);
 
         primaryStage.show();
