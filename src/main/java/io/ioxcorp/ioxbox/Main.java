@@ -21,8 +21,11 @@ import java.util.Properties;
 import java.util.Random;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
-public final class Main {
+public final class Main extends ListenerAdapter {
     private Main() {
 
     }
@@ -66,6 +69,9 @@ public final class Main {
         BOXES = JacksonYeehawHelper.read();
     }
 
+    private static final String token = getToken();
+    private static JDA api;
+
     public static void main(final String[] args) {
 
         //throw error if version is not found
@@ -75,25 +81,17 @@ public final class Main {
         }
 
         //log in
-        JDA api = null;
-        try {
-            String token = getToken();
-            api = JDABuilder.createDefault(token).build();
-            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
-        } catch (LoginException e) {
-            FRAME.log(LogType.FATAL_ERR, "invalid token");
-        }
+        connectJDA();
 
-        //add event listeners
         if (api != null) {
-            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20));
+            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
             FRAME.log(LogType.INIT, "initialized jda");
         } else {
             FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");
         }
     }
 
-    public static String getToken() {
+    private static String getToken() {
         String token = null;
         String fileName = "token.txt";
         try {
@@ -114,5 +112,25 @@ public final class Main {
         }
 
         return token;
+    }
+
+    public static void reloadJDA() {
+        connectJDA();
+        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
+        FRAME.log(LogType.INIT, "reconnected jda");
+    }
+
+    private static void connectJDA() {
+        try {
+            api = JDABuilder.createDefault(token).build();
+            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
+        } catch (LoginException e) {
+            FRAME.log(LogType.FATAL_ERR, "invalid token");
+        }
+    }
+
+    @Override
+    public void onReady(final @NotNull ReadyEvent e) {
+        FRAME.log(LogType.MAIN,"fully loaded JDA; connected to discord");
     }
 }

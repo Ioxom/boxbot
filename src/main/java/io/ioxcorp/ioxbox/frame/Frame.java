@@ -40,7 +40,7 @@ public final class Frame {
 
     public Frame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
-        this.console = new JTextArea("[init] loading ioxbox");
+        this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + "\n[init] loading ioxbox");
         this.mainPanel = new JPanel(new BorderLayout(0, 0));
         this.logger = new FileLogger();
         this.consoleInput = new JTextArea();
@@ -153,7 +153,12 @@ public final class Frame {
         this.clearConsole.setPreferredSize(new Dimension(50, 50));
         this.clearConsole.setBackground(Color.DARK_GRAY);
 
-        this.clearConsole.addActionListener(e -> this.console.setText(""));
+        //add listeners to buttons
+        this.clearConsole.addActionListener(e -> this.console.setText("[main]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version")));
+        this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
+        this.reloadJDA.addActionListener(e -> Main.reloadJDA());
+
+        //add everything to main panel, utilising another panel to get the buttons in a line
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(this.reloadJDA, BorderLayout.NORTH);
         panel.add(this.commandHelp, BorderLayout.CENTER);

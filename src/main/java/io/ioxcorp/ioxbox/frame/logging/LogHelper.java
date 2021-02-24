@@ -25,6 +25,9 @@ public final class LogHelper {
             case FATAL_ERR:
                 delimiter = "\n[err/FATAL]: ";
                 break;
+            case HELP:
+                delimiter = "\n[help]: ";
+                break;
         }
         return String.join(delimiter, message.split("\n"));
     }
@@ -51,6 +54,9 @@ public final class LogHelper {
                 break;
             case CMD:
                 formattedMessage = "\n[cmd]: " + replaceNewlines(type, message);
+                break;
+            case HELP:
+                formattedMessage = "\n[help]: " + replaceNewlines(type, message);
                 break;
             default:
                 throw new IllegalArgumentException("unhandled type in LogType sent to LogHelper#getLogMessage(LogType, String)");
