@@ -1,8 +1,5 @@
 package io.ioxcorp.ioxbox.frame.logging;
 
-import io.ioxcorp.ioxbox.data.format.CustomUser;
-import net.dv8tion.jda.api.entities.User;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -121,25 +118,12 @@ public class FileLogger {
         }
     }
 
-    /**
-     * supplementary method for {@link FileLogger#log(LogType, String)} that provides a user object, allowing {@link LogType#CMD} to be used
-     * @author ioxom
-     */
-    public void log(final LogType type, final String message, final Object author) {
-        if (type == LogType.CMD) {
-            CustomUser user;
-            if (author instanceof User) {
-                user = new CustomUser((User) author);
-            } else if (author instanceof CustomUser) {
-                user = (CustomUser) author;
-            } else {
-                throw new IllegalArgumentException("object \"author\" passed to FileLogger#log(LogType type, String message, Object author) must be a User or CustomUser");
-            }
-
-            String logMessage = LogHelper.getLogMessage(LogType.CMD, user.getTag() + " used " + message);
-            this.write(logMessage);
-        } else {
-            LogHelper.handleNormalLogs(LogHelper.LoggerType.WRITER, type, message);
-        }
+    public String getDebugInfo() {
+        return "=== debug information ==="
+                + "\njava version: " + System.getProperty("java.version")
+                + "\noperating system: " + System.getProperty("os.name")
+                + "\noperating system version: " + System.getProperty("os.version")
+                + "\noperating system architecture: " + System.getProperty("os.arch")
+                + "\n=== debug information ===";
     }
 }

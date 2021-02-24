@@ -105,6 +105,8 @@ public final class Frame {
 //    }
 
     public void init() {
+        this.logger.log(LogType.INIT, this.logger.getDebugInfo());
+
         this.jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         //set icon
         try {
