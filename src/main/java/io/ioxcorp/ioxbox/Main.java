@@ -71,7 +71,7 @@ public final class Main extends ListenerAdapter {
         BOXES = JacksonYeehawHelper.read();
     }
 
-    private static final String token = getToken();
+    private static final String TOKEN = getToken();
     private static JDA api;
 
     public static void main(final String[] args) {
@@ -133,7 +133,7 @@ public final class Main extends ListenerAdapter {
 
     private static void connectJDA() {
         try {
-            api = JDABuilder.createDefault(token).build();
+            api = JDABuilder.createDefault(TOKEN).build();
             Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
             FRAME.log(LogType.FATAL_ERR, "invalid token");
@@ -146,6 +146,6 @@ public final class Main extends ListenerAdapter {
 
     @Override
     public void onReady(final @NotNull ReadyEvent e) {
-        FRAME.log(LogType.MAIN,"fully loaded JDA; connected to discord");
+        FRAME.log(LogType.MAIN, "fully loaded JDA; connected to discord");
     }
 }
