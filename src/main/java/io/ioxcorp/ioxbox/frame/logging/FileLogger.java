@@ -13,7 +13,7 @@ import java.util.Date;
  * used by the {@link io.ioxcorp.ioxbox.frame.Frame} class to save logs to {@link File files}
  * @author ioxom
  */
-public class FileLogger {
+public final class FileLogger {
     private final File file;
 
     /**
