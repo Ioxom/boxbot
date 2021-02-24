@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
@@ -19,15 +20,18 @@ public final class Box {
     /**
      * the owner of the box
      */
-    private CustomUser owner;
+    @JsonProperty("owner")
+    public CustomUser owner;
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
-    private ArrayList<String> items;
+    @JsonProperty("items")
+    public ArrayList<String> items;
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
-    private ArrayList<CustomUser> users;
+    @JsonProperty("users")
+    public ArrayList<CustomUser> users;
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
