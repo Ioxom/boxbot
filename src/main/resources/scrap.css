@@ -1,3 +1,6 @@
 .root{
     -fx-background-color: #383838
 }
+.btn{
+    -fx-background-color: red;
+}
