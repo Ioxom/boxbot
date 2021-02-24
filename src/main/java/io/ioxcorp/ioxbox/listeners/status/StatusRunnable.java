@@ -12,7 +12,7 @@ public final class StatusRunnable implements Runnable {
     private int i;
     private final Presence presence;
     private final String[] statuses = {
-            "PREFIX | " + MainListener.PREFIX,
+            "prefix | " + MainListener.PREFIX,
             "help | " + MainListener.PREFIX + "commands"
     };
 
