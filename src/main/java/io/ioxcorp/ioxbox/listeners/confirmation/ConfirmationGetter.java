@@ -30,10 +30,11 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * @param id the id of the user we want confirmation from
      * @author ioxom
      */
-    public ConfirmationGetter(final CountDownLatch latch, final long id) {
+    public ConfirmationGetter(final CountDownLatch latch, final long id, final MessageChannel channel) {
         this.id = id;
         this.latch = latch;
         this.attempts = 0;
+        this.channel = channel;
         CONFIRMATION_GETTERS.put(id, this);
     }
 
@@ -56,7 +57,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
      * @author ioxom
      */
-    public static WhatAmIDoing crab(final long id) {
+    public static WhatAmIDoing crab(final long id, final MessageChannel initialChannel) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
         //ideally this has already been checked for
         if (gettingConfirmationFrom(id)) {
@@ -65,7 +66,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
         //create a ConfirmationGetter to handle it
         CountDownLatch crabDownLatch = new CountDownLatch(1);
-        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id);
+        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id, initialChannel);
 
         try {
             //ensure that we've gotten our confirmation before returning a response
@@ -123,5 +124,9 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
     public void addAttempt() {
         this.attempts++;
+    }
+
+    public MessageChannel getChannel() {
+        return this.channel;
     }
 }

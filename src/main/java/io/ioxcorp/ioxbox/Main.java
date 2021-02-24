@@ -3,6 +3,8 @@ package io.ioxcorp.ioxbox;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.Frame;
+import io.ioxcorp.ioxbox.helpers.EmbedHelper;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
 import io.ioxcorp.ioxbox.listeners.MainListener;
 import io.ioxcorp.ioxbox.listeners.status.StatusSetter;
@@ -84,7 +86,7 @@ public final class Main extends ListenerAdapter {
         connectJDA();
 
         if (api != null) {
-            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
+            addListeners();
             FRAME.log(LogType.INIT, "initialized jda");
         } else {
             FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");
@@ -115,9 +117,18 @@ public final class Main extends ListenerAdapter {
     }
 
     public static void reloadJDA() {
+        shutdownJDA();
         connectJDA();
-        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
+        addListeners();
         FRAME.log(LogType.INIT, "reconnected jda");
+    }
+
+    public static void shutdownJDA() {
+        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+            confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
+            ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
+        }
+        api.shutdown();
     }
 
     private static void connectJDA() {
@@ -127,6 +138,10 @@ public final class Main extends ListenerAdapter {
         } catch (LoginException e) {
             FRAME.log(LogType.FATAL_ERR, "invalid token");
         }
+    }
+
+    public static void addListeners() {
+        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
     }
 
     @Override
