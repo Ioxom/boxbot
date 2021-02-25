@@ -3,6 +3,7 @@ package io.ioxcorp.ioxbox.data.format;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
@@ -279,6 +280,21 @@ public final class Box {
     @JsonGetter
     public ArrayList<CustomUser> getUsers() {
         return users;
+    }
+
+    @JsonSetter
+    public void setOwner(CustomUser owner) {
+        this.owner = owner;
+    }
+
+    @JsonSetter
+    public void setItems(ArrayList<String> items) {
+        this.items = items;
+    }
+
+    @JsonSetter
+    public void setUsers(ArrayList<CustomUser> users) {
+        this.users = users;
     }
 
     /**

@@ -52,7 +52,7 @@ public final class JacksonYeehawHelper {
         File file = new File("box_data.json");
 
         //if the file doesn't exist create it and return an empty HashMap
-        if (file.exists()) {
+        if (!file.exists()) {
             try {
                 boolean created = file.createNewFile();
                 FileWriter writer = new FileWriter(file);
@@ -77,8 +77,11 @@ public final class JacksonYeehawHelper {
 
             if (data == null) {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
-                return null;
+                return new HashMap<>();
             } else {
+                if (data.getMap() == null) {
+                    return new HashMap<>();
+                }
                 return data.getMap();
             }
         }
