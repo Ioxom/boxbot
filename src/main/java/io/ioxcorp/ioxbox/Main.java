@@ -19,10 +19,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.events.ReadyEvent;

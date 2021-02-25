@@ -29,7 +29,7 @@ public final class HandleAdd extends Handler {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser() + " would you like to join " + this.askingUser.getTag() + "'s box? (Type yes to accept)")).queue();
+            this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser() + " would you like to join " + this.askingUser.getAsTag() + "'s box? (Type yes to accept)")).queue();
         }
 
         WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
@@ -47,10 +47,10 @@ public final class HandleAdd extends Handler {
                     .setTitle("caught!")
                     .setDescription("the user allowed you to put them in the box!")
                     .setColor(0x00ff00)
-                    .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                    .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "add " + this.getUser().getTag() + " to their box", this.askingUser);
+            Main.FRAME.log(LogType.CMD, "add " + this.getUser().getAsTag() + " to their box", this.askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
                 this.askingUser.getBox().add(this.getUser());
@@ -59,10 +59,10 @@ public final class HandleAdd extends Handler {
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(0x00ff00)
                         .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                        .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                        .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "add " + this.getUser().getTag() + " to their box", this.askingUser);
+                Main.FRAME.log(LogType.CMD, "add " + this.getUser().getAsTag() + " to their box", this.askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

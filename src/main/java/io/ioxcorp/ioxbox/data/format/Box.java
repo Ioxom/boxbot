@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
@@ -17,21 +18,24 @@ import java.util.Objects;
  * a container for items (instances of {@link String} and {@link CustomUser}.
  */
 public final class Box {
+
     /**
      * the owner of the box
      */
     @JsonProperty("owner")
-    public CustomUser owner;
+    private CustomUser owner;
+
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("items")
-    public ArrayList<String> items;
+    private ArrayList<String> items;
+
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("users")
-    public ArrayList<CustomUser> users;
+    private ArrayList<CustomUser> users;
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
@@ -103,7 +107,7 @@ public final class Box {
     }
 
     public String toString() {
-        return this.owner.getTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
+        return this.owner.getAsTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
     }
 
     /**
@@ -115,7 +119,7 @@ public final class Box {
         EmbedBuilder e = new EmbedBuilder()
                 .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                 .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setTitle(this.owner.getTag() + "'s box contents:")
+                .setTitle(this.owner.getAsTag() + "'s box contents:")
                 .addField("items:", this.itemsToString(), false)
                 .addField("users:", this.usersToString(), false)
                 .setFooter("box id: " + this.owner.getId());
@@ -260,6 +264,21 @@ public final class Box {
         } else {
             return false;
         }
+    }
+
+    @JsonGetter
+    public CustomUser getOwner() {
+        return owner;
+    }
+
+    @JsonGetter
+    public ArrayList<String> getItems() {
+        return items;
+    }
+
+    @JsonGetter
+    public ArrayList<CustomUser> getUsers() {
+        return users;
     }
 
     /**

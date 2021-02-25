@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox.data.format;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
@@ -11,11 +12,11 @@ import java.util.Objects;
 //the JDA User class is too convoluted to save to JSON, so we only keep what we need
 public final class CustomUser {
     @JsonProperty("id")
-    public final long id;
+    private final long id;
     @JsonProperty("username")
-    public final String username;
+    private final String username;
     @JsonProperty("tag")
-    public final int tag;
+    private final int tag;
 
     /**
      * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
@@ -45,7 +46,7 @@ public final class CustomUser {
      * @author ioxom
      */
     @JsonIgnore
-    public String getTag() {
+    public String getAsTag() {
         return this.username + "#" + this.tag;
     }
 
@@ -68,17 +69,13 @@ public final class CustomUser {
     }
 
     /**
-     * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of BOXES
+     * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of boxes
      * @return the found {@link Box Box}, null if there is no box owned by the user
      * @author ioxom
      */
     @JsonIgnore
     public Box getBox() {
         return Main.BOXES.get(this.id);
-    }
-
-    public long getId() {
-        return this.id;
     }
 
     @Override
@@ -96,5 +93,20 @@ public final class CustomUser {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, tag);
+    }
+
+    @JsonGetter
+    public String getUsername() {
+        return username;
+    }
+
+    @JsonGetter
+    public long getId() {
+        return this.id;
+    }
+
+    @JsonGetter
+    public int getTag() {
+        return tag;
     }
 }

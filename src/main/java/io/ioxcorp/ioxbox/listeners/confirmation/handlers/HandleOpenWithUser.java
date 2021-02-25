@@ -48,10 +48,10 @@ public final class HandleOpenWithUser extends Handler {
                     .setTitle("put " + this.getUser().getPing() + " in your new box!")
                     .setDescription("the user allowed you to put them in the box!")
                     .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
-                    .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                    .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getTag(), this.askingUser);
+            Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getAsTag(), this.askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
                 Box.createBox(this.askingUser, this.getUser());
@@ -60,10 +60,10 @@ public final class HandleOpenWithUser extends Handler {
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                         .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                        .setFooter("requested by user " + this.askingUser.getTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                        .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getTag(), this.askingUser);
+                Main.FRAME.log(LogType.CMD, "open a new box with user " + this.getUser().getAsTag(), this.askingUser);
             } else {
                 response.getChannel().sendMessage(helper.errorEmbed("user refused")).queue();
             }

@@ -28,7 +28,6 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * a bad swing gui
  * @author ioxom
  */
-//TODO: 1.0.0: (thonkman) make this look good, maybe move away from swing to javaFX
 public final class Frame {
     private final JTextArea console;
     private final JFrame jFrame;
@@ -87,7 +86,6 @@ public final class Frame {
         this.consoleInput.setPreferredSize(consoleInputSize);
         this.consoleInput.setEditable(true);
         this.consoleInput.addActionListener(e -> {
-            //TODO: handle commands here
             String message = this.consoleInput.getText();
             FRAME.log(LogType.MAIN, message);
             this.consoleInput.clearText();
@@ -151,7 +149,7 @@ public final class Frame {
                 throw new IllegalArgumentException("object \"author\" passed to Frame#log(LogType type, String message, Object author) must be a User or CustomUser");
             }
 
-            String logMessage = LogHelper.getLogMessage(LogType.CMD, user.getTag() + " used " + message);
+            String logMessage = LogHelper.getLogMessage(LogType.CMD, user.getAsTag() + " used " + message);
             this.console.append(logMessage);
         } else {
             LogHelper.handleNormalLogs(LogHelper.LoggerType.CONSOLE, type, message);
