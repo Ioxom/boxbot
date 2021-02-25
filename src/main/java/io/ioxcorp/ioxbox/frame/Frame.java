@@ -104,6 +104,7 @@ public final class Frame {
         //add listeners to buttons
         this.clearConsole.addActionListener(e -> this.clearConsole());
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
+        //TODO: look into only using Main#isFullyLoaded(), probably just drag and drop
         this.connected = true;
         this.reloadJDA.addActionListener(e -> {
             if (connected) {
@@ -117,6 +118,8 @@ public final class Frame {
             }
         });
 
+        //TODO: colour scheme
+        //TODO: better scaling - final, interlocking Dimensions for most components
         //add everything to main panel, utilising another panel to get the buttons in a line
         JPanel panel = new JPanel(new BorderLayout());
         this.mainPanel.add(this.consoleInput, BorderLayout.SOUTH);
@@ -183,7 +186,14 @@ public final class Frame {
             if (COMMANDS[i].equals(command)) {
                 switch (i) {
                     case 0:
-                        FRAME.log(LogType.MAIN, "command list");
+                        FRAME.log(LogType.HELP, "=== command list start ===\n" +
+                                "/commands: display this list\n" +
+                                "/clear: clear the console\n" +
+                                "/reload: reload JDA, disconnecting and reconnecting to discord\n" +
+                                "/disconnect: disconnect from discord, if already disconnected does nothing\n" +
+                                "/connect: connect to discord, if already connected reloads jda\n" +
+                                "/ping: get the current ping\n" +
+                                "=== command list end ===");
                         return;
                     case 1:
                         FRAME.clearConsole();
@@ -192,11 +202,19 @@ public final class Frame {
                         Main.reloadJDA();
                         return;
                     case 3:
-                        Main.shutdownJDA();
+                        if (Main.isFullyConnected()) {
+                            Main.shutdownJDA();
+                        } else {
+                            FRAME.log(LogType.ERR, "could not disconnect from discord: already disconnected");
+                        }
                         return;
                     case 4:
-                        Main.connectJDA();
-                        FRAME.log(LogType.MAIN, "reconnected to discord");
+                        if (Main.isFullyConnected()) {
+                            FRAME.log(LogType.MAIN, "already connected; reloading JDA");
+                        } else {
+                            Main.connectJDA();
+                            FRAME.log(LogType.MAIN, "reconnected to discord");
+                        }
                         return;
                     case 5:
                         if (Main.isFullyConnected()) {
