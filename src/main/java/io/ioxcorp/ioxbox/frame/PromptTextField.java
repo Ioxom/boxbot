@@ -12,7 +12,7 @@ public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
 
-    public PromptTextField(String prompt) {
+    public PromptTextField(final String prompt) {
         this.prompt = prompt;
     }
 
@@ -44,7 +44,7 @@ public final class PromptTextField extends JTextField {
 
     public void drawText(final String text, final Graphics g) {
         int h = getHeight();
-        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         Insets ins = getInsets();
         FontMetrics fm = g.getFontMetrics();
         int c0 = getBackground().getRGB();

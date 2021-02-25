@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import static io.ioxcorp.ioxbox.Main.FRAME;
@@ -170,7 +171,8 @@ public final class Frame {
             "/clear",
             "/reload",
             "/disconnect",
-            "/connect"
+            "/connect",
+            "/ping"
     };
 
     public void handleCommands(final String command) {
@@ -197,6 +199,18 @@ public final class Frame {
                     case 4:
                         Main.connectJDA();
                         FRAME.log(LogType.MAIN, "reconnected to discord");
+                        return;
+                    case 5:
+                        if (Main.isFullyConnected()) {
+                            final long time = System.currentTimeMillis();
+                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(618926084326686723L)).getTextChannelById(784440682436886588L)).sendMessage("calculating ping").queue(message -> {
+                                long ping = System.currentTimeMillis() - time;
+                                FRAME.log(LogType.MAIN, "current ping: " + ping + "ms");
+                                message.editMessage("ping is " + ping + "ms").queue();
+                            });
+                        } else {
+                            FRAME.log(LogType.ERR, "not fully connected to JDA, could not get ping");
+                        }
                         return;
                 }
             }

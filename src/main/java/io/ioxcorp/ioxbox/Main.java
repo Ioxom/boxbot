@@ -19,8 +19,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -73,6 +75,7 @@ public final class Main extends ListenerAdapter {
 
     private static final String TOKEN = getToken();
     private static JDA api;
+    private static boolean fullyConnected;
 
     public static void main(final String[] args) {
 
@@ -124,6 +127,7 @@ public final class Main extends ListenerAdapter {
     }
 
     public static void shutdownJDA() {
+        fullyConnected = false;
         for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
             confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
             ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
@@ -148,5 +152,14 @@ public final class Main extends ListenerAdapter {
     @Override
     public void onReady(final @NotNull ReadyEvent e) {
         FRAME.log(LogType.MAIN, "fully loaded JDA; connected to discord");
+        fullyConnected = true;
+    }
+
+    public static JDA getApi() {
+        return api;
+    }
+
+    public static boolean isFullyConnected() {
+        return fullyConnected;
     }
 }
