@@ -116,13 +116,6 @@ public final class Main extends ListenerAdapter {
         return token;
     }
 
-    public static void reloadJDA() {
-        shutdownJDA();
-        connectJDA();
-        addListeners();
-        FRAME.log(LogType.INIT, "reconnected jda");
-    }
-
     public static void shutdownJDA() {
         for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
             confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
@@ -131,7 +124,7 @@ public final class Main extends ListenerAdapter {
         api.shutdown();
     }
 
-    private static void connectJDA() {
+    public static void connectJDA() {
         try {
             api = JDABuilder.createDefault(TOKEN).build();
             Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
