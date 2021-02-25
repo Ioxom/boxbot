@@ -20,8 +20,8 @@ import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import static io.ioxcorp.ioxbox.Main.FRAME;
 
 /**
  * a bad swing gui
@@ -60,7 +60,7 @@ public final class Frame {
             if (inputStream != null) {
                 Image image = ImageIO.read(inputStream);
                 this.jFrame.setIconImage(image);
-//                this.log(LogType.INIT, "added icon to frame");
+                this.log(LogType.INIT, "added icon to frame");
             } else {
                 this.log(LogType.ERR, "failed to add icon to frame; resources may be broken");
             }
@@ -88,8 +88,9 @@ public final class Frame {
         this.consoleInput.addActionListener(e -> {
             //TODO: handle commands here
             String message = this.consoleInput.getText();
-            Main.FRAME.log(LogType.MAIN, message);
+            FRAME.log(LogType.MAIN, message);
             this.consoleInput.clearText();
+            this.handleCommands(message);
         });
 
         //add **buttons**
@@ -102,18 +103,17 @@ public final class Frame {
         this.clearConsole.setBackground(Color.DARK_GRAY);
 
         //add listeners to buttons
-        this.clearConsole.addActionListener(e -> this.console.setText("[main]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version")));
+        this.clearConsole.addActionListener(e -> this.clearConsole());
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
         this.connect = false;
         this.reloadJDA.addActionListener(e -> {
             if (connect) {
                 Main.connectJDA();
                 Main.addListeners();
-                Main.FRAME.log(LogType.MAIN, "reconnected JDA");
+                FRAME.log(LogType.MAIN, "reconnected JDA");
                 this.connect = false;
             } else {
                 Main.shutdownJDA();
-                Main.FRAME.log(LogType.MAIN, "disconnected JDA");
                 this.connect = true;
             }
         });
@@ -163,5 +163,49 @@ public final class Frame {
 
     public JTextArea getConsole() {
         return this.console;
+    }
+
+    public static final String[] commands = {
+            "/commands",
+            "/clear",
+            "/reload",
+            "/disconnect",
+            "/connect"
+    };
+
+    public void handleCommands(final String command) {
+        if (!command.startsWith("/")) {
+            FRAME.log(LogType.MAIN, "invalid command: commands must start with /\nuse /commands for a list");
+            return;
+        }
+
+        for (int i = 0; i < commands.length; i++) {
+            if (commands[i].equals(command)) {
+                switch (i) {
+                    case 0:
+                        FRAME.log(LogType.MAIN, "command list");
+                        return;
+                    case 1:
+                        FRAME.clearConsole();
+                        return;
+                    case 2:
+                        Main.reloadJDA();
+                        return;
+                    case 3:
+                        Main.shutdownJDA();
+                        return;
+                    case 4:
+                        Main.connectJDA();
+                        FRAME.log(LogType.MAIN, "reconnected to discord");
+                        return;
+                }
+            }
+        }
+
+        FRAME.log(LogType.MAIN, "command not found");
+    }
+
+    public void clearConsole() {
+        this.console.setText("[main]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
     }
 }
