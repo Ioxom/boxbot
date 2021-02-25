@@ -37,14 +37,14 @@ public final class Frame {
     private final JButton reloadJDA;
     private final JButton clearConsole;
     private final JButton commandHelp;
-    private boolean connect;
+    private boolean connected;
 
     public Frame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
         this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + "\n[init] loading ioxbox");
         this.mainPanel = new JPanel(new BorderLayout(0, 0));
         this.logger = new FileLogger();
-        this.consoleInput = new PromptTextField("prompt");
+        this.consoleInput = new PromptTextField("enter commands here");
         this.reloadJDA = new JButton();
         this.commandHelp = new JButton();
         this.clearConsole = new JButton();
@@ -94,7 +94,7 @@ public final class Frame {
         });
 
         //add **buttons**
-        //TODO: icons
+        //TODO: icons - note that jda connection button icon should differ depending on whether we're connected or not
         this.reloadJDA.setPreferredSize(new Dimension(50, 50));
         this.reloadJDA.setBackground(Color.DARK_GRAY);
         this.commandHelp.setPreferredSize(new Dimension(50, 50));
@@ -105,16 +105,16 @@ public final class Frame {
         //add listeners to buttons
         this.clearConsole.addActionListener(e -> this.clearConsole());
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
-        this.connect = false;
+        this.connected = true;
         this.reloadJDA.addActionListener(e -> {
-            if (connect) {
+            if (connected) {
+                Main.shutdownJDA();
+                this.connected = false;
+            } else {
                 Main.connectJDA();
                 Main.addListeners();
                 FRAME.log(LogType.MAIN, "reconnected JDA");
-                this.connect = false;
-            } else {
-                Main.shutdownJDA();
-                this.connect = true;
+                this.connected = true;
             }
         });
 
@@ -165,7 +165,7 @@ public final class Frame {
         return this.console;
     }
 
-    public static final String[] commands = {
+    public static final String[] COMMANDS = {
             "/commands",
             "/clear",
             "/reload",
@@ -179,8 +179,8 @@ public final class Frame {
             return;
         }
 
-        for (int i = 0; i < commands.length; i++) {
-            if (commands[i].equals(command)) {
+        for (int i = 0; i < COMMANDS.length; i++) {
+            if (COMMANDS[i].equals(command)) {
                 switch (i) {
                     case 0:
                         FRAME.log(LogType.MAIN, "command list");

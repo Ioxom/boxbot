@@ -10,9 +10,10 @@ import java.awt.RenderingHints;
 
 public final class PromptTextField extends JTextField {
     private final String prompt;
+    private String savedCommand;
 
-    public PromptTextField(String hint) {
-        prompt = hint;
+    public PromptTextField(String prompt) {
+        this.prompt = prompt;
     }
 
     @Override
@@ -23,10 +24,15 @@ public final class PromptTextField extends JTextField {
             this.drawText(this.prompt, g);
         //otherwise we try to get an autofill option
         } else {
-            for (String command : Frame.commands) {
+            for (String command : Frame.COMMANDS) {
                 if (command.startsWith(this.getText())) {
-                    //autofill the text
+                    this.savedCommand = command;
+                    drawText(" ".repeat(this.getText().length() * 3) + command + " (press space)", g);
                     return;
+                }
+
+                if (this.getText().contains(" ") && this.getText().startsWith("/")) {
+                    this.setText(savedCommand);
                 }
             }
         }
@@ -46,6 +52,6 @@ public final class PromptTextField extends JTextField {
         int m = 0xfefefefe;
         int c2 = ((c0 & m) >>> 1) + ((c1 & m) >>> 1);
         g.setColor(new Color(c2, true));
-        g.drawString(text, ins.left, h / 2 + fm.getAscent() / 2 - 2);
+        g.drawString(text, ins.left, h / 2 + fm.getAscent() / 2 - 1);
     }
 }
