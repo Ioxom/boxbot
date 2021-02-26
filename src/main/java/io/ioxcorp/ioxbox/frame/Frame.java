@@ -188,14 +188,14 @@ public final class Frame {
             if (COMMANDS[i].equals(command)) {
                 switch (i) {
                     case 0:
-                        this.log(LogType.HELP, "=== command list start ===\n" +
-                                "/commands: display this list\n" +
-                                "/clear: clear the console\n" +
-                                "/reload: reload JDA, disconnecting and reconnecting to discord\n" +
-                                "/disconnect: disconnect from discord, if already disconnected does nothing\n" +
-                                "/connect: connect to discord, if already connected reloads jda\n" +
-                                "/ping: get the current ping\n" +
-                                "=== command list end ===");
+                        this.log(LogType.HELP, "=== command list start ===\n"
+                                + "/commands: display this list\n"
+                                + "/clear: clear the console\n"
+                                + "/reload: reload JDA, disconnecting and reconnecting to discord\n"
+                                + "/disconnect: disconnect from discord, if already disconnected does nothing\n"
+                                + "/connect: connect to discord, if already connected reloads jda\n"
+                                + "/ping: get the current ping\n"
+                                + "=== command list end ===");
                         return;
                     case 1:
                         this.clearConsole();
