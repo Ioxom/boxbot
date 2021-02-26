@@ -131,6 +131,7 @@ public final class Main extends ListenerAdapter {
             ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
         }
         api.shutdown();
+        FRAME.setReloadJDAImage("images/lightning_bolt.png");
         FRAME.log(LogType.MAIN, "shut down JDA, disconnected from discord");
     }
 
@@ -151,6 +152,7 @@ public final class Main extends ListenerAdapter {
     public void onReady(final @NotNull ReadyEvent e) {
         FRAME.log(LogType.MAIN, "fully loaded JDA; connected to discord");
         fullyConnected = true;
+        FRAME.setReloadJDAImage("images/lightning_bolt_white.png");
     }
 
     public static JDA getApi() {

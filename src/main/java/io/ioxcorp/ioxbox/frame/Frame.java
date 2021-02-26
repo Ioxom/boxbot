@@ -8,6 +8,7 @@ import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -37,7 +38,6 @@ public final class Frame {
     private final JButton reloadJDA;
     private final JButton clearConsole;
     private final JButton commandHelp;
-    private boolean connected;
 
     public Frame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
@@ -55,21 +55,12 @@ public final class Frame {
 
         this.jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         //set icon
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("images/box.png");
-            if (inputStream != null) {
-                Image image = ImageIO.read(inputStream);
-                this.jFrame.setIconImage(image);
-                this.log(LogType.INIT, "added icon to frame");
-            } else {
-                this.log(LogType.ERR, "failed to add icon to frame; resources may be broken");
-            }
-        } catch (IOException e) {
-            this.log(LogType.FATAL_ERR, "an IOException occurred while reading file \"images/box.png\"");
-        }
+        this.jFrame.setIconImage(this.getImage("images/box.png"));
         //configure the console, adding a scroll bar and setting the colour
-        final Dimension consoleSize = new Dimension(600, 375);
-        this.console.setBackground(Color.GRAY);
+        final Dimension consoleSize = new Dimension(600, 300);
+        this.console.setForeground(new Color(30, 30, 30));
+        this.console.setFont(this.console.getFont().deriveFont(12.0F));
+        this.console.setBackground(new Color(102, 102, 102));
         this.console.setSize(consoleSize);
         this.console.setEditable(false);
         //create a pane to allow the console to have scrolling
@@ -87,39 +78,50 @@ public final class Frame {
         this.consoleInput.setEditable(true);
         this.consoleInput.addActionListener(e -> {
             String message = this.consoleInput.getText();
-            FRAME.log(LogType.MAIN, message);
+            this.log(LogType.MAIN, message);
             this.consoleInput.clearText();
             this.handleCommands(message);
         });
 
         //add **buttons**
         //TODO: icons - note that jda connection button icon should differ depending on whether we're connected or not
-        this.reloadJDA.setPreferredSize(new Dimension(50, 50));
-        this.reloadJDA.setBackground(Color.DARK_GRAY);
-        this.commandHelp.setPreferredSize(new Dimension(50, 50));
-        this.commandHelp.setBackground(Color.DARK_GRAY);
-        this.clearConsole.setPreferredSize(new Dimension(50, 50));
-        this.clearConsole.setBackground(Color.DARK_GRAY);
+        final Color buttonColour = Color.DARK_GRAY;
+        final Dimension buttonSize = new Dimension(50, 60);
+        this.reloadJDA.setPreferredSize(buttonSize);
+        this.reloadJDA.setBackground(buttonColour);
+        this.setReloadJDAImage("images/lightning_bolt.png");
+        this.commandHelp.setPreferredSize(buttonSize);
+        this.commandHelp.setBackground(buttonColour);
+        Image commandHelpImage = this.getImage("images/question_mark_icon.png");
+        if (commandHelpImage == null) {
+            this.log(LogType.ERR, "could not get resource for clear console button");
+        } else {
+            ImageIcon commandHelpIcon = new ImageIcon(commandHelpImage);
+            this.commandHelp.setIcon(commandHelpIcon);
+        }
+        this.clearConsole.setPreferredSize(buttonSize);
+        this.clearConsole.setBackground(buttonColour);
+        Image clearConsoleImage = this.getImage("images/clear_console_icon.png");
+        if (clearConsoleImage == null) {
+            this.log(LogType.ERR, "could not get resource for jda clear console button");
+        } else {
+            ImageIcon clearConsoleIcon = new ImageIcon(clearConsoleImage);
+            this.clearConsole.setIcon(clearConsoleIcon);
+        }
 
         //add listeners to buttons
         this.clearConsole.addActionListener(e -> this.clearConsole());
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
-        //TODO: look into only using Main#isFullyLoaded(), probably just drag and drop
-        this.connected = true;
         this.reloadJDA.addActionListener(e -> {
-            if (connected) {
+            if (Main.isFullyConnected()) {
                 Main.shutdownJDA();
-                this.connected = false;
             } else {
                 Main.connectJDA();
                 Main.addListeners();
                 FRAME.log(LogType.MAIN, "reconnected JDA");
-                this.connected = true;
             }
         });
 
-        //TODO: colour scheme
-        //TODO: better scaling - final, interlocking Dimensions for most components
         //add everything to main panel, utilising another panel to get the buttons in a line
         JPanel panel = new JPanel(new BorderLayout());
         this.mainPanel.add(this.consoleInput, BorderLayout.SOUTH);
@@ -129,7 +131,7 @@ public final class Frame {
         this.mainPanel.add(panel, BorderLayout.EAST);
 
         //open the frame
-        this.jFrame.setSize(new Dimension(600, 275));
+        this.jFrame.setSize(consoleSize);
         this.jFrame.setVisible(true);
     }
 
@@ -178,7 +180,7 @@ public final class Frame {
 
     public void handleCommands(final String command) {
         if (!command.startsWith("/")) {
-            FRAME.log(LogType.MAIN, "invalid command: commands must start with /\nuse /commands for a list");
+            this.log(LogType.MAIN, "invalid command: commands must start with /\nuse /commands for a list");
             return;
         }
 
@@ -186,7 +188,7 @@ public final class Frame {
             if (COMMANDS[i].equals(command)) {
                 switch (i) {
                     case 0:
-                        FRAME.log(LogType.HELP, "=== command list start ===\n" +
+                        this.log(LogType.HELP, "=== command list start ===\n" +
                                 "/commands: display this list\n" +
                                 "/clear: clear the console\n" +
                                 "/reload: reload JDA, disconnecting and reconnecting to discord\n" +
@@ -196,7 +198,7 @@ public final class Frame {
                                 "=== command list end ===");
                         return;
                     case 1:
-                        FRAME.clearConsole();
+                        this.clearConsole();
                         return;
                     case 2:
                         Main.reloadJDA();
@@ -205,15 +207,15 @@ public final class Frame {
                         if (Main.isFullyConnected()) {
                             Main.shutdownJDA();
                         } else {
-                            FRAME.log(LogType.ERR, "could not disconnect from discord: already disconnected");
+                            this.log(LogType.ERR, "could not disconnect from discord: already disconnected");
                         }
                         return;
                     case 4:
                         if (Main.isFullyConnected()) {
-                            FRAME.log(LogType.MAIN, "already connected; reloading JDA");
+                            this.log(LogType.MAIN, "already connected; reloading JDA");
                         } else {
                             Main.connectJDA();
-                            FRAME.log(LogType.MAIN, "reconnected to discord");
+                            this.log(LogType.MAIN, "reconnected to discord");
                         }
                         return;
                     case 5:
@@ -221,21 +223,46 @@ public final class Frame {
                             final long time = System.currentTimeMillis();
                             Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(618926084326686723L)).getTextChannelById(784440682436886588L)).sendMessage("calculating ping").queue(message -> {
                                 long ping = System.currentTimeMillis() - time;
-                                FRAME.log(LogType.MAIN, "current ping: " + ping + "ms");
+                                this.log(LogType.MAIN, "current ping: " + ping + "ms");
                                 message.editMessage("ping is " + ping + "ms").queue();
                             });
                         } else {
-                            FRAME.log(LogType.ERR, "not fully connected to JDA, could not get ping");
+                            this.log(LogType.ERR, "not fully connected to JDA, could not get ping");
                         }
                         return;
                 }
             }
         }
 
-        FRAME.log(LogType.MAIN, "command not found");
+        this.log(LogType.MAIN, "command not found");
     }
 
-    public void clearConsole() {
+    private void clearConsole() {
         this.console.setText("[main]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
+    }
+
+    private Image getImage(final String path) {
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
+            if (inputStream != null) {
+                return ImageIO.read(inputStream);
+            } else {
+                this.log(LogType.ERR, "failed to get image: " + path + "; resources may be broken");
+                return null;
+            }
+        } catch (IOException e) {
+            this.log(LogType.FATAL_ERR, "an IOException occurred while reading file \"images/box.png\"");
+            return null;
+        }
+    }
+
+    public void setReloadJDAImage(final String path) {
+        Image reloadJDAImage = this.getImage(path);
+        if (reloadJDAImage == null) {
+            this.log(LogType.ERR, "could not get resource for reload JDA button");
+        } else {
+            ImageIcon reloadJDAIcon = new ImageIcon(reloadJDAImage);
+            this.reloadJDA.setIcon(reloadJDAIcon);
+        }
     }
 }
