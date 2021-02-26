@@ -8,7 +8,7 @@ public final class LogHelper {
     }
 
     public static String replaceNewlines(final LogType type, final String message) {
-        String delimiter = null;
+        String delimiter = "";
         switch (type) {
             case CMD:
                 delimiter = "\n[cmd]: ";
@@ -38,31 +38,11 @@ public final class LogHelper {
      * @return the message formatted as what should be sent in the console
      */
     public static String getLogMessage(final LogType type, final String message) {
-        String formattedMessage;
-        switch (type) {
-            case FATAL_ERR:
-                formattedMessage = "\n[err/FATAL]: " + replaceNewlines(type, message) + "\n[err/FATAL]: closing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".";
-                break;
-            case MAIN:
-                formattedMessage = "\n[main]: " + replaceNewlines(type, message);
-                break;
-            case INIT:
-                formattedMessage = "\n[init]: " + replaceNewlines(type, message);
-                break;
-            case ERR:
-                formattedMessage = "\n[err]: " + replaceNewlines(type, message);
-                break;
-            case CMD:
-                formattedMessage = "\n[cmd]: " + replaceNewlines(type, message);
-                break;
-            case HELP:
-                formattedMessage = "\n[help]: " + replaceNewlines(type, message);
-                break;
-            default:
-                throw new IllegalArgumentException("unhandled type in LogType sent to LogHelper#getLogMessage(LogType, String)");
+        if (type == LogType.FATAL_ERR) {
+            return replaceNewlines(type, "\n" + message + "\nclosing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".");
+        } else {
+            return replaceNewlines(type, "\n" + message);
         }
-
-        return formattedMessage;
     }
 
     /**
@@ -102,8 +82,7 @@ public final class LogHelper {
      * @param message the message to send before killing the process
      */
     public static void throwFatalError(final String message) {
-        String logMessage = getLogMessage(LogType.FATAL_ERR, message);
-        Main.FRAME.log(LogType.FATAL_ERR, logMessage);
+        Main.FRAME.getConsole().append(getLogMessage(LogType.FATAL_ERR, message));
         try {
             Thread.sleep(5000);
             System.exit(1);

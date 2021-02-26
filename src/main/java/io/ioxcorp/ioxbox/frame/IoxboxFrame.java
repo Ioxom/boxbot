@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import static io.ioxcorp.ioxbox.Main.FRAME;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  * a bad swing gui
@@ -41,7 +41,7 @@ public final class IoxboxFrame {
 
     public IoxboxFrame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
-        this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + "\n[init] loading ioxbox");
+        this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + LogHelper.getLogMessage(LogType.INIT, "loading ioxbox"));
         this.mainPanel = new JPanel(new BorderLayout(0, 0));
         this.logger = new FileLogger();
         this.consoleInput = new PromptTextField("enter commands here");

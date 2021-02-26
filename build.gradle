@@ -40,3 +40,5 @@ task('addVersion') {
         )
     }
 }
+
+tasks.shadowJar.dependsOn(tasks.addVersion)
