@@ -24,7 +24,7 @@ public final class PromptTextField extends JTextField {
             this.drawText(this.prompt, g);
         //otherwise we try to get an autofill option
         } else {
-            for (String command : Frame.COMMANDS) {
+            for (String command : IoxboxFrame.COMMANDS) {
                 if (command.startsWith(this.getText())) {
                     this.savedCommand = command;
                     drawText(" ".repeat(this.getText().length() * 3) + command + " (press space)", g);

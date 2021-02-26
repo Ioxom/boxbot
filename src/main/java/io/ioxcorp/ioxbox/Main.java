@@ -2,7 +2,7 @@ package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
-import io.ioxcorp.ioxbox.frame.Frame;
+import io.ioxcorp.ioxbox.frame.IoxboxFrame;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
@@ -60,7 +60,7 @@ public final class Main extends ListenerAdapter {
         return Main.version;
     }
 
-    public static final Frame FRAME = new Frame();
+    public static final IoxboxFrame FRAME = new IoxboxFrame();
     static {
         FRAME.init();
     }

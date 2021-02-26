@@ -29,7 +29,7 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * a bad swing gui
  * @author ioxom
  */
-public final class Frame {
+public final class IoxboxFrame {
     private final JTextArea console;
     private final JFrame jFrame;
     private final JPanel mainPanel;
@@ -39,7 +39,7 @@ public final class Frame {
     private final JButton clearConsole;
     private final JButton commandHelp;
 
-    public Frame() {
+    public IoxboxFrame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
         this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + "\n[init] loading ioxbox");
         this.mainPanel = new JPanel(new BorderLayout(0, 0));
@@ -84,7 +84,6 @@ public final class Frame {
         });
 
         //add **buttons**
-        //TODO: icons - note that jda connection button icon should differ depending on whether we're connected or not
         final Color buttonColour = Color.DARK_GRAY;
         final Dimension buttonSize = new Dimension(50, 60);
         this.reloadJDA.setPreferredSize(buttonSize);
@@ -111,7 +110,11 @@ public final class Frame {
 
         //add listeners to buttons
         this.clearConsole.addActionListener(e -> this.clearConsole());
-        this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\nmiddle button: help\nbottom button: clear console"));
+        this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\n"
+                + "middle button: help\n"
+                + "bottom button: clear console\n"
+                + COMMAND_LIST
+        ));
         this.reloadJDA.addActionListener(e -> {
             if (Main.isFullyConnected()) {
                 Main.shutdownJDA();
@@ -178,6 +181,15 @@ public final class Frame {
             "/ping"
     };
 
+    public static final String COMMAND_LIST = "=== command list start ===\n"
+            + COMMANDS[0] + ": display this list\n"
+            + COMMANDS[1] + ": clear the console\n"
+            + COMMANDS[2] + ": reload JDA, disconnecting and reconnecting to discord\n"
+            + COMMANDS[3] + ": disconnect from discord, if already disconnected does nothing\n"
+            + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
+            + COMMANDS[5] + ": get the current ping\n"
+            + "=== command list end ===";
+
     public void handleCommands(final String command) {
         if (!command.startsWith("/")) {
             this.log(LogType.MAIN, "invalid command: commands must start with /\nuse /commands for a list");
@@ -188,14 +200,7 @@ public final class Frame {
             if (COMMANDS[i].equals(command)) {
                 switch (i) {
                     case 0:
-                        this.log(LogType.HELP, "=== command list start ===\n"
-                                + "/commands: display this list\n"
-                                + "/clear: clear the console\n"
-                                + "/reload: reload JDA, disconnecting and reconnecting to discord\n"
-                                + "/disconnect: disconnect from discord, if already disconnected does nothing\n"
-                                + "/connect: connect to discord, if already connected reloads jda\n"
-                                + "/ping: get the current ping\n"
-                                + "=== command list end ===");
+                        this.log(LogType.HELP, COMMAND_LIST);
                         return;
                     case 1:
                         this.clearConsole();
