@@ -1,7 +1,5 @@
 package io.ioxcorp.ioxbox.frame.logging;
 
-import io.ioxcorp.ioxbox.frame.IoxboxFrame;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,7 +10,7 @@ import java.util.Date;
 
 /**
  * a class with methods to log to a {@link File file}
- * used by the {@link IoxboxFrame} class to save logs to {@link File files}
+ * used by the {@link io.ioxcorp.ioxbox.frame.IoxboxFrame IoxboxFrame} class to save logs to {@link File files}
  * @author ioxom
  */
 public final class FileLogger {
