@@ -3,7 +3,6 @@ package io.ioxcorp.ioxbox.data.format;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
@@ -24,19 +23,19 @@ public final class Box {
      * the owner of the box
      */
     @JsonProperty("owner")
-    private CustomUser owner;
+    private final CustomUser owner;
 
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("items")
-    private ArrayList<String> items;
+    private final ArrayList<String> items;
 
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("users")
-    private ArrayList<CustomUser> users;
+    private final ArrayList<CustomUser> users;
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
@@ -104,7 +103,9 @@ public final class Box {
      */
     @JsonCreator
     public Box() {
-
+        this.owner = null;
+        this.items = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     public String toString() {
@@ -280,21 +281,6 @@ public final class Box {
     @JsonGetter
     public ArrayList<CustomUser> getUsers() {
         return users;
-    }
-
-    @JsonSetter
-    public void setOwner(CustomUser owner) {
-        this.owner = owner;
-    }
-
-    @JsonSetter
-    public void setItems(ArrayList<String> items) {
-        this.items = items;
-    }
-
-    @JsonSetter
-    public void setUsers(ArrayList<CustomUser> users) {
-        this.users = users;
     }
 
     /**
