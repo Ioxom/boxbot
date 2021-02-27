@@ -44,7 +44,6 @@ public final class MainListener extends ListenerAdapter {
         final MessageChannel channel = eventMessage.getChannel();
 
         switch (messageContent[0]) {
-            //TODO: 0.4.0: make this not a mess
             case "help":
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")

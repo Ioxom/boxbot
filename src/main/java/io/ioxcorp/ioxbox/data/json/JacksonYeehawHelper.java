@@ -45,14 +45,14 @@ public final class JacksonYeehawHelper {
 
     /**
      * gets the stored data in box_data.json
-     * @return a {@link HashMap<>} of the stored BOXES in box_data.json
+     * @return a {@link HashMap<>} of the stored boxes in box_data.json
      * @author ioxom
      */
     public static HashMap<Long, Box> read() {
         File file = new File("box_data.json");
 
         //if the file doesn't exist create it and return an empty HashMap
-        if (file.exists()) {
+        if (!file.exists()) {
             try {
                 boolean created = file.createNewFile();
                 FileWriter writer = new FileWriter(file);
@@ -77,8 +77,11 @@ public final class JacksonYeehawHelper {
 
             if (data == null) {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
-                return null;
+                return new HashMap<>();
             } else {
+                if (data.getMap() == null) {
+                    return new HashMap<>();
+                }
                 return data.getMap();
             }
         }

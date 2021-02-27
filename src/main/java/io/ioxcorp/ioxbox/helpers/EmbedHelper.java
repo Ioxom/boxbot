@@ -49,7 +49,7 @@ public final class EmbedHelper {
                 .setAuthor(author[0], author[1], author[2])
                 .setDescription(error + (rotater ? "have a rotater!" : ""))
                 .setThumbnail(rotater ? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
-                .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
+                .setFooter("requested by user " + user.getAsTag() + "\nbox id: " + getBoxID())
                 .build();
     }
 
@@ -58,7 +58,7 @@ public final class EmbedHelper {
                 .setAuthor(author[0], author[1], author[2])
                 .setColor(SUCCESS_EMBED_COLOUR)
                 .setDescription(message)
-                .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
+                .setFooter("requested by user " + user.getAsTag() + "\nbox id: " + getBoxID())
                 .build();
     }
 
@@ -68,7 +68,7 @@ public final class EmbedHelper {
                 .setColor(SUCCESS_EMBED_COLOUR)
                 .setDescription(message)
                 .setTitle(title)
-                .setFooter("requested by user " + user.getTag() + "\nbox id: " + getBoxID())
+                .setFooter("requested by user " + user.getAsTag() + "\nbox id: " + getBoxID())
                 .build();
     }
 

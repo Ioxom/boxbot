@@ -20,5 +20,9 @@ public enum LogType {
     /**
      * appears in the console as [cmd]: message
      */
-    CMD
+    CMD,
+    /**
+     * appears in the console as [help]: message
+     */
+    HELP
 }

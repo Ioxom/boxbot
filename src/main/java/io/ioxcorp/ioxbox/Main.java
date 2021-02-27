@@ -2,7 +2,9 @@ package io.ioxcorp.ioxbox;
 
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
-import io.ioxcorp.ioxbox.frame.Frame;
+import io.ioxcorp.ioxbox.frame.IoxboxFrame;
+import io.ioxcorp.ioxbox.helpers.EmbedHelper;
+import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
 import io.ioxcorp.ioxbox.listeners.MainListener;
 import io.ioxcorp.ioxbox.listeners.status.StatusSetter;
@@ -21,8 +23,11 @@ import java.util.Properties;
 import java.util.Random;
 
 import io.ioxcorp.ioxbox.frame.logging.LogType;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
-public final class Main {
+public final class Main extends ListenerAdapter {
     private Main() {
 
     }
@@ -55,7 +60,7 @@ public final class Main {
         return Main.version;
     }
 
-    public static final Frame FRAME = new Frame();
+    public static final IoxboxFrame FRAME = new IoxboxFrame();
     static {
         FRAME.init();
     }
@@ -66,6 +71,10 @@ public final class Main {
         BOXES = JacksonYeehawHelper.read();
     }
 
+    private static final String TOKEN = getToken();
+    private static JDA api;
+    private static boolean fullyConnected;
+
     public static void main(final String[] args) {
 
         //throw error if version is not found
@@ -75,25 +84,17 @@ public final class Main {
         }
 
         //log in
-        JDA api = null;
-        try {
-            String token = getToken();
-            api = JDABuilder.createDefault(token).build();
-            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
-        } catch (LoginException e) {
-            FRAME.log(LogType.FATAL_ERR, "invalid token");
-        }
+        connectJDA();
 
-        //add event listeners
         if (api != null) {
-            api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20));
+            addListeners();
             FRAME.log(LogType.INIT, "initialized jda");
         } else {
             FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");
         }
     }
 
-    public static String getToken() {
+    private static String getToken() {
         String token = null;
         String fileName = "token.txt";
         try {
@@ -114,5 +115,51 @@ public final class Main {
         }
 
         return token;
+    }
+
+    public static void reloadJDA() {
+        shutdownJDA();
+        connectJDA();
+        addListeners();
+        FRAME.log(LogType.INIT, "reconnected jda");
+    }
+
+    public static void shutdownJDA() {
+        fullyConnected = false;
+        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+            confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
+            ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
+        }
+        api.shutdown();
+        FRAME.setReloadJDAImage("images/lightning_bolt.png");
+        FRAME.log(LogType.MAIN, "shut down JDA, disconnected from discord");
+    }
+
+    public static void connectJDA() {
+        try {
+            api = JDABuilder.createDefault(TOKEN).build();
+            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
+        } catch (LoginException e) {
+            FRAME.log(LogType.FATAL_ERR, "invalid token");
+        }
+    }
+
+    public static void addListeners() {
+        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
+    }
+
+    @Override
+    public void onReady(final @NotNull ReadyEvent e) {
+        FRAME.log(LogType.MAIN, "fully loaded JDA; connected to discord");
+        fullyConnected = true;
+        FRAME.setReloadJDAImage("images/lightning_bolt_white.png");
+    }
+
+    public static JDA getApi() {
+        return api;
+    }
+
+    public static boolean isFullyConnected() {
+        return fullyConnected;
     }
 }
