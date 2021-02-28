@@ -178,7 +178,8 @@ public final class IoxboxFrame {
             "/reload",
             "/disconnect",
             "/connect",
-            "/ping"
+            "/ping",
+            "/exit"
     };
 
     public static final String COMMAND_LIST = "=== command list start ===\n"
@@ -188,6 +189,7 @@ public final class IoxboxFrame {
             + COMMANDS[3] + ": disconnect from discord, if already disconnected does nothing\n"
             + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
             + COMMANDS[5] + ": get the current ping\n"
+            + COMMANDS[6] + ": disconnects from discord and ends the process\n"
             + "=== command list end ===";
 
     public void handleCommands(final String command) {
@@ -234,6 +236,9 @@ public final class IoxboxFrame {
                         } else {
                             this.log(LogType.ERR, "not fully connected to JDA, could not get ping");
                         }
+                        return;
+                    case 6:
+                        System.exit(0);
                         return;
                 }
             }

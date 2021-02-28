@@ -25,14 +25,19 @@ public final class PromptTextField extends JTextField {
         //otherwise we try to get an autofill option
         } else {
             for (String command : IoxboxFrame.COMMANDS) {
-                if (command.startsWith(this.getText())) {
+                if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
                     drawText(" ".repeat(this.getText().length() * 3) + command + " (press space)", g);
                     return;
+                } else if (command.equals(this.getText())) {
+                    this.savedCommand = command;
+                    this.drawText(" ".repeat(this.getText().length() * 3) + "press enter to run", g);
+                    return;
                 }
 
-                if (this.getText().contains(" ") && this.getText().startsWith("/")) {
+                if (this.getText().contains(" ") && this.getText().startsWith("/") && savedCommand.startsWith(this.getText().split(" ")[0])) {
                     this.setText(savedCommand);
+                    this.drawText(" ".repeat(this.getText().length() * 3) + "press enter to run", g);
                 }
             }
         }
