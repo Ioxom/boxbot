@@ -243,7 +243,7 @@ public final class IoxboxFrame {
     }
 
     private void clearConsole() {
-        this.console.setText("[main]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
+        this.console.setText(LogHelper.getLogMessage(LogType.MAIN, "ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version")));
     }
 
     private Image getImage(final String path) {

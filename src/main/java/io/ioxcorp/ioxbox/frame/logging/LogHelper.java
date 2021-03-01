@@ -8,28 +8,7 @@ public final class LogHelper {
     }
 
     public static String replaceNewlines(final LogType type, final String message) {
-        String delimiter = "";
-        switch (type) {
-            case CMD:
-                delimiter = "\n[cmd]: ";
-                break;
-            case ERR:
-                delimiter = "\n[err]: ";
-                break;
-            case INIT:
-                delimiter = "\n[init]: ";
-                break;
-            case MAIN:
-                delimiter = "\n[main]: ";
-                break;
-            case FATAL_ERR:
-                delimiter = "\n[err/FATAL]: ";
-                break;
-            case HELP:
-                delimiter = "\n[help]: ";
-                break;
-        }
-        return String.join(delimiter, message.split("\n"));
+        return String.join("\n" + type.getValue() + ": ", message.split("\n"));
     }
 
     /**
@@ -78,7 +57,7 @@ public final class LogHelper {
     }
 
     /**
-     * exists ioxbox after giving ample time to read the message
+     * exits ioxbox after giving ample time to read the message
      * @param message the message to send before killing the process
      */
     public static void throwFatalError(final String message) {
