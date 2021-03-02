@@ -28,7 +28,7 @@ public enum LogType {
 
     private final String value;
 
-    LogType(String value) {
+    LogType(final String value) {
         this.value = value;
     }
 
