@@ -25,7 +25,7 @@ public final class HandleOpenWithUser extends Handler {
 
     @Override
     public void run() {
-        EmbedHelper helper = new EmbedHelper(this.getUser());
+        final EmbedHelper helper = new EmbedHelper(this.getUser());
         if (ConfirmationGetter.gettingConfirmationFrom(this.getUser().getId())) {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
@@ -33,7 +33,7 @@ public final class HandleOpenWithUser extends Handler {
             this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser().getPing() + ", do you want to be added to " + this.askingUser.getPing() + "'s new box?")).queue();
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
+        final WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
 
         if (response == null) {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();

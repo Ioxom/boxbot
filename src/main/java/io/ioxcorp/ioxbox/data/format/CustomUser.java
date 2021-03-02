@@ -15,8 +15,8 @@ public final class CustomUser {
     private final long id;
     @JsonProperty("username")
     private final String username;
-    @JsonProperty("tag")
-    private final int tag;
+    @JsonProperty("discriminator")
+    private final int discriminator;
 
     /**
      * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
@@ -26,7 +26,7 @@ public final class CustomUser {
     public CustomUser(final User user) {
         this.id = user.getIdLong();
         String[] splitTag = user.getAsTag().split("#");
-        this.tag = Integer.parseInt(splitTag[1]);
+        this.discriminator = Integer.parseInt(splitTag[1]);
         this.username = splitTag[0];
     }
 
@@ -34,11 +34,11 @@ public final class CustomUser {
     public CustomUser() {
         this.id = 0L;
         this.username = "";
-        this.tag = 0;
+        this.discriminator = 0;
     }
 
     public String toString() {
-        return "id: " + this.id + "\ntag: " + this.username + "#" + this.tag;
+        return "id: " + this.id + "\ntag: " + this.username + "#" + this.discriminator;
     }
 
     /**
@@ -47,7 +47,7 @@ public final class CustomUser {
      */
     @JsonIgnore
     public String getAsTag() {
-        return this.username + "#" + this.tag;
+        return this.username + "#" + this.discriminator;
     }
 
     /**
@@ -80,19 +80,20 @@ public final class CustomUser {
 
     @Override
     public boolean equals(final Object o) {
+
         if (this == o) {
             return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        } else if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        CustomUser that = (CustomUser) o;
-        return id == that.id && tag == that.tag && Objects.equals(username, that.username);
+
+        final CustomUser that = (CustomUser) o;
+        return id == that.id && discriminator == that.discriminator && Objects.equals(username, that.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, tag);
+        return Objects.hash(id, username, discriminator);
     }
 
     @JsonGetter
@@ -106,7 +107,7 @@ public final class CustomUser {
     }
 
     @JsonGetter
-    public int getTag() {
-        return tag;
+    public int getDiscriminator() {
+        return discriminator;
     }
 }

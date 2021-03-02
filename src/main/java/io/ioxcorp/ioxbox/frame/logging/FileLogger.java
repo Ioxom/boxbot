@@ -58,7 +58,7 @@ public final class FileLogger {
      * @return a {@link String} filename in the format of log_day-month-year_run[runNumber]
      * @author ioxom
      */
-    public String getValidLogName() {
+    private String getValidLogName() {
         //get the date
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
@@ -75,9 +75,12 @@ public final class FileLogger {
     /**
      * convenience method to get the run number of the program
      * @return the run number of the program starting at 0
+     * @throws NumberFormatException if the log number isn't valid somehow
      * @author ioxom
      */
     public int getRun() {
+        //first remove everything before "run", leaving us with [run number].txt
+        //then remove .txt, leaving us with a number
         return Integer.parseInt((this.file.getName().split("run"))[1].split(".txt")[0]);
     }
 

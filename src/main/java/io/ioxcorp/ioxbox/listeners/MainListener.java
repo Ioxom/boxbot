@@ -1,13 +1,10 @@
 package io.ioxcorp.ioxbox.listeners;
 
-import static io.ioxcorp.ioxbox.Main.BOXES;
-import static io.ioxcorp.ioxbox.Main.FRAME;
-
 import io.ioxcorp.ioxbox.Main;
-import io.ioxcorp.ioxbox.frame.logging.LogType;
-import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
+import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
@@ -20,6 +17,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
+
+import static io.ioxcorp.ioxbox.Main.FRAME;
 
 /**
  * the main listener for ioxbox<br>
@@ -45,9 +44,10 @@ public final class MainListener extends ListenerAdapter {
 
         switch (messageContent[0]) {
             case "help":
+
                 EmbedBuilder helpEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0xfc03df)
+                        .setColor(helper.getRandomEmbedColour())
                         .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
                         .addField("commands", "use " + PREFIX + "commands for a list", false)
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
@@ -58,9 +58,10 @@ public final class MainListener extends ListenerAdapter {
 
             case "commands":
             case "cmds":
+
                 EmbedBuilder commandEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0x00ff00)
+                        .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                         .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + PREFIX + "add [ping or item]`", false)
                         .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + PREFIX + "remove [ping or item]`", false)
                         .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + PREFIX + "ping`", false)
@@ -74,23 +75,23 @@ public final class MainListener extends ListenerAdapter {
                 break;
 
             case "add":
+
                 //if there are no mentioned users, use the first argument
-                if (eventMessage.getMentionedUsers().isEmpty()) {
-                    if (BOXES.containsKey(author.getId())) {
+                if (eventMessage.getMentionedUsers().isEmpty() && messageContent.length > 1) {
+                    if (author.hasBox()) {
                         author.getBox().add(messageContent[1]);
                         channel.sendMessage(helper.successEmbed(
                                 "successfully added item to box!",
                                 "items:\n" + author.getBox().itemsToString()
                         )).queue();
-
                     } else {
                         Box.createBox(author, messageContent[1]);
                         channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
                     }
-                    //if we have a mention use it
+                //if we have a mention use it
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    if (BOXES.containsKey(author.getId())) {
+                    if (author.hasBox()) {
                         HandleAdd yes = new HandleAdd(user, author, channel);
                         ConfirmationGetter.EXECUTOR.submit(yes);
                         break;
@@ -104,33 +105,27 @@ public final class MainListener extends ListenerAdapter {
                 break;
 
             case "remove":
-                //if there are no mentioned users, use the first argument
+                //if there are no mentioned users and we have an item to remove, use the first argument
                 if (eventMessage.getMentionedUsers().isEmpty() && messageContent.length > 1) {
-                    if (BOXES.containsKey(author.getId())) {
-                        if (author.getBox().contains(messageContent[1])) {
-                            author.getBox().remove(messageContent[1]);
-                            channel.sendMessage(helper.successEmbed(
-                                    "successfully removed item from box!",
-                                    "items:\n" + author.getBox().itemsToString()
-                            )).queue();
-                        } else {
-                            channel.sendMessage(helper.errorEmbed("error removing from box: box does not contain item")).queue();
-                        }
+                    if (author.hasBox() && author.getBox().contains(messageContent[1])) {
+                        author.getBox().remove(messageContent[1]);
+                        channel.sendMessage(helper.successEmbed(
+                                "successfully removed item from box!",
+                                "items:\n" + author.getBox().itemsToString()
+                        )).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("error removing from box: box does not exist")).queue();
+                        channel.sendMessage(helper.errorEmbed("error removing from box: box does not exist or does not contain the requested item")).queue();
                     }
                 } else if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
-                    if (BOXES.containsKey(author.getId())) {
-                        if (author.getBox().contains(user)) {
-                            author.getBox().remove(user);
-                        }
+                    if (author.hasBox() && author.getBox().contains(user)) {
+                        author.getBox().remove(user);
                         channel.sendMessage(helper.successEmbed(
                                 "successfully removed user from box!",
                                 "users:\n" + author.getBox().usersToString()
                         )).queue();
                     } else {
-                        channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
+                        channel.sendMessage(helper.errorEmbed("error removing from box: user's box does not contain the requested user or does not exist")).queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
@@ -139,6 +134,7 @@ public final class MainListener extends ListenerAdapter {
                 break;
 
             case "open":
+
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
@@ -146,36 +142,24 @@ public final class MainListener extends ListenerAdapter {
                     break;
                 } else {
                     if (messageContent.length == 1) {
-                        try {
-                            Box.createBox(author);
-                            channel.sendMessage(helper.successEmbed("new empty box successfully created for owner " + author.getPing())).queue();
-                        } catch (InvalidParameterException e) {
-                            channel.sendMessage(helper.errorEmbed("you seem to already have a box.")).queue();
-                        } catch (IllegalArgumentException e) {
-                            channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
-                        }
+                        createBox(author, null, helper, channel);
                     } else {
-                        try {
-                            Box.createBox(author, messageContent[1]);
-                            channel.sendMessage(helper.successEmbed("box successfully created with item " + messageContent[1] + "!")).queue();
-                        } catch (InvalidParameterException e) {
-                            channel.sendMessage(helper.errorEmbed("you seem to already have a box.")).queue();
-                        } catch (IllegalArgumentException e) {
-                            channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
-                        }
+                        createBox(author, messageContent[1], helper, channel);
                     }
                 }
                 FRAME.log(LogType.CMD, PREFIX + "open", author);
                 break;
 
             case "delete":
-                if (BOXES.containsKey(author.getId())) {
-                    HandleDelete yes = new HandleDelete(author, channel);
+
+                if (author.hasBox()) {
+                    final HandleDelete yes = new HandleDelete(author, channel);
                     ConfirmationGetter.EXECUTOR.submit(yes);
                     break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
+
                 FRAME.log(LogType.CMD, PREFIX + "add", author);
                 break;
 
@@ -220,4 +204,20 @@ public final class MainListener extends ListenerAdapter {
             "hershey\"s makes millions of kisses a day...\nall I\"m asking for is one from you.",
             "if i told you that you had a great body, would you hold it against me?"
     };
+
+    public void createBox(final CustomUser owner, final String content, final EmbedHelper helper, final MessageChannel channel) {
+        try {
+            if (content == null || content.isEmpty()) {
+                Box.createBox(owner);
+            } else {
+                Box.createBox(owner, content);
+            }
+
+            channel.sendMessage(helper.successEmbed("box successfully created with item " + content + "!")).queue();
+        } catch (InvalidParameterException e) {
+            channel.sendMessage(helper.errorEmbed("you seem to already have a box.")).queue();
+        } catch (IllegalArgumentException e) {
+            channel.sendMessage(helper.errorEmbed(e + ": the object passed to Box#createBox(Object, Object) was of an incompatible type")).queue();
+        }
+    }
 }

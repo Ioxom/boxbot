@@ -288,13 +288,14 @@ public final class Box {
      */
     @Override
     public boolean equals(final Object o) {
+
         if (this == o) {
             return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        } else if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Box box = (Box) o;
+
+        final Box box = (Box) o;
         return Objects.equals(owner, box.owner) && Objects.equals(items, box.items) && Objects.equals(users, box.users);
     }
 

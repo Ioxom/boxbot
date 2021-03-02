@@ -13,33 +13,35 @@ public final class ConfirmationGetterListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
+
+        //if we have no active confirmation getters do nothing
         if (ConfirmationGetter.CONFIRMATION_GETTERS.isEmpty()) {
             return;
         }
-        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+
+        for (ConfirmationGetter getter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
 
             //with over 5 attempts we assume no
-            if (confirmationGetter.getAttempts() >= 5) {
-                confirmationGetter.setChannel(event.getChannel());
-                confirmationGetter.getLatch().countDown();
-            }
-
-            //has to be the right person of course
-            if (!(event.getAuthor().getIdLong() == confirmationGetter.getId())) {
+            if (getter.getAttempts() >= 5) {
+                getter.setChannel(event.getChannel());
+                getter.getLatch().countDown();
+            //has to be the right person of course - we don't add any attempts for the wrong user
+            } else if (!(event.getAuthor().getIdLong() == getter.getId())) {
                 return;
             }
 
             //if our other checks passed handle the response
-            if (event.getMessage().getContentRaw().equals("yes") || event.getMessage().getContentRaw().equals("true")) {
-                confirmationGetter.setResponse(true);
-                confirmationGetter.setChannel(event.getChannel());
-                confirmationGetter.getLatch().countDown();
-            } else if (event.getMessage().getContentRaw().equals("false") || event.getMessage().getContentRaw().equals("no")) {
-                confirmationGetter.setResponse(false);
-                confirmationGetter.setChannel(event.getChannel());
-                confirmationGetter.getLatch().countDown();
+            final String messageContent = event.getMessage().getContentRaw();
+            if (messageContent.equals("yes") || messageContent.equals("true") || messageContent.equals("of course")) {
+                getter.setResponse(true);
+                getter.setChannel(event.getChannel());
+                getter.getLatch().countDown();
+            } else if (messageContent.equals("false") || messageContent.equals("no") || /* will anyone ever say this? probably not */ messageContent.equals("absolutely not")) {
+                getter.setResponse(false);
+                getter.setChannel(event.getChannel());
+                getter.getLatch().countDown();
             } else {
-                confirmationGetter.addAttempt();
+                getter.addAttempt();
             }
         }
     }

@@ -7,7 +7,7 @@ public final class LogHelper {
 
     }
 
-    public static String replaceNewlines(final LogType type, final String message) {
+    private static String replaceNewlines(final LogType type, final String message) {
         return String.join("\n" + type.getValue() + ": ", message.split("\n"));
     }
 
@@ -40,8 +40,7 @@ public final class LogHelper {
         if (loggerType == LoggerType.WRITER) {
             Main.FRAME.getFileLogger().write(logMessage);
         } else if (loggerType == LoggerType.CONSOLE) {
-            Main.FRAME.getConsole().append(logMessage);
-            Main.FRAME.getFileLogger().write(logMessage);
+            writeToConsoleAndFrame(logMessage);
         }
     }
 
@@ -60,13 +59,18 @@ public final class LogHelper {
      * exits ioxbox after giving ample time to read the message
      * @param message the message to send before killing the process
      */
-    public static void throwFatalError(final String message) {
-        Main.FRAME.getConsole().append(getLogMessage(LogType.FATAL_ERR, message));
+    private static void throwFatalError(final String message) {
+        writeToConsoleAndFrame(getLogMessage(LogType.FATAL_ERR, message));
         try {
             Thread.sleep(5000);
             System.exit(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void writeToConsoleAndFrame(final String message) {
+        Main.FRAME.getFileLogger().write(message);
+        Main.FRAME.getConsole().append(message);
     }
 }

@@ -6,6 +6,8 @@ import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.awt.Color;
+
 public final class EmbedHelper {
     public static final int SUCCESS_EMBED_COLOUR = 0x00FF00;
     public static final int ERROR_EMBED_COLOUR = 0xc91a00;
@@ -37,6 +39,11 @@ public final class EmbedHelper {
         } else {
             return "null - no box";
         }
+    }
+
+    @JsonIgnore
+    public Color getRandomEmbedColour() {
+        return new Color(Main.RANDOM.nextInt(0xffffff));
     }
 
     public MessageEmbed errorEmbed(final String error) {

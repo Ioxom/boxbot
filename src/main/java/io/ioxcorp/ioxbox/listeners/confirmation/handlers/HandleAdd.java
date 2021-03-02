@@ -24,7 +24,7 @@ public final class HandleAdd extends Handler {
 
     @Override
     public void run() {
-        EmbedHelper helper = new EmbedHelper(this.getUser());
+        final EmbedHelper helper = new EmbedHelper(this.getUser());
         if (ConfirmationGetter.gettingConfirmationFrom(this.getUser().getId())) {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
@@ -32,7 +32,7 @@ public final class HandleAdd extends Handler {
             this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser() + " would you like to join " + this.askingUser.getAsTag() + "'s box? (Type yes to accept)")).queue();
         }
 
-        WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
+        final WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
 
         if (response == null) {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
@@ -46,7 +46,7 @@ public final class HandleAdd extends Handler {
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
                     .setTitle("caught!")
                     .setDescription("the user allowed you to put them in the box!")
-                    .setColor(0x00ff00)
+                    .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                     .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                     .build()
             ).queue();
@@ -57,7 +57,7 @@ public final class HandleAdd extends Handler {
                 response.getChannel().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                        .setColor(0x00ff00)
+                        .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                         .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
                         .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
                         .build()
