@@ -66,7 +66,7 @@ public final class PromptTextField extends JTextField {
     public void addAutofillEvent() {
         this.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent evt) {
+            public void keyPressed(final KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0])) {
                     setText(savedCommand);
                     drawText(" ".repeat(getText().length() * 3) + "press enter to run", graphics);
