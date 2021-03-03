@@ -15,7 +15,6 @@ import java.util.Collections;
 public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
-    private Graphics graphics;
 
     public PromptTextField(final String prompt) {
         this.prompt = prompt;
@@ -25,7 +24,6 @@ public final class PromptTextField extends JTextField {
 
     @Override
     public void paint(final Graphics g) {
-        graphics = g;
         super.paint(g);
         //if the text in the field is empty draw the prompt
         if (getText().length() == 0) {
@@ -50,7 +48,7 @@ public final class PromptTextField extends JTextField {
         this.setText("");
     }
 
-    public void drawText(final String text, final Graphics g) {
+    private void drawText(final String text, final Graphics g) {
         int h = getHeight();
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         Insets ins = getInsets();
@@ -69,7 +67,7 @@ public final class PromptTextField extends JTextField {
             public void keyPressed(final KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0])) {
                     setText(savedCommand);
-                    drawText(" ".repeat(getText().length() * 3) + "press enter to run", graphics);
+                    drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
                 }
             }
         });

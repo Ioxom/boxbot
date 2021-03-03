@@ -93,7 +93,7 @@ public final class MainListener extends ListenerAdapter {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     if (author.hasBox()) {
                         HandleAdd yes = new HandleAdd(user, author, channel);
-                        ConfirmationGetter.getExecutor().submit(yes);
+                        ConfirmationGetter.EXECUTOR.submit(yes);
                         break;
                     } else {
                         channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + PREFIX + "open?")).queue();
@@ -138,7 +138,7 @@ public final class MainListener extends ListenerAdapter {
                 if (!eventMessage.getMentionedUsers().isEmpty()) {
                     CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                     HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
-                    ConfirmationGetter.getExecutor().submit(handleOpenWithUser);
+                    ConfirmationGetter.EXECUTOR.submit(handleOpenWithUser);
                     break;
                 } else {
                     if (messageContent.length == 1) {
@@ -154,7 +154,7 @@ public final class MainListener extends ListenerAdapter {
 
                 if (author.hasBox()) {
                     final HandleDelete yes = new HandleDelete(author, channel);
-                    ConfirmationGetter.getExecutor().submit(yes);
+                    ConfirmationGetter.EXECUTOR.submit(yes);
                     break;
                 } else {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
