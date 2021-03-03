@@ -40,8 +40,8 @@ public final class IoxboxFrame {
     private final JButton commandHelp;
 
     /**
-     * creates a new frame with all variables set and the tile of "ioxbox v [version]". 
-     * this constructor should only be called once, as it opens the console with an [init] message and would be incorrect if called after initialisation. 
+     * creates a new frame with all variables set and the tile of "ioxbox v [version]".
+     * this constructor should only be called once, as it opens the console with an [init] message and would be incorrect if called after initialisation.
      * it also adds the prompt "enter commands here" to the input console ({@link PromptTextField#PromptTextField(String)})<br>
      * note: this will create a new file due to the call of {@link FileLogger#FileLogger()}
      */

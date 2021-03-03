@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 public final class PromptTextField extends JTextField {
+    private static final long serialVersionUID = -7065789752989953979L;
     private final String prompt;
     private String savedCommand;
     private boolean autofill;
@@ -88,7 +89,7 @@ public final class PromptTextField extends JTextField {
      * enable or disable autofill
      * @param enabled whether to enable autofill or not
      */
-    public void setAutofill(boolean enabled) {
+    public void setAutofill(final boolean enabled) {
         if (enabled) {
             addAutofillEvent();
         } else {
