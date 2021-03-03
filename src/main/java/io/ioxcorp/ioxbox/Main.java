@@ -3,13 +3,17 @@ package io.ioxcorp.ioxbox;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.IoxboxFrame;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
+import io.ioxcorp.ioxbox.listeners.MainListener;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
-import io.ioxcorp.ioxbox.listeners.MainListener;
 import io.ioxcorp.ioxbox.listeners.status.StatusSetter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
@@ -21,11 +25,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
-
-import io.ioxcorp.ioxbox.frame.logging.LogType;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
 public final class Main extends ListenerAdapter {
     private Main() {
@@ -95,7 +94,6 @@ public final class Main extends ListenerAdapter {
     }
 
     private static String getToken() {
-        String token = null;
         String fileName = "token.txt";
         try {
             if (!Files.exists(Paths.get(fileName))) {
@@ -106,15 +104,11 @@ public final class Main extends ListenerAdapter {
                     FRAME.log(LogType.FATAL_ERR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
                 }
             }
-            token = Files.readString(Paths.get(fileName));
-            if (token == null) {
-                FRAME.log(LogType.FATAL_ERR, "could not get token");
-            }
+            return Files.readString(Paths.get(fileName));
         } catch (IOException e) {
             FRAME.log(LogType.FATAL_ERR, "token.txt not found");
+            return "";
         }
-
-        return token;
     }
 
     public static void reloadJDA() {

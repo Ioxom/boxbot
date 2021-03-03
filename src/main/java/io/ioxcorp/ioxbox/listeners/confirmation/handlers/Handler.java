@@ -3,6 +3,10 @@ package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
+/**
+ * base class for handling confirmation requests<br>
+ * implements {@link Runnable} - should be used by running on a new thread
+ */
 public class Handler implements Runnable {
     private final CustomUser user;
     private final MessageChannel initialChannel;

@@ -45,7 +45,7 @@ public final class JacksonYeehawHelper {
 
     /**
      * gets the stored data in box_data.json
-     * @return a {@link HashMap<>} of the stored boxes in box_data.json
+     * @return a {@link HashMap<>} of the stored boxes in box_data.json or an empty hashmap if the file is empty or not found
      * @author ioxom
      */
     public static HashMap<Long, Box> read() {
