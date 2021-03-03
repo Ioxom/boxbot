@@ -39,6 +39,12 @@ public final class IoxboxFrame {
     private final JButton clearConsole;
     private final JButton commandHelp;
 
+    /**
+     * creates a new frame with all variables set and the tile of "ioxbox v [version]". 
+     * this constructor should only be called once, as it opens the console with an [init] message and would be incorrect if called after initialisation. 
+     * it also adds the prompt "enter commands here" to the input console ({@link PromptTextField#PromptTextField(String)})<br>
+     * note: this will create a new file due to the call of {@link FileLogger#FileLogger()}
+     */
     public IoxboxFrame() {
         this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
         this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + LogHelper.getLogMessage(LogType.INIT, "loading ioxbox"));
@@ -50,6 +56,9 @@ public final class IoxboxFrame {
         this.clearConsole = new JButton();
     }
 
+    /**
+     * initialises and opens the frame. this method is essentially "make the program available to the user", everything executed before it simply makes it seem like the program is loading slowly.
+     */
     public void init() {
         this.logger.log(LogType.INIT, this.logger.getDebugInfo());
 
@@ -63,6 +72,7 @@ public final class IoxboxFrame {
         this.console.setBackground(new Color(102, 102, 102));
         this.console.setSize(consoleSize);
         this.console.setEditable(false);
+        this.console.setLineWrap(true);
         //create a pane to allow the console to have scrolling
         JScrollPane pane = new JScrollPane(this.console);
         pane.setPreferredSize(consoleSize);
@@ -76,6 +86,7 @@ public final class IoxboxFrame {
         Dimension consoleInputSize = new Dimension(600, 20);
         this.consoleInput.setPreferredSize(consoleInputSize);
         this.consoleInput.setEditable(true);
+        this.consoleInput.setAutofill(true);
         this.consoleInput.addActionListener(e -> {
             String message = this.consoleInput.getText();
             this.log(LogType.MAIN, message);

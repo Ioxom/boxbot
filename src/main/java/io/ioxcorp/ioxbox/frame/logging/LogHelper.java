@@ -7,6 +7,13 @@ public final class LogHelper {
 
     }
 
+    /**
+     * replaces \n with a corresponding header: i.e. [main]: yes\n no with the {@link LogType} of {@link LogType#MAIN MAIN} would become [main]: yes\n[main]:  no<br>
+     * note: running a string through this method twice will produce bad results like "\n[main]: \n[main]: original message (if you run through twice)
+     * @param type the {@link LogType} the message should be
+     * @param message the message text
+     * @return the formatted string
+     */
     private static String replaceNewlines(final LogType type, final String message) {
         return String.join("\n" + type.getValue() + ": ", message.split("\n"));
     }

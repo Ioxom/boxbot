@@ -11,14 +11,31 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
+import java.util.Objects;
 
 public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
+    private boolean autofill;
+    private final KeyAdapter autofillAdapter = new KeyAdapter() {
+        @Override
+        public void keyPressed(final KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0]) && autofill) {
+                setText(savedCommand);
+                drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
+            }
+        }
+    };
 
+    /**
+     * constructs a new {@link PromptTextField} with autofill set to false
+     * @param prompt the prompt to show in the text field, set to null or "" for no prompt
+     */
     public PromptTextField(final String prompt) {
-        this.prompt = prompt;
+        this.autofill = false;
+        this.prompt = Objects.requireNonNullElse(prompt, "");
         this.savedCommand = "/";
+        //this gives autofill the ability to work by making sure that tab doesn't just leave the text field
         this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
     }
 
@@ -29,7 +46,7 @@ public final class PromptTextField extends JTextField {
         if (getText().length() == 0) {
             this.drawText(this.prompt, g);
         //otherwise we try to get an autofill option
-        } else {
+        } else if (autofill) {
             for (String command : IoxboxFrame.COMMANDS) {
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
@@ -48,6 +65,12 @@ public final class PromptTextField extends JTextField {
         this.setText("");
     }
 
+    /**
+     * draws text to this field that is not selectable
+     * adapted from: https://stackoverflow.com/a/24571681
+     * @param text the text to be drawn
+     * @param g the {@link Graphics} object used to draw the text
+     */
     private void drawText(final String text, final Graphics g) {
         int h = getHeight();
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -61,15 +84,23 @@ public final class PromptTextField extends JTextField {
         g.drawString(text, ins.left, h / 2 + fm.getAscent() / 2 - 1);
     }
 
+    /**
+     * enable or disable autofill
+     * @param enabled whether to enable autofill or not
+     */
+    public void setAutofill(boolean enabled) {
+        if (enabled) {
+            addAutofillEvent();
+        } else {
+            removeKeyListener(autofillAdapter);
+        }
+        autofill = enabled;
+    }
+
+    /**
+     * adds the necessary {@link KeyEvent} to make autofill work: not calling this disables autofill
+     */
     public void addAutofillEvent() {
-        this.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(final KeyEvent evt) {
-                if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0])) {
-                    setText(savedCommand);
-                    drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
-                }
-            }
-        });
+        this.addKeyListener(autofillAdapter);
     }
 }
