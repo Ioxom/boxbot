@@ -6,18 +6,26 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Collections;
 
 public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
+    private Graphics graphics;
 
     public PromptTextField(final String prompt) {
         this.prompt = prompt;
+        this.savedCommand = "/";
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
     }
 
     @Override
     public void paint(final Graphics g) {
+        graphics = g;
         super.paint(g);
         //if the text in the field is empty draw the prompt
         if (getText().length() == 0) {
@@ -27,17 +35,12 @@ public final class PromptTextField extends JTextField {
             for (String command : IoxboxFrame.COMMANDS) {
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
-                    drawText(" ".repeat(this.getText().length() * 3) + command + " (press space)", g);
+                    drawText(" ".repeat(this.getText().length() * 3) + command + " (press tab)", g);
                     return;
                 } else if (command.equals(this.getText())) {
                     this.savedCommand = command;
                     this.drawText(" ".repeat(this.getText().length() * 3) + "press enter to run", g);
                     return;
-                }
-
-                if (this.getText().contains(" ") && this.getText().startsWith("/") && savedCommand.startsWith(this.getText().split(" ")[0])) {
-                    this.setText(savedCommand);
-                    this.drawText(" ".repeat(this.getText().length() * 3) + "press enter to run", g);
                 }
             }
         }
@@ -58,5 +61,17 @@ public final class PromptTextField extends JTextField {
         int c2 = ((c0 & m) >>> 1) + ((c1 & m) >>> 1);
         g.setColor(new Color(c2, true));
         g.drawString(text, ins.left, h / 2 + fm.getAscent() / 2 - 1);
+    }
+
+    public void addAutofillEvent() {
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0])) {
+                    setText(savedCommand);
+                    drawText(" ".repeat(getText().length() * 3) + "press enter to run", graphics);
+                }
+            }
+        });
     }
 }

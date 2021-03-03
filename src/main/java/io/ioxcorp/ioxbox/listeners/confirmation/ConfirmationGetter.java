@@ -16,7 +16,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public final class ConfirmationGetter extends ListenerAdapter {
 
-    public static final ThreadPoolExecutor EXECUTOR = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    /**
+     * note: if any bugs result from using a {@link ThreadPoolExecutor} we can switch back to new threads every time
+     */
+    private static final ThreadPoolExecutor EXECUTOR = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     private final CountDownLatch latch;
     private final long id;
@@ -38,7 +41,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
         CONFIRMATION_GETTERS.put(id, this);
     }
 
-    public static final HashMap<Long, ConfirmationGetter> CONFIRMATION_GETTERS = new HashMap<>();
+    private static final HashMap<Long, ConfirmationGetter> CONFIRMATION_GETTERS = new HashMap<>();
 
     /**
      * convenience method to check if we're getting confirmation from a user
@@ -128,5 +131,13 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
     public MessageChannel getChannel() {
         return this.channel;
+    }
+
+    public static ThreadPoolExecutor getExecutor() {
+        return EXECUTOR;
+    }
+
+    public static HashMap<Long, ConfirmationGetter> getConfirmationGetters() {
+        return CONFIRMATION_GETTERS;
     }
 }

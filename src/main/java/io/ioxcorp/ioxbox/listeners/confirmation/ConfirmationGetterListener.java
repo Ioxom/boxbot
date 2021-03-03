@@ -15,11 +15,11 @@ public final class ConfirmationGetterListener extends ListenerAdapter {
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
         //if we have no active confirmation getters do nothing
-        if (ConfirmationGetter.CONFIRMATION_GETTERS.isEmpty()) {
+        if (ConfirmationGetter.getConfirmationGetters().isEmpty()) {
             return;
         }
 
-        for (ConfirmationGetter getter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+        for (ConfirmationGetter getter : ConfirmationGetter.getConfirmationGetters().values()) {
 
             //with over 5 attempts we assume no
             if (getter.getAttempts() >= 5) {

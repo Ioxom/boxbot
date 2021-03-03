@@ -83,14 +83,8 @@ public final class Main extends ListenerAdapter {
         }
 
         //log in
-        connectJDA();
-
-        if (api != null) {
-            addListeners();
-            FRAME.log(LogType.INIT, "initialized jda");
-        } else {
-            FRAME.log(LogType.ERR, "failed to create JDA object for unknown reasons");
-        }
+        connect();
+        FRAME.log(LogType.INIT, "initialized jda");
     }
 
     private static String getToken() {
@@ -111,31 +105,40 @@ public final class Main extends ListenerAdapter {
         }
     }
 
+    /**
+     * simple method for shutting down {@link Main#api JDA}, then
+     */
     public static void reloadJDA() {
-        shutdownJDA();
-        connectJDA();
-        addListeners();
+        shutdown();
+        connect();
         FRAME.log(LogType.INIT, "reconnected jda");
     }
 
-    public static void shutdownJDA() {
+    /**
+     * disconnect from discord. this should always be used in place of {@link JDA#shutdown()}
+     */
+    public static void shutdown() {
         fullyConnected = false;
-        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.getConfirmationGetters().values()) {
             confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
-            ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
+            ConfirmationGetter.getConfirmationGetters().remove(confirmationGetter.getId());
         }
         api.shutdown();
         FRAME.setReloadJDAImage("images/lightning_bolt.png");
         FRAME.log(LogType.MAIN, "shut down JDA, disconnected from discord");
     }
 
-    public static void connectJDA() {
+    /**
+     * connect the {@link Main#api} to discord using {@link Main#TOKEN}, then add listeners
+     */
+    public static void connect() {
         try {
             api = JDABuilder.createDefault(TOKEN).build();
             Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
             FRAME.log(LogType.FATAL_ERR, "invalid token");
         }
+        addListeners();
     }
 
     public static void addListeners() {

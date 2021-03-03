@@ -108,13 +108,16 @@ public final class Box {
         this.users = new ArrayList<>();
     }
 
+    /**
+     * @return the
+     */
     public String toString() {
         return this.owner.getAsTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
     }
 
     /**
      * a method for making a discord-sendable representation of a box
-     * @return a {@link net.dv8tion.jda.api.entities.MessageEmbed MessageEmbed} that can be sent in discord showing the contents of the referenced box
+     * @return a {@link MessageEmbed MessageEmbed} that can be sent in discord showing the contents of the referenced box
      * @author ioxom
      */
     public MessageEmbed embed() {
@@ -130,7 +133,8 @@ public final class Box {
     }
 
     /**
-     * @return a readable {@link java.lang.String String} of the items in the specified box
+     * @return a readable {@link String String} of the items in the specified box
+     * @see Box#usersToString()
      * @author ioxom
      */
     public String itemsToString() {
@@ -151,7 +155,8 @@ public final class Box {
     }
 
     /**
-     * @return a readable {@link java.lang.String String} of the users in the specified box
+     * @return a readable {@link String String} of the users in the specified box
+     * @see Box#itemsToString()
      * @author ioxom
      */
     public String usersToString() {
@@ -172,8 +177,8 @@ public final class Box {
     }
 
     /**
-     * adds the Object passed to the {@link io.ioxcorp.ioxbox.data.format.Box} specified if it is a compatible format, then saves to json
-     * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be added to the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
+     * adds the Object passed to the {@link Box} specified if it is a compatible format, then saves to json
+     * @param object a {@link String String}, a {@link CustomUser CustomUser} or {@link User User} to be added to the referenced {@link Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#remove(Object)
      * @author ioxom

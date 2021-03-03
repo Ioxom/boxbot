@@ -117,13 +117,15 @@ public final class IoxboxFrame {
         ));
         this.reloadJDA.addActionListener(e -> {
             if (Main.isFullyConnected()) {
-                Main.shutdownJDA();
+                Main.shutdown();
             } else {
-                Main.connectJDA();
-                Main.addListeners();
+                Main.connect();
                 FRAME.log(LogType.MAIN, "reconnected JDA");
             }
         });
+
+        //ensure that autofill works for consoleInput
+        this.consoleInput.addAutofillEvent();
 
         //add everything to main panel, utilising another panel to get the buttons in a line
         JPanel panel = new JPanel(new BorderLayout());
@@ -212,7 +214,7 @@ public final class IoxboxFrame {
                         return;
                     case 3:
                         if (Main.isFullyConnected()) {
-                            Main.shutdownJDA();
+                            Main.shutdown();
                         } else {
                             this.log(LogType.ERR, "could not disconnect from discord: already disconnected");
                         }
@@ -221,7 +223,7 @@ public final class IoxboxFrame {
                         if (Main.isFullyConnected()) {
                             this.log(LogType.MAIN, "already connected; reloading JDA");
                         } else {
-                            Main.connectJDA();
+                            Main.connect();
                             this.log(LogType.MAIN, "reconnected to discord");
                         }
                         return;
@@ -248,7 +250,7 @@ public final class IoxboxFrame {
     }
 
     private void clearConsole() {
-        this.console.setText(LogHelper.getLogMessage(LogType.MAIN, "ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version")));
+        this.console.setText(LogType.MAIN.getValue() + ": ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
     }
 
     private Image getImage(final String path) {
