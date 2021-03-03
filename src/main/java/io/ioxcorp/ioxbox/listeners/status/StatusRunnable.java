@@ -31,7 +31,7 @@ public final class StatusRunnable implements Runnable {
         if (i == statuses.length - 1) {
             i = 0;
         } else {
-            i ++;
+            i++;
         }
         this.presence.setActivity(Activity.playing(statuses[i]));
     }
