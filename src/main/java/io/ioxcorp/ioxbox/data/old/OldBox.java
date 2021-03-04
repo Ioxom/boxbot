@@ -35,7 +35,7 @@ public class OldBox {
         this.users = new ArrayList<>();
     }
 
-    @JsonSetter()
+    @JsonSetter
     public void setUsers(ArrayList<OldCustomUser> list) {
         this.users = list;
     }
