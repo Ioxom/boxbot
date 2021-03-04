@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.Box;
+import io.ioxcorp.ioxbox.data.old.OldFrickYouJackson;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 
 import java.io.File;
@@ -69,6 +70,14 @@ public final class JacksonYeehawHelper {
             return new HashMap<>();
         } else {
             FrickYouJackson data = null;
+            //changing the name of "tag" to "discriminator" broke some data, this should fix it
+            //this is immediately fixed after running save() once
+            try {
+                OldFrickYouJackson oldData = MAPPER.readValue(file, OldFrickYouJackson.class);
+                return oldData.convert();
+            } catch (Exception ignored) {
+                //if we get an exception we know that the data is in the correct format
+            }
             try {
                 data = MAPPER.readValue(file, FrickYouJackson.class);
             } catch (IOException e) {
@@ -79,10 +88,10 @@ public final class JacksonYeehawHelper {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to read json data for unknown reasons");
                 return new HashMap<>();
             } else {
-                if (data.getMap() == null) {
+                if (data.getBoxes() == null) {
                     return new HashMap<>();
                 }
-                return data.getMap();
+                return data.getBoxes();
             }
         }
     }

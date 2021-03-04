@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.ioxcorp.ioxbox.Main;
+import io.ioxcorp.ioxbox.data.old.OldCustomUser;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Objects;
@@ -28,6 +29,12 @@ public final class CustomUser {
         String[] splitTag = user.getAsTag().split("#");
         this.discriminator = Integer.parseInt(splitTag[1]);
         this.username = splitTag[0];
+    }
+
+    public CustomUser(OldCustomUser user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.discriminator = user.getDiscriminator();
     }
 
     @JsonCreator
