@@ -5,6 +5,10 @@
 /logs/
 box_data.json
 token.txt
+bin
+.project
+.settings
+.classpath
 
 # Ignore Gradle GUI config
 gradle-app.setting
