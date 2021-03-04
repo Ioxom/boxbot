@@ -9,7 +9,7 @@ import io.ioxcorp.ioxbox.data.format.CustomUser;
 
 import java.util.ArrayList;
 
-public class OldBox {
+public final class OldBox {
     /**
      * the owner of the box
      */

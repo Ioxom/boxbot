@@ -31,7 +31,7 @@ public final class CustomUser {
         this.username = splitTag[0];
     }
 
-    public CustomUser(OldCustomUser user) {
+    public CustomUser(final OldCustomUser user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.discriminator = user.getDiscriminator();

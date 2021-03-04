@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OldCustomUser {
+public final class OldCustomUser {
     @JsonProperty("id")
     private final long id;
     @JsonProperty("username")

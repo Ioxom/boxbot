@@ -6,7 +6,7 @@ import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
-public class OldFrickYouJackson {
+public final class OldFrickYouJackson {
     private final HashMap<Long, OldBox> boxes;
 
     @JsonCreator

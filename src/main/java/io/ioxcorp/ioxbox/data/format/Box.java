@@ -108,7 +108,7 @@ public final class Box {
         this.users = new ArrayList<>();
     }
 
-    public Box(CustomUser owner, ArrayList<CustomUser> users, ArrayList<String> items) {
+    public Box(final CustomUser owner, final ArrayList<CustomUser> users, final ArrayList<String> items) {
         this.owner = owner;
         this.users = users;
         this.items = items;
