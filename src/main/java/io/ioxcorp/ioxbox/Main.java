@@ -12,7 +12,6 @@ import io.ioxcorp.ioxbox.listeners.status.StatusSetter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -130,7 +129,7 @@ public final class Main extends ListenerAdapter {
     }
 
     /**
-     * connect the {@link Main#api} to discord using {@link Main#TOKEN}, then add listeners
+     * connect the {@link Main#api api} to discord using {@link Main#TOKEN}, then add listeners
      */
     public static void connect() {
         try {
@@ -145,8 +144,8 @@ public final class Main extends ListenerAdapter {
     /**
      * add the four main listeners for ioxbox: {@link MainListener}, {@link ConfirmationGetterListener}, {@link StatusSetter} and {@link Main}<br>
      * events added:<br>
-     * {@link MainListener}: {@link ListenerAdapter#onMessageReceived(MessageReceivedEvent)} - handles all commands sent to the bot<br>
-     * {@link ConfirmationGetterListener}: {@link ListenerAdapter#onMessageReceived(MessageReceivedEvent)} - handles requests for confirmation; detects whether the requested user has said yes or not<br>
+     * {@link MainListener}: {@link ListenerAdapter#onMessageReceived(net.dv8tion.jda.api.events.message.MessageReceivedEvent) ListenerAdapter.onMessageReceived(MessageReceivedEvent)} - handles all commands sent to the bot<br>
+     * {@link ConfirmationGetterListener}: {@link ListenerAdapter#onMessageReceived(net.dv8tion.jda.api.events.message.MessageReceivedEvent) ListenerAdapter.onMessageReceived(MessageReceivedEvent)} - handles requests for confirmation; detects whether the requested user has said yes or not<br>
      * {@link StatusSetter}: {@link ListenerAdapter#onReady(ReadyEvent)} - begins a {@link io.ioxcorp.ioxbox.listeners.status.StatusRunnable StatusRunnable} that cycles ioxbox's status<br>
      * {@link Main}: {@link ListenerAdapter#onReady(ReadyEvent)} - tells ioxbox whether JDA is fully connected or not, shows whether it is with {@link IoxboxFrame#reloadJDA reloadJDA's} icon, and logs the connection<br>
      */
