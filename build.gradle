@@ -7,7 +7,7 @@ plugins {
 mainClassName = "io.ioxcorp.ioxbox.Main"
 group 'io.ioxcorp'
 version '0.4.1'
-def jdaVersion = '4.2.0_230'
+def jdaVersion = '4.2.0_231'
 def jacksonVersion = '2.12.1'
 
 repositories {
