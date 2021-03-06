@@ -1,6 +1,5 @@
 package io.ioxcorp.ioxbox.listeners.status;
 
-import io.ioxcorp.ioxbox.listeners.MainListener;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -19,10 +18,7 @@ public final class StatusSetter extends ListenerAdapter {
         //when JDA is ready, set our status at the interval of timeBetweenChanges
         StatusRunnable setStatus = new StatusRunnable(
                 event.getJDA().getPresence(),
-                new String[] {
-                "prefix | " + MainListener.PREFIX,
-                "help | " + MainListener.PREFIX + "commands"
-                },
+                null,
                 this.timeBetweenChanges);
         setStatus.start();
     }

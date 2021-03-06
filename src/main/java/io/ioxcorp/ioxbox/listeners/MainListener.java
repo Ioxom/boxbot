@@ -25,19 +25,19 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * executes commands from text channels
  */
 public final class MainListener extends ListenerAdapter {
-    public static final String PREFIX = "-box ";
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
+        final String prefix = Main.getConfig().getPrefix();
         final Message eventMessage = event.getMessage();
         final String messageContentRaw = eventMessage.getContentRaw().toLowerCase();
 
-        if (!messageContentRaw.startsWith(PREFIX) || event.getAuthor().isBot()) {
+        if (!messageContentRaw.startsWith(prefix) || event.getAuthor().isBot()) {
             return;
         }
 
-        final String[] messageContent = messageContentRaw.split(PREFIX)[1].split(" ");
+        final String[] messageContent = messageContentRaw.split(prefix)[1].split(" ");
         final CustomUser author = new CustomUser(event.getAuthor());
         final EmbedHelper helper = new EmbedHelper(author);
         final MessageChannel channel = eventMessage.getChannel();
@@ -49,7 +49,7 @@ public final class MainListener extends ListenerAdapter {
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(helper.getRandomEmbedColour())
                         .addField("what in the heck does this bot do?", "this bot is very hot, it stores cool things for you. like words, words and more words for now.", false)
-                        .addField("commands", "use " + PREFIX + "commands for a list", false)
+                        .addField("commands", "use " + prefix + "commands for a list", false)
                         .addField("ioxcorp™ inc", "ioxcorp™ inc. was founded in 04/01/20 by ioxom. it is also maintained by thonkman.", false)
                         .setFooter("powered by ioxcorp™");
                 channel.sendMessage(helpEmbed.build()).queue();
@@ -62,14 +62,14 @@ public final class MainListener extends ListenerAdapter {
                 EmbedBuilder commandEmbed = new EmbedBuilder()
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
-                        .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + PREFIX + "add [ping or item]`", false)
-                        .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + PREFIX + "remove [ping or item]`", false)
-                        .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + PREFIX + "ping`", false)
-                        .addField("open", "opens a new box for you, with items if specified.\nsyntax:\n`" + PREFIX + "open`,\n`" + PREFIX + "open [ping or item]`", false)
-                        .addField("delete", "deletes your box from our files permanently.\nsyntax: `" + PREFIX + "delete`", false)
-                        .addField("list", "shows you all users and items in your or another user's box.\nsyntax:\n`" + PREFIX + "list`,\n`" + PREFIX + "list [ping]`", false)
-                        .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + PREFIX + "commands`", false)
-                        .addField("help", "general information about ioxbox.\nsyntax: `" + PREFIX + "help`", false);
+                        .addField("add", "adds a user or item to your box. if you don't have one, creates a new box for you.\nsyntax: `" + prefix + "add [ping or item]`", false)
+                        .addField("remove", "removes a user or item from your box. if you have no box this will error.\nsyntax: `" + prefix + "remove [ping or item]`", false)
+                        .addField("ping", "checks the bot's ping is ms.\nsyntax: `" + prefix + "ping`", false)
+                        .addField("open", "opens a new box for you, with items if specified.\nsyntax:\n`" + prefix + "open`,\n`" + prefix + "open [ping or item]`", false)
+                        .addField("delete", "deletes your box from our files permanently.\nsyntax: `" + prefix + "delete`", false)
+                        .addField("list", "shows you all users and items in your or another user's box.\nsyntax:\n`" + prefix + "list`,\n`" + prefix + "list [ping]`", false)
+                        .addField("commands", "lists ioxbox's available commands.\nsyntax: `" + prefix + "commands`", false)
+                        .addField("help", "general information about ioxbox.\nsyntax: `" + prefix + "help`", false);
                 channel.sendMessage(commandEmbed.build()).queue();
                 FRAME.log(LogType.CMD, "commands", author);
                 break;
@@ -96,12 +96,12 @@ public final class MainListener extends ListenerAdapter {
                         ConfirmationGetter.EXECUTOR.submit(yes);
                         break;
                     } else {
-                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + PREFIX + "open?")).queue();
+                        channel.sendMessage(helper.errorEmbed("you have no box to add to:\nwhy not open with " + prefix + "open?")).queue();
                     }
                 } else {
                     channel.sendMessage(helper.errorEmbed("error adding to box: nothing found to add in message")).queue();
                 }
-                FRAME.log(LogType.CMD, PREFIX + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "remove":
@@ -130,7 +130,7 @@ public final class MainListener extends ListenerAdapter {
                 } else {
                     channel.sendMessage(helper.errorEmbed("error removing from box: nothing found to remove in message")).queue();
                 }
-                FRAME.log(LogType.CMD, PREFIX + "remove", author);
+                FRAME.log(LogType.CMD, prefix + "remove", author);
                 break;
 
             case "open":
@@ -147,7 +147,7 @@ public final class MainListener extends ListenerAdapter {
                         createBox(author, messageContent[1], helper, channel);
                     }
                 }
-                FRAME.log(LogType.CMD, PREFIX + "open", author);
+                FRAME.log(LogType.CMD, prefix + "open", author);
                 break;
 
             case "delete":
@@ -160,7 +160,7 @@ public final class MainListener extends ListenerAdapter {
                     channel.sendMessage(helper.errorEmbed("no box found to remove")).queue();
                 }
 
-                FRAME.log(LogType.CMD, PREFIX + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "list":
@@ -169,16 +169,16 @@ public final class MainListener extends ListenerAdapter {
                     if (user.hasBox()) {
                         event.getChannel().sendMessage(user.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + PREFIX + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("this user doesn't seem to have a box. they can try opening a new one with " + prefix + "open!")).queue();
                     }
                 } else {
                     if (author.hasBox()) {
                         event.getChannel().sendMessage(author.getBox().embed()).queue();
                     } else {
-                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + PREFIX + "open!")).queue();
+                        event.getChannel().sendMessage(helper.errorEmbed("you don't seem to have a box. try opening a new one with " + prefix + "open!")).queue();
                     }
                 }
-                FRAME.log(LogType.CMD, PREFIX + "add", author);
+                FRAME.log(LogType.CMD, prefix + "add", author);
                 break;
 
             case "ping":

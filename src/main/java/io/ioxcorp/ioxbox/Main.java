@@ -110,16 +110,21 @@ public final class Main extends ListenerAdapter {
     }
 
     /**
-     * connect the {@link Main#api api} to discord using {@link Main#config#getToken()}, then add listeners
+     * connect the {@link Main#api api} to discord using {@link Main#config Main's config's} token, then add listeners
      */
     public static void connect() {
         try {
-            api = JDABuilder.createDefault(config.getToken()).build();
-            Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
+            final String token = config.getToken();
+            api = JDABuilder.createDefault(token).build();
+            Main.FRAME.log(LogType.MAIN, "successfully logged in JDA");
         } catch (LoginException e) {
             FRAME.log(LogType.FATAL_ERR, "invalid token");
         }
         addListeners();
+    }
+
+    public static void setApi(JDABuilder builder) throws LoginException {
+        api = builder.build();
     }
 
     /**

@@ -109,7 +109,7 @@ public class Config {
         this.isFirstRun = false;
     }
 
-    public void setThis(final Config config) {
+    private void setThis(final Config config) {
         this.isFirstRun = config.isFirstRun;
         this.admins = config.getAdmins();
         this.mainServer = config.mainServer;
