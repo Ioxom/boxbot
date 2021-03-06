@@ -1,5 +1,6 @@
 package io.ioxcorp.ioxbox;
 
+import io.ioxcorp.ioxbox.data.config.Config;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.IoxboxFrame;
@@ -75,6 +76,9 @@ public final class Main extends ListenerAdapter {
     private static boolean fullyConnected;
 
     public static void main(final String[] args) {
+
+        Config config = new Config();
+        config.readConfig();
 
         //throw error if version is not found
         if (version == null) {
