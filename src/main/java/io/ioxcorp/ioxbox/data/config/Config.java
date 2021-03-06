@@ -144,8 +144,8 @@ public class Config {
         return this.prefix;
     }
 
-    @JsonGetter
-    public boolean getLogCommands() {
+    @JsonGetter("logCommands")
+    public boolean logCommands() {
         return this.logCommands;
     }
 }

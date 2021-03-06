@@ -17,12 +17,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
@@ -71,13 +68,11 @@ public final class Main extends ListenerAdapter {
         BOXES = JacksonYeehawHelper.read();
     }
 
-    private static final String TOKEN = getToken();
     private static JDA api;
+    private static final Config config = new Config();
     private static boolean fullyConnected;
 
     public static void main(final String[] args) {
-
-        Config config = new Config();
         config.readConfig();
 
         //throw error if version is not found
@@ -89,24 +84,6 @@ public final class Main extends ListenerAdapter {
         //log in
         connect();
         FRAME.log(LogType.INIT, "initialized jda");
-    }
-
-    private static String getToken() {
-        String fileName = "token.txt";
-        try {
-            if (!Files.exists(Paths.get(fileName))) {
-                boolean created = new File(fileName).createNewFile();
-                if (created) {
-                    FRAME.log(LogType.FATAL_ERR, "could not find token file and created token.txt: paste in your token and rerun the bot");
-                } else {
-                    FRAME.log(LogType.FATAL_ERR, "could not find file " + fileName + " and created token.txt: paste in your token and rerun the bot");
-                }
-            }
-            return Files.readString(Paths.get(fileName));
-        } catch (IOException e) {
-            FRAME.log(LogType.FATAL_ERR, "token.txt not found");
-            return "";
-        }
     }
 
     /**
@@ -133,11 +110,11 @@ public final class Main extends ListenerAdapter {
     }
 
     /**
-     * connect the {@link Main#api api} to discord using {@link Main#TOKEN}, then add listeners
+     * connect the {@link Main#api api} to discord using {@link Main#config#getToken()}, then add listeners
      */
     public static void connect() {
         try {
-            api = JDABuilder.createDefault(TOKEN).build();
+            api = JDABuilder.createDefault(config.getToken()).build();
             Main.FRAME.log(LogType.INIT, "successfully logged in JDA");
         } catch (LoginException e) {
             FRAME.log(LogType.FATAL_ERR, "invalid token");
@@ -170,5 +147,9 @@ public final class Main extends ListenerAdapter {
 
     public static boolean isFullyConnected() {
         return fullyConnected;
+    }
+
+    public static Config getConfig() {
+        return config;
     }
 }

@@ -1,8 +1,0 @@
-{
-  "admins" : [ ],
-  "mainServer" : 0,
-  "spamChannel" : 0,
-  "token" : "null",
-  "prefix" : "null",
-  "logCommands" : true
-}

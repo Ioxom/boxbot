@@ -161,6 +161,10 @@ public final class IoxboxFrame {
 
     public void log(final LogType type, final String message, final Object author) {
         if (type == LogType.CMD) {
+            if (!Main.getConfig().logCommands()) {
+                return;
+            }
+
             CustomUser user;
             if (author instanceof User) {
                 user = new CustomUser((User) author);
@@ -241,7 +245,7 @@ public final class IoxboxFrame {
                     case 5:
                         if (Main.isFullyConnected()) {
                             final long time = System.currentTimeMillis();
-                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(618926084326686723L)).getTextChannelById(784440682436886588L)).sendMessage("calculating ping").queue(message -> {
+                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(Main.getConfig().getMainServer())).getTextChannelById(Main.getConfig().getSpamChannel())).sendMessage("calculating ping").queue(message -> {
                                 long ping = System.currentTimeMillis() - time;
                                 this.log(LogType.MAIN, "current ping: " + ping + "ms");
                                 message.editMessage("ping is " + ping + "ms").queue();
