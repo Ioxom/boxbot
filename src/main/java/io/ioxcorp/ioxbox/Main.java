@@ -69,11 +69,11 @@ public final class Main extends ListenerAdapter {
     }
 
     private static JDA api;
-    private static final Config config = new Config();
+    private static final Config CONFIG = new Config();
     private static boolean fullyConnected;
 
     public static void main(final String[] args) {
-        config.readConfig();
+        CONFIG.readConfig();
 
         //throw error if version is not found
         if (version == null) {
@@ -110,11 +110,11 @@ public final class Main extends ListenerAdapter {
     }
 
     /**
-     * connect the {@link Main#api api} to discord using {@link Main#config Main's config's} token, then add listeners
+     * connect the {@link Main#api api} to discord using {@link Main#CONFIG Main's config's} token, then add listeners
      */
     public static void connect() {
         try {
-            final String token = config.getToken();
+            final String token = CONFIG.getToken();
             api = JDABuilder.createDefault(token).build();
             Main.FRAME.log(LogType.MAIN, "successfully logged in JDA");
         } catch (LoginException e) {
@@ -123,7 +123,7 @@ public final class Main extends ListenerAdapter {
         addListeners();
     }
 
-    public static void setApi(JDABuilder builder) throws LoginException {
+    public static void setApi(final JDABuilder builder) throws LoginException {
         api = builder.build();
     }
 
@@ -155,6 +155,6 @@ public final class Main extends ListenerAdapter {
     }
 
     public static Config getConfig() {
-        return config;
+        return CONFIG;
     }
 }

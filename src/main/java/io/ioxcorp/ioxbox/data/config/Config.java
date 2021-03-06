@@ -14,9 +14,12 @@ import io.ioxcorp.ioxbox.frame.logging.LogType;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class Config {
+public final class Config {
     @JsonIgnore
     private boolean isFirstRun;
     @JsonProperty("admins")
@@ -58,9 +61,10 @@ public class Config {
             try {
                 if (file.createNewFile()) {
                     FileWriter writer = new FileWriter(file);
-                    writer.write(MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, "null", "null", true)));
+                    String token = getTokenFromDedicatedFile();
+                    writer.write(MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, token, "null", true)));
                     writer.close();
-                    Main.FRAME.log(LogType.FATAL_ERR, "no config file found, created one");
+                    Main.FRAME.log(LogType.ERR, "no config file found, created one\nyou can fill this in with the required information");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -117,6 +121,22 @@ public class Config {
         this.token = config.token;
         this.prefix = config.prefix;
         this.logCommands = config.logCommands;
+    }
+
+    //the token used to be stored in its own file, this is used for migrating
+    private static String getTokenFromDedicatedFile() {
+        Path path = Paths.get("token.txt");
+        try {
+            return Files.readString(path);
+        } catch (IOException e) {
+            return "null";
+        } finally {
+            try {
+                Files.delete(path);
+            } catch (IOException ignored) {
+
+            }
+        }
     }
 
     @JsonGetter
