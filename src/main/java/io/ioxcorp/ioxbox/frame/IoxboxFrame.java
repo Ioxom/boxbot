@@ -5,9 +5,11 @@ import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.frame.logging.FileLogger;
 import io.ioxcorp.ioxbox.frame.logging.LogHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
+import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
+import javax.security.auth.login.LoginException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -161,6 +163,10 @@ public final class IoxboxFrame {
 
     public void log(final LogType type, final String message, final Object author) {
         if (type == LogType.CMD) {
+            if (!Main.getConfig().logCommands()) {
+                return;
+            }
+
             CustomUser user;
             if (author instanceof User) {
                 user = new CustomUser((User) author);
@@ -192,7 +198,8 @@ public final class IoxboxFrame {
             "/disconnect",
             "/connect",
             "/ping",
-            "/exit"
+            "/exit",
+            "/configure"
     };
 
     public static final String COMMAND_LIST = "=== command list start ===\n"
@@ -203,6 +210,7 @@ public final class IoxboxFrame {
             + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
             + COMMANDS[5] + ": get the current ping\n"
             + COMMANDS[6] + ": disconnects from discord and ends the process\n"
+            + COMMANDS[7] + ": rereads the config file\n"
             + "=== command list end ===";
 
     public void handleCommands(final String command) {
@@ -241,7 +249,7 @@ public final class IoxboxFrame {
                     case 5:
                         if (Main.isFullyConnected()) {
                             final long time = System.currentTimeMillis();
-                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(618926084326686723L)).getTextChannelById(784440682436886588L)).sendMessage("calculating ping").queue(message -> {
+                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(Main.getConfig().getMainServer())).getTextChannelById(Main.getConfig().getSpamChannel())).sendMessage("calculating ping").queue(message -> {
                                 long ping = System.currentTimeMillis() - time;
                                 this.log(LogType.MAIN, "current ping: " + ping + "ms");
                                 message.editMessage("ping is " + ping + "ms").queue();
@@ -252,6 +260,21 @@ public final class IoxboxFrame {
                         return;
                     case 6:
                         System.exit(0);
+                        return;
+                    case 7:
+                        final String oldToken = Main.getConfig().getToken();
+                        Main.getConfig().readConfig();
+                        final String token = Main.getConfig().getToken();
+                        if (!oldToken.equals(token)) {
+                            FRAME.log(LogType.MAIN, "got different token; reloading JDA");
+                            Main.shutdown();
+                            try {
+                                Main.setApi(JDABuilder.createDefault(token));
+                                Main.addListeners();
+                            } catch (LoginException e) {
+                                FRAME.log(LogType.ERR, "got invalid token on config reload, enter a working one and do /configure again");
+                            }
+                        }
                         return;
                 }
             }

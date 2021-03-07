@@ -41,13 +41,15 @@ public final class LogHelper {
     public static void handleNormalLogs(final LoggerType loggerType, final LogType logType, final String message) {
         if (logType == LogType.FATAL_ERR) {
             throwFatalError(message);
-        }
-
-        String logMessage = getLogMessage(logType, message);
-        if (loggerType == LoggerType.WRITER) {
-            Main.FRAME.getFileLogger().write(logMessage);
-        } else if (loggerType == LoggerType.CONSOLE) {
-            writeToConsoleAndFrame(logMessage);
+        } else if (logType == LogType.CMD) {
+            throw new IllegalArgumentException("LogType#CMD cannot be passed to LogHelper#handleNormalLogs(LoggerType, LogType, String)");
+        } else {
+            String logMessage = getLogMessage(logType, message);
+            if (loggerType == LoggerType.WRITER) {
+                Main.FRAME.getFileLogger().write(logMessage);
+            } else if (loggerType == LoggerType.CONSOLE) {
+                writeToConsoleAndFrame(logMessage);
+            }
         }
     }
 
