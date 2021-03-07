@@ -7,8 +7,6 @@ plugins {
 mainClassName = "io.ioxcorp.ioxbox.Main"
 group 'io.ioxcorp'
 version '0.5.0'
-def jdaVersion = '4.2.0_231'
-def jacksonVersion = '2.12.1'
 
 repositories {
     mavenCentral()
@@ -18,10 +16,10 @@ repositories {
 dependencies {
     //json parsing library
     //https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.1")
     //integration with discord
     //https://bintray.com/dv8fromtheworld/maven/JDA
-    implementation (group: 'net.dv8tion', name: 'JDA', version: jdaVersion) {
+    implementation ("net.dv8tion:JDA:4.2.0_231") {
         exclude module: "opus-java"
     }
 }
