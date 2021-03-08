@@ -16,7 +16,7 @@ repositories {
 dependencies {
     //json parsing library
     //https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.2")
     //integration with discord
     //https://bintray.com/dv8fromtheworld/maven/JDA
     implementation ("net.dv8tion:JDA:4.2.0_231") {
