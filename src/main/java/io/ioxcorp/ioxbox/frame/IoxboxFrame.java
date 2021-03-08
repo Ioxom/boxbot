@@ -217,7 +217,7 @@ public final class IoxboxFrame {
 
     public void handleCommands(final String command) {
         if (!command.startsWith(COMMAND_PREFIX)) {
-            this.log(LogType.ERR, "invalid command: commands must start with "+ COMMAND_PREFIX + "\nuse " + IoxboxFrame.COMMAND_PREFIX + COMMANDS[0] + " for a list");
+            this.log(LogType.ERR, "invalid command: commands must start with " + COMMAND_PREFIX + "\nuse " + IoxboxFrame.COMMAND_PREFIX + COMMANDS[0] + " for a list");
             return;
         }
 

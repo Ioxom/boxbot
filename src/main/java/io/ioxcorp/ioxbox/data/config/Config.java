@@ -174,12 +174,12 @@ public final class Config {
     }
 
     @JsonSetter
-    public void setPrefix(String prefix) {
+    public void setPrefix(final String prefix) {
         this.prefix = prefix;
     }
 
     @JsonSetter("logCommands")
-    public void setCommandLogging(boolean log) {
+    public void setCommandLogging(final boolean log) {
         this.logCommands = log;
     }
 }
