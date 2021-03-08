@@ -21,7 +21,7 @@ public final class PromptTextField extends JTextField {
     private final KeyAdapter autofillAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(final KeyEvent evt) {
-            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith("/") && savedCommand.startsWith(getText().split(" ")[0]) && autofill) {
+            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(IoxboxFrame.COMMAND_PREFIX) && savedCommand.startsWith(getText().split(" ")[0]) && autofill) {
                 setText(savedCommand);
                 drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
             }
@@ -49,6 +49,7 @@ public final class PromptTextField extends JTextField {
         //otherwise we try to get an autofill option
         } else if (autofill) {
             for (String command : IoxboxFrame.COMMANDS) {
+                command = IoxboxFrame.COMMAND_PREFIX + command;
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
                     drawText(" ".repeat(this.getText().length() * 3) + command + " (press tab)", g);

@@ -5,6 +5,7 @@ import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
+import io.ioxcorp.ioxbox.helpers.MessageHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleAdd;
 import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleDelete;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.security.InvalidParameterException;
 
 import static io.ioxcorp.ioxbox.Main.FRAME;
+import static io.ioxcorp.ioxbox.Main.getConfig;
 
 /**
  * the main listener for ioxbox<br>
@@ -187,9 +189,57 @@ public final class MainListener extends ListenerAdapter {
                         message.editMessage(helper.successEmbed("ioxbox's ping is: " + (System.currentTimeMillis() - time) + "ms")).queue());
                 FRAME.log(LogType.CMD, "ping", author);
                 break;
+
             case "pickup":
-                event.getChannel().sendMessage(PICKUPS[Main.RANDOM.nextInt(PICKUPS.length)]).queue();
+                channel.sendMessage(PICKUPS[Main.RANDOM.nextInt(PICKUPS.length)]).queue();
                 break;
+
+            case "cfg":
+            case "config":
+                if (getConfig().getAdmins().contains(author.getId())) {
+                    if (messageContent.length > 2) {
+                        switch (messageContent[1]) {
+                            case "admin":
+                            case "admins":
+                                if (messageContent[2].equals("add") && messageContent.length > 3) {
+                                    try {
+                                        getConfig().getAdmins().add(Long.parseLong(messageContent[3]));
+                                        channel.sendMessage(helper.successEmbed("added admin " + MessageHelper.getAsPing(messageContent[3]))).queue();
+                                    } catch (NumberFormatException e) {
+                                        channel.sendMessage(helper.errorEmbed("failed to add admin: id is invalid")).queue();
+                                    }
+                                } else if (messageContent[2].equals("remove") && messageContent.length > 3) {
+                                    try {
+                                        getConfig().getAdmins().remove(Long.parseLong(messageContent[3]));
+                                        channel.sendMessage(helper.successEmbed("removed admin " + MessageHelper.getAsPing(messageContent[3]))).queue();
+                                    } catch (NumberFormatException e) {
+                                        channel.sendMessage(helper.errorEmbed("failed to remove admin: id is invalid")).queue();
+                                    }
+                                } else {
+                                    channel.sendMessage(helper.errorEmbed("not enough arguments or unknown command")).queue();
+                                }
+                                break;
+                            case "prefix":
+                                if (messageContent[2].equals("set") && messageContent.length > 3) {
+                                    final String newPrefix = messageContent.length > 4 && messageContent[4].equals("-addspace") ? " " : "" + messageContent[3];
+                                    getConfig().setPrefix(newPrefix);
+                                    channel.sendMessage(helper.successEmbed("set prefix to [" + newPrefix + "]")).queue();
+                                } else {
+                                    channel.sendMessage(helper.errorEmbed("not enough arguments or unknown command")).queue();
+                                }
+                                break;
+                            case "logcommands":
+                                final boolean log = Boolean.parseBoolean(messageContent[2]);
+                                getConfig().setCommandLogging(log);
+                                channel.sendMessage(helper.successEmbed("set logCommands to " + log)).queue();
+                                break;
+                        }
+                    } else {
+                        channel.sendMessage(helper.errorEmbed("not enough arguments")).queue();
+                    }
+                } else {
+                    channel.sendMessage(helper.errorEmbed("you do not have sufficient permissions to edit configuration")).queue();
+                }
         }
     }
 

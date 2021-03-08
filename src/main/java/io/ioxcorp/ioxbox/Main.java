@@ -118,7 +118,7 @@ public final class Main extends ListenerAdapter {
             api = JDABuilder.createDefault(token).build();
             Main.FRAME.log(LogType.MAIN, "successfully logged in JDA");
         } catch (LoginException e) {
-            FRAME.log(LogType.FATAL_ERR, "invalid token");
+            FRAME.log(LogType.ERR, "invalid token; enter a valid one and run /configure to log in");
         }
         addListeners();
     }

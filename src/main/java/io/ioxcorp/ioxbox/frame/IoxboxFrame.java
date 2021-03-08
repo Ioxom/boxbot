@@ -191,36 +191,38 @@ public final class IoxboxFrame {
         return this.console;
     }
 
+    public static final String COMMAND_PREFIX = "/";
+
     public static final String[] COMMANDS = {
-            "/commands",
-            "/clear",
-            "/reload",
-            "/disconnect",
-            "/connect",
-            "/ping",
-            "/exit",
-            "/configure"
+            "commands",
+            "clear",
+            "reload",
+            "disconnect",
+            "connect",
+            "ping",
+            "exit",
+            "configure"
     };
 
     public static final String COMMAND_LIST = "=== command list start ===\n"
-            + COMMANDS[0] + ": display this list\n"
-            + COMMANDS[1] + ": clear the console\n"
-            + COMMANDS[2] + ": reload JDA, disconnecting and reconnecting to discord\n"
-            + COMMANDS[3] + ": disconnect from discord, if already disconnected does nothing\n"
-            + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
-            + COMMANDS[5] + ": get the current ping\n"
-            + COMMANDS[6] + ": disconnects from discord and ends the process\n"
-            + COMMANDS[7] + ": rereads the config file\n"
+            + COMMAND_PREFIX + COMMANDS[0] + ": display this list\n"
+            + COMMAND_PREFIX + COMMANDS[1] + ": clear the console\n"
+            + COMMAND_PREFIX + COMMANDS[2] + ": reload JDA, disconnecting and reconnecting to discord\n"
+            + COMMAND_PREFIX + COMMANDS[3] + ": disconnect from discord, if already disconnected does nothing\n"
+            + COMMAND_PREFIX + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
+            + COMMAND_PREFIX + COMMANDS[5] + ": get the current ping\n"
+            + COMMAND_PREFIX + COMMANDS[6] + ": disconnects from discord and ends the process\n"
+            + COMMAND_PREFIX + COMMANDS[7] + ": rereads the config file\n"
             + "=== command list end ===";
 
     public void handleCommands(final String command) {
-        if (!command.startsWith("/")) {
-            this.log(LogType.MAIN, "invalid command: commands must start with /\nuse /commands for a list");
+        if (!command.startsWith(COMMAND_PREFIX)) {
+            this.log(LogType.ERR, "invalid command: commands must start with "+ COMMAND_PREFIX + "\nuse " + IoxboxFrame.COMMAND_PREFIX + COMMANDS[0] + " for a list");
             return;
         }
 
         for (int i = 0; i < COMMANDS.length; i++) {
-            if (COMMANDS[i].equals(command)) {
+            if ((COMMAND_PREFIX + COMMANDS[i]).equals(command)) {
                 switch (i) {
                     case 0:
                         this.log(LogType.HELP, COMMAND_LIST);

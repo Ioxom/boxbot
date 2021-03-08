@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,8 @@ public final class Config {
 
     @JsonIgnore
     private static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    @JsonIgnore
+    private static final File CONFIG_FILE = new File("config.json");
 
     @JsonCreator
     public Config() {
@@ -53,14 +56,15 @@ public final class Config {
         this.logCommands = logCommands;
     }
 
+    /**
+     * sets all values in the config to what's found in config.json ({@link Config#CONFIG_FILE})
+     */
     public void readConfig() {
-
         //create file if it doesn't exist
-        File file = new File("config.json");
-        if (!file.exists()) {
+        if (!CONFIG_FILE.exists()) {
             try {
-                if (file.createNewFile()) {
-                    FileWriter writer = new FileWriter(file);
+                if (CONFIG_FILE.createNewFile()) {
+                    FileWriter writer = new FileWriter(CONFIG_FILE);
                     String token = getTokenFromDedicatedFile();
                     writer.write(MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, token, "null", true)));
                     writer.close();
@@ -74,7 +78,7 @@ public final class Config {
         //read config
         Config readConfig = null;
         try {
-            readConfig = MAPPER.readValue(file, Config.class);
+            readConfig = MAPPER.readValue(CONFIG_FILE, Config.class);
         } catch (JsonMappingException e) {
             if (isFirstRun) {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to map json of config: " + e);
@@ -167,5 +171,15 @@ public final class Config {
     @JsonGetter("logCommands")
     public boolean logCommands() {
         return this.logCommands;
+    }
+
+    @JsonSetter
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    @JsonSetter("logCommands")
+    public void setCommandLogging(boolean log) {
+        this.logCommands = log;
     }
 }
