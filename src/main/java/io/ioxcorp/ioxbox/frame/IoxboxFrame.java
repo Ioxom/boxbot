@@ -6,6 +6,8 @@ import io.ioxcorp.ioxbox.frame.logging.FileLogger;
 import io.ioxcorp.ioxbox.frame.logging.LogHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
@@ -22,7 +24,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 import static io.ioxcorp.ioxbox.Main.FRAME;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
@@ -251,7 +252,17 @@ public final class IoxboxFrame {
                     case 5:
                         if (Main.isFullyConnected()) {
                             final long time = System.currentTimeMillis();
-                            Objects.requireNonNull(Objects.requireNonNull(Main.getApi().getGuildById(Main.getConfig().getMainServer())).getTextChannelById(Main.getConfig().getSpamChannel())).sendMessage("calculating ping").queue(message -> {
+                            final Guild guild = Main.getApi().getGuildById(Main.getConfig().getMainServer());
+                            if (guild == null) {
+                                this.log(LogType.ERR, "guild not found; could not get ping\nplease fix your config!");
+                                return;
+                            }
+                            final MessageChannel channel = guild.getTextChannelById(Main.getConfig().getSpamChannel());
+                            if (channel == null) {
+                                this.log(LogType.ERR, "channel not found; could not get ping\nplease fix your config!");
+                                return;
+                            }
+                            channel.sendMessage("calculating ping").queue(message -> {
                                 long ping = System.currentTimeMillis() - time;
                                 this.log(LogType.MAIN, "current ping: " + ping + "ms");
                                 message.editMessage("ping is " + ping + "ms").queue();
