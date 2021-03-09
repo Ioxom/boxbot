@@ -12,6 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * helper methods for using Jackson
+ * @author ioxom
+ */
 public final class JacksonYeehawHelper {
     private JacksonYeehawHelper() {
 
@@ -22,7 +26,6 @@ public final class JacksonYeehawHelper {
     /**
      * saves the data currently stored in {@link Main#BOXES} to box_data.json.
      * if box_data.json doesn't exist create it
-     * @author ioxom
      */
     public static void save() {
         FrickYouJackson yeehaw = new FrickYouJackson(Main.BOXES);
@@ -47,7 +50,6 @@ public final class JacksonYeehawHelper {
     /**
      * gets the stored data in box_data.json
      * @return a {@link HashMap<>} of the stored boxes in box_data.json or an empty hashmap if the file is empty or not found
-     * @author ioxom
      */
     public static HashMap<Long, Box> read() {
         File file = new File("box_data.json");

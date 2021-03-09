@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * a container for items (instances of {@link String} and {@link CustomUser}.
+ * a container for items (instances of {@link String} and {@link CustomUser}
+ * @author ioxom
  */
 public final class Box {
 
@@ -42,7 +43,6 @@ public final class Box {
      * @param owner must be a {@link CustomUser CustomUser} or {@link User User}; the owner of the box
      * @param object must be a {@link String String}, {@link CustomUser CustomUser} or {@link User User}; the object that is inside the newly created box
      * @exception IllegalArgumentException if the owner or object parameters are incompatible types
-     * @author ioxom
      */
     public Box(final Object owner, final Object object) {
         //convert the owner object to a CustomUser and save
@@ -80,7 +80,6 @@ public final class Box {
      * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the owner of the box
      * @exception IllegalArgumentException if the owner object passed is an incompatible type
      * @see Box#Box(Object, Object)
-     * @author ioxom
      */
     public Box(final Object owner) {
         //convert the owner object to a CustomUser and save
@@ -99,7 +98,6 @@ public final class Box {
 
     /**
      * do not use this, it is a constructor used only for jackson to be able to parse Box objects from json
-     * @author ioxom
      */
     @JsonCreator
     public Box() {
@@ -115,7 +113,7 @@ public final class Box {
     }
 
     /**
-     * @return the
+     * @return the box as a readable {@link String}
      */
     public String toString() {
         return this.owner.getAsTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
@@ -124,7 +122,6 @@ public final class Box {
     /**
      * a method for making a discord-sendable representation of a box
      * @return a {@link MessageEmbed MessageEmbed} that can be sent in discord showing the contents of the referenced box
-     * @author ioxom
      */
     public MessageEmbed embed() {
         EmbedBuilder e = new EmbedBuilder()
@@ -141,7 +138,6 @@ public final class Box {
     /**
      * @return a readable {@link String String} of the items in the specified box
      * @see Box#usersToString()
-     * @author ioxom
      */
     public String itemsToString() {
         StringBuilder itemsAsString = new StringBuilder();
@@ -163,7 +159,6 @@ public final class Box {
     /**
      * @return a readable {@link String String} of the users in the specified box
      * @see Box#itemsToString()
-     * @author ioxom
      */
     public String usersToString() {
         StringBuilder usersAsString = new StringBuilder();
@@ -187,7 +182,6 @@ public final class Box {
      * @param object a {@link String String}, a {@link CustomUser CustomUser} or {@link User User} to be added to the referenced {@link Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#remove(Object)
-     * @author ioxom
      */
     public void add(final Object object) {
         if (object instanceof String) {
@@ -208,7 +202,6 @@ public final class Box {
      * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be removed from the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#add(Object)
-     * @author ioxom
      */
     public void remove(final Object object) {
         if (object instanceof String) {
@@ -231,7 +224,6 @@ public final class Box {
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(CustomUser)
-     * @author ioxom
      */
     public static void createBox(final CustomUser owner, final Object item) {
         if (owner.hasBox()) {
@@ -249,7 +241,6 @@ public final class Box {
      * @exception IllegalArgumentException if the owner or item objects are incompatible types
      * @exception InvalidParameterException if the owner already has a box
      * @see Box#createBox(CustomUser, Object)
-     * @author ioxom
      */
     public static void createBox(final CustomUser owner) {
         if (owner.hasBox()) {
@@ -265,7 +256,6 @@ public final class Box {
      * checks if a box contains the object specified
      * @param object must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser}, {@link net.dv8tion.jda.api.entities.User User} or {@link java.lang.String}; the object to be checked for
      * @return true, if the object is found; false, if the object is not found
-     * @author ioxom
      */
     public boolean contains(final Object object) {
         if (object instanceof CustomUser) {
@@ -294,9 +284,6 @@ public final class Box {
         return users;
     }
 
-    /**
-     * overridden equals method.
-     */
     @Override
     public boolean equals(final Object o) {
 
@@ -310,9 +297,6 @@ public final class Box {
         return Objects.equals(owner, box.owner) && Objects.equals(items, box.items) && Objects.equals(users, box.users);
     }
 
-    /**
-     * overridden hashCode method.
-     */
     @Override
     public int hashCode() {
         return Objects.hash(owner, items, users);

@@ -2,13 +2,9 @@ package io.ioxcorp.ioxbox.frame.logging;
 
 public enum LogType {
     /**
-     * appears in the console as [main]: message
+     * appears in the console as [cmd]: message
      */
-    MAIN("[main]"),
-    /**
-     * appears in the console as [init]: message
-     */
-    INIT("[init]"),
+    CMD("[cmd]"),
     /**
      * appears in the console as [err]: message
      */
@@ -18,13 +14,17 @@ public enum LogType {
      */
     FATAL_ERR("[err/FATAL]"),
     /**
-     * appears in the console as [cmd]: message
-     */
-    CMD("[cmd]"),
-    /**
      * appears in the console as [help]: message
      */
-    HELP("[help]");
+    HELP("[help]"),
+    /**
+     * appears in the console as [init]: message
+     */
+    INIT("[init]"),
+    /**
+     * appears in the console as [main]: message
+     */
+    MAIN("[main]");
 
     private final String value;
 

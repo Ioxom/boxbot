@@ -13,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.Objects;
 
+/**
+ * a specialised {@link JTextField} with the added features autofill and a prompt
+ */
 public final class PromptTextField extends JTextField {
     private static final long serialVersionUID = -7065789752989953979L;
     private final String prompt;

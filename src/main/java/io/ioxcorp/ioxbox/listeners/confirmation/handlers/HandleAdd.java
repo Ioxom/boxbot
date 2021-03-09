@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 /**
  * adds a user to another user's box, after asking for confirmation<br>
- * usage: new {@link Thread}(instance of {@link HandleAdd}).start();
+ * usage: new {@link Thread Thread(HandleAdd)}{@link Thread#start() .start()}
  * @author ioxom, thonkman
  */
 public final class HandleAdd extends Handler {

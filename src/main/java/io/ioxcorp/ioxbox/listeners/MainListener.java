@@ -25,6 +25,8 @@ import static io.ioxcorp.ioxbox.Main.getConfig;
 /**
  * the main listener for ioxbox<br>
  * executes commands from text channels
+ * @author ioxom
+ * @author thonkman
  */
 public final class MainListener extends ListenerAdapter {
 

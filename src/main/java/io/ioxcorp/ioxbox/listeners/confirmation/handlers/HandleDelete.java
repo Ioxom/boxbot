@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 /**
  * deletes a user's box, after asking for confirmation <br>
- * usage: new {@link Thread}(instance of {@link HandleDelete}).start();
+ * usage: new {@link Thread Thread(HandleDelete)}{@link Thread#start() .start()}
  * @author ioxom
  */
 public final class HandleDelete extends Handler {

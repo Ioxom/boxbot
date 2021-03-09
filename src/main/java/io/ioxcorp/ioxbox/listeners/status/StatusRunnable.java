@@ -21,6 +21,12 @@ public final class StatusRunnable implements Runnable {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final int timeBetweenChanges;
 
+    /**
+     * create a new {@link StatusRunnable}
+     * @param jdaPresence the {@link Presence} to update
+     * @param statuses the statuses to cycle through; if null uses default statuses
+     * @param timeBetweenChanges the time in seconds between cycles
+     */
     public StatusRunnable(final Presence jdaPresence, final String[] statuses, final int timeBetweenChanges) {
         this.timeBetweenChanges = timeBetweenChanges;
         this.useDefaultStatuses = statuses == null;
@@ -43,6 +49,7 @@ public final class StatusRunnable implements Runnable {
         } else {
             i++;
         }
+
         this.presence.setActivity(Activity.playing(statuses[i]));
     }
 

@@ -24,6 +24,10 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 
+/**
+ * main class for logging in and creating all our objects
+ * @author ioxom
+ */
 public final class Main extends ListenerAdapter {
     private Main() {
 
@@ -100,7 +104,7 @@ public final class Main extends ListenerAdapter {
      */
     public static void shutdown() {
         fullyConnected = false;
-        for (ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+        for (final ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
             confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
             ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
         }

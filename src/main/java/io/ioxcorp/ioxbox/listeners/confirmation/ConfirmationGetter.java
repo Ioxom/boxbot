@@ -31,7 +31,6 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * creates a {@link ConfirmationGetter} for the specified user with the specified lock
      * @param latch a {@link CountDownLatch} that will keep the thread locked until we have confirmation
      * @param id the id of the user we want confirmation from
-     * @author ioxom
      */
     public ConfirmationGetter(final CountDownLatch latch, final long id, final MessageChannel channel) {
         this.id = id;
@@ -47,7 +46,6 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * convenience method to check if we're getting confirmation from a user
      * @param id the id of the user we want to check if we're getting confirmation from
      * @return whether or not we're getting confirmation from the user
-     * @author ioxom
      */
     public static boolean gettingConfirmationFrom(final long id) {
         return CONFIRMATION_GETTERS.containsKey(id);
@@ -58,7 +56,6 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
      * @param id the id of the user we want confirmation from
      * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
-     * @author ioxom
      */
     public static WhatAmIDoing crab(final long id, final MessageChannel initialChannel) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
@@ -99,7 +96,6 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps
      * this normally runs after getting confirmation from that user
      * this isn't necessary after the cleanup but yes
-     * @author ioxom
      */
     public void clean() {
         CONFIRMATION_GETTERS.remove(id);

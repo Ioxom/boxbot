@@ -2,6 +2,10 @@ package io.ioxcorp.ioxbox.frame.logging;
 
 import io.ioxcorp.ioxbox.Main;
 
+/**
+ * useful static methods for logging
+ * @author ioxom
+ */
 public final class LogHelper {
     private LogHelper() {
 
@@ -36,11 +40,12 @@ public final class LogHelper {
      * @param loggerType the type of logger to use: {@link LoggerType#WRITER WRITER} writes only to a file and {@link LoggerType#CONSOLE CONSOLE} writes to the console and a file
      * @param logType the type of log to display before the sent message
      * @param message the message to be displayed after the type
-     * @author ioxom
      */
     public static void handleNormalLogs(final LoggerType loggerType, final LogType logType, final String message) {
+        //special handling for FATAL_ERR
         if (logType == LogType.FATAL_ERR) {
             throwFatalError(message);
+        //we need a CustomUser "author" object
         } else if (logType == LogType.CMD) {
             throw new IllegalArgumentException("LogType#CMD cannot be passed to LogHelper#handleNormalLogs(LoggerType, LogType, String)");
         } else {
@@ -48,7 +53,7 @@ public final class LogHelper {
             if (loggerType == LoggerType.WRITER) {
                 Main.FRAME.getFileLogger().write(logMessage);
             } else if (loggerType == LoggerType.CONSOLE) {
-                writeToConsoleAndFrame(logMessage);
+                writeToConsoleAndFile(logMessage);
             }
         }
     }
@@ -69,7 +74,7 @@ public final class LogHelper {
      * @param message the message to send before killing the process
      */
     private static void throwFatalError(final String message) {
-        writeToConsoleAndFrame(getLogMessage(LogType.FATAL_ERR, message));
+        writeToConsoleAndFile(getLogMessage(LogType.FATAL_ERR, message));
         try {
             Thread.sleep(5000);
             System.exit(1);
@@ -78,7 +83,11 @@ public final class LogHelper {
         }
     }
 
-    private static void writeToConsoleAndFrame(final String message) {
+    /**
+     * writes to both {@link Main Main's} console and its associated log file
+     * @param message the message to write
+     */
+    private static void writeToConsoleAndFile(final String message) {
         Main.FRAME.getFileLogger().write(message);
         Main.FRAME.getConsole().append(message);
     }

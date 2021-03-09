@@ -53,7 +53,7 @@ public final class OldBox {
     @JsonGetter
     public ArrayList<CustomUser> getUsers() {
         ArrayList<CustomUser> list = new ArrayList<>();
-        for (OldCustomUser user : this.users) {
+        for (final OldCustomUser user : this.users) {
             list.add(new CustomUser(user));
         }
         return list;

@@ -306,11 +306,11 @@ public final class IoxboxFrame {
             if (inputStream != null) {
                 return ImageIO.read(inputStream);
             } else {
-                this.log(LogType.ERR, "failed to get image: " + path + "; resources may be broken");
+                this.log(LogType.ERR, "failed to get image: " + path + "; resource will be unavailable");
                 return null;
             }
         } catch (IOException e) {
-            this.log(LogType.FATAL_ERR, "an IOException occurred while reading file \"images/box.png\"");
+            this.log(LogType.ERR, "an IOException occurred while reading file \"" + path + "\"; resource will be unavailable");
             return null;
         }
     }

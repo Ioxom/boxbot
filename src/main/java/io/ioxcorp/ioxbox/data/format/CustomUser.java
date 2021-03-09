@@ -10,7 +10,10 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.util.Objects;
 
-//the JDA User class is too convoluted to save to JSON, so we only keep what we need
+/**
+ * this class is used when saving to json instead of {@link User} because that errors on save
+ * @author ioxom
+ */
 public final class CustomUser {
     @JsonProperty("id")
     private final long id;
@@ -22,7 +25,6 @@ public final class CustomUser {
     /**
      * creates a {@link CustomUser CustomUser} from the {@link User User} object passed, essentially stripping down the data to its most important fields
      * @param user the {@link User User} object to be converted
-     * @author ioxom
      */
     public CustomUser(final User user) {
         this.id = user.getIdLong();
@@ -50,7 +52,6 @@ public final class CustomUser {
 
     /**
      * @return the formatting most users see in discord of a {@link User User}: something like bob#1000
-     * @author ioxom
      */
     @JsonIgnore
     public String getAsTag() {
@@ -59,7 +60,6 @@ public final class CustomUser {
 
     /**
      * @return a string that if sent in discord will ping the user
-     * @author ioxom
      */
     @JsonIgnore
     public String getPing() {
@@ -69,7 +69,6 @@ public final class CustomUser {
     /**
      * checks the {@link java.util.HashMap HashMap} contained in {@link Main Main} for a box owned by the user
      * @return true, if the {@link CustomUser CustomUser} has a box; false, if they do not
-     * @author ioxom
      */
     public boolean hasBox() {
         return Main.BOXES.containsKey(this.id);
@@ -78,7 +77,6 @@ public final class CustomUser {
     /**
      * get the box owned by the user from {@link Main Main's} {@link java.util.HashMap HashMap} of boxes
      * @return the found {@link Box Box}, null if there is no box owned by the user
-     * @author ioxom
      */
     @JsonIgnore
     public Box getBox() {

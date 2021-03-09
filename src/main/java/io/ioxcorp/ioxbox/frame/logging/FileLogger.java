@@ -19,7 +19,6 @@ public final class FileLogger {
     /**
      * creates a new {@link FileLogger} that writes to a {@link File file} in /logs/ with a filename corresponding to the date and program run
      * <br>note: if you create multiple of these in one run of a program it will generate multiple log files, avoid creating more than one
-     * @author ioxom
      */
     public FileLogger() {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
@@ -56,7 +55,6 @@ public final class FileLogger {
     /**
      * gets a valid name for the log {@link File file} by iterating over names
      * @return a {@link String} filename in the format of log_day-month-year_run[runNumber]
-     * @author ioxom
      */
     private String getValidLogName() {
         //get the date
@@ -76,7 +74,6 @@ public final class FileLogger {
      * convenience method to get the run number of the program
      * @return the run number of the program starting at 0
      * @throws NumberFormatException if the log number isn't valid somehow
-     * @author ioxom
      */
     public int getRun() {
         //first remove everything before "run", leaving us with [run number].txt
@@ -95,7 +92,6 @@ public final class FileLogger {
     /**
      * writes the specified message the {@link File} associated with this {@link FileLogger}
      * @param message the message to write
-     * @author ioxom
      */
     public void write(final String message) {
         try {
@@ -111,7 +107,6 @@ public final class FileLogger {
     /**
      * @param type a {@link LogType} that tells what to put before the message<br>note: this will throw {@link IllegalArgumentException} if you pass {@link LogType#CMD} without using the method where a user is passed
      * @param message the message to be printed to the file
-     * @author ioxom
      */
     public void log(final LogType type, final String message) {
         if (type == LogType.CMD) {

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 /**
  * base class for handling confirmation requests<br>
  * implements {@link Runnable} - should be used by running on a new thread
+ * @author ioxom
  */
 public class Handler implements Runnable {
     private final CustomUser user;

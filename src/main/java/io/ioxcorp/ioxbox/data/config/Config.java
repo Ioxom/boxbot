@@ -46,6 +46,15 @@ public final class Config {
         this.isFirstRun = true;
     }
 
+    /**
+     * creates a new config with all values set to the parameters
+     * @param admins an {@link ArrayList} of user ids: the admins who are allowed to use config commands from discord
+     * @param mainServer the id of the server to find the {@link Config#spamChannel} in
+     * @param spamChannel the id of the channel to use when getting ping from the console
+     * @param token the bot's token
+     * @param prefix the prefix to be used before bot commands
+     * @param logCommands whether or not to log command usages
+     */
     public Config(final ArrayList<Long> admins, final long mainServer, final long spamChannel, final String token, final String prefix, final boolean logCommands) {
         this.isFirstRun = false;
         this.admins = admins;
@@ -112,11 +121,15 @@ public final class Config {
             return;
         }
 
-        setThis(readConfig);
+        this.setThis(readConfig);
 
         this.isFirstRun = false;
     }
 
+    /**
+     * set all values of this object to the config passed in
+     * @param config the config to pull values from
+     */
     private void setThis(final Config config) {
         this.isFirstRun = config.isFirstRun;
         this.admins = config.getAdmins();
@@ -127,18 +140,31 @@ public final class Config {
         this.logCommands = config.logCommands;
     }
 
-    //the token used to be stored in its own file, this is used for migrating
+    /**
+     * we used to store the token in a dedicated file named "token.txt", we use this method to migrate it<br>
+     * deletes token.txt after getting contents.
+     * @return the contents of token.txt or "null" if it isn't found
+     */
     private static String getTokenFromDedicatedFile() {
         Path path = Paths.get("token.txt");
-        try {
-            return Files.readString(path);
-        } catch (IOException e) {
+        boolean found = path.toFile().exists();
+        if (!found) {
             return "null";
-        } finally {
+        } else {
             try {
-                Files.delete(path);
-            } catch (IOException ignored) {
+                return Files.readString(path);
+            //this should never be thrown as we've already checked if the file exists
+            } catch (IOException e) {
+                return "null";
+            } catch (OutOfMemoryError e) {
+                Main.FRAME.log(LogType.ERR, "token.txt was too large to read, aborting and writing \"null\" to config.json");
+                return "null";
+            } finally {
+                try {
+                    Files.delete(path);
+                } catch (IOException ignored) {
 
+                }
             }
         }
     }

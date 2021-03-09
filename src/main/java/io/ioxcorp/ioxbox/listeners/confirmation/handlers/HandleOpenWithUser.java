@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 /**
  * opens a new {@link Box} containing a user owned by the the asking user, after asking for confirmation<br>
- * usage: new {@link Thread}(instance of {@link HandleOpenWithUser}).start();
+ * usage: new {@link Thread Thread(HandleOpenWithUser)}{@link Thread#start() .start()}
  * @author ioxom
  */
 public final class HandleOpenWithUser extends Handler {

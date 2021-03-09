@@ -6,6 +6,9 @@ import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
+/**
+ * used for converting old data from box_data.json to the newer format
+ */
 public final class OldFrickYouJackson {
     private final HashMap<Long, OldBox> boxes;
 
@@ -16,7 +19,7 @@ public final class OldFrickYouJackson {
 
     public HashMap<Long, Box> convert() {
         HashMap<Long, Box> convertedData = new HashMap<>();
-        for (long key : boxes.keySet()) {
+        for (final long key : boxes.keySet()) {
             convertedData.put(key, boxes.get(key).convert());
         }
         return convertedData;

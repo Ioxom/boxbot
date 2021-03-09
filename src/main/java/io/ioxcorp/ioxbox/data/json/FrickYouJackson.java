@@ -5,6 +5,10 @@ import io.ioxcorp.ioxbox.data.format.Box;
 
 import java.util.HashMap;
 
+/**
+ * class used to make box_data.json prettier
+ * @author ioxom
+ */
 public final class FrickYouJackson {
     private HashMap<Long, Box> boxes;
 
