@@ -5,7 +5,6 @@ import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.IoxboxFrame;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
-import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.MainListener;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetterListener;
@@ -66,15 +65,13 @@ public final class Main extends ListenerAdapter {
         FRAME.init();
     }
 
-    public static final HashMap<Long, Box> BOXES;
-    static {
-        //read saved box data
-        BOXES = JacksonYeehawHelper.read();
-    }
+    //get saved box data
+    public static final HashMap<Long, Box> BOXES = JacksonYeehawHelper.read();
 
     private static JDA api;
     private static final Config CONFIG = new Config();
     private static boolean fullyConnected;
+    private static boolean firstConnection = true;
 
     public static void main(final String[] args) {
         CONFIG.readConfig();
@@ -104,10 +101,7 @@ public final class Main extends ListenerAdapter {
      */
     public static void shutdown() {
         fullyConnected = false;
-        for (final ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
-            confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
-            ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
-        }
+        ConfirmationGetter.shutdown();
         api.shutdown();
         FRAME.setReloadJDAImage("images/lightning_bolt.png");
         FRAME.log(LogType.MAIN, "shut down JDA, disconnected from discord");
@@ -120,11 +114,14 @@ public final class Main extends ListenerAdapter {
         try {
             final String token = CONFIG.getToken();
             api = JDABuilder.createDefault(token).build();
-            Main.FRAME.log(LogType.MAIN, "successfully logged in JDA");
+            Main.FRAME.log(firstConnection ? LogType.INIT : LogType.MAIN, "successfully logged in JDA");
         } catch (LoginException e) {
             FRAME.log(LogType.ERR, "invalid token; enter a valid one and run /configure to log in");
         }
         addListeners();
+        if (firstConnection) {
+            firstConnection = false;
+        }
     }
 
     public static void setApi(final JDABuilder builder) throws LoginException {

@@ -29,7 +29,7 @@ public final class HandleAdd extends Handler {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            this.getInitialChannel().sendMessage(helper.successEmbed(this.getUser() + " would you like to join " + this.askingUser.getAsTag() + "'s box? (Type yes to accept)")).queue();
+            this.getInitialChannel().sendMessage(helper.successEmbed(getUser().getPing() + ", do you give " + askingUser.getPing() + " permission to put you in their box?")).queue();
         }
 
         final WhatAmIDoing response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());

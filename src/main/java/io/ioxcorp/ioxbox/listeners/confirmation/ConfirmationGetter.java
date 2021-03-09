@@ -1,6 +1,8 @@
 package io.ioxcorp.ioxbox.listeners.confirmation;
 
+import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
+import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -127,5 +129,16 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
     public MessageChannel getChannel() {
         return this.channel;
+    }
+
+    /**
+     * clears all confirmation getters, informing users that they're no longer active
+     */
+    public static void shutdown() {
+        Main.FRAME.log(LogType.MAIN, "shutting down confirmation system");
+        for (final ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
+            confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
+            ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
+        }
     }
 }
