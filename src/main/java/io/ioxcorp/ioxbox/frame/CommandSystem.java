@@ -15,6 +15,10 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * @author ioxom
  */
 public final class CommandSystem {
+    private CommandSystem() {
+        
+    }
+    
     public static final String COMMAND_PREFIX = "/";
 
     public static final String[] COMMANDS = {
