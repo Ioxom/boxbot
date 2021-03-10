@@ -45,7 +45,7 @@ public final class PromptTextField extends JTextField {
     /**
      * draws the prompt or an autofill option when called
      * @param g a graphics object used to paint
-     * @see PromptTextField#drawText(String, Graphics) 
+     * @see PromptTextField#drawText(String, Graphics)
      */
     @Override
     public void paint(final Graphics g) {
@@ -79,7 +79,7 @@ public final class PromptTextField extends JTextField {
      * adapted from: https://stackoverflow.com/a/24571681
      * @param text the text to be drawn
      * @param g the {@link Graphics} object used to draw the text
-     * @see PromptTextField#paint(Graphics) 
+     * @see PromptTextField#paint(Graphics)
      */
     private void drawText(final String text, final Graphics g) {
         int h = getHeight();

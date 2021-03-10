@@ -14,7 +14,7 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * system for handling console commands
  * @author ioxom
  */
-public class CommandSystem {
+public final class CommandSystem {
     public static final String COMMAND_PREFIX = "/";
 
     public static final String[] COMMANDS = {
@@ -32,7 +32,7 @@ public class CommandSystem {
      * @param index the index of the command in {@link CommandSystem#COMMANDS}
      * @return the commands with added prefix
      */
-    private static String getCommand(int index) {
+    private static String getCommand(final int index) {
         return COMMAND_PREFIX + COMMANDS[index];
     }
 
