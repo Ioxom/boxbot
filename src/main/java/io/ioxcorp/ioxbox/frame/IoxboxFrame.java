@@ -5,13 +5,9 @@ import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.frame.logging.FileLogger;
 import io.ioxcorp.ioxbox.frame.logging.LogHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.imageio.ImageIO;
-import javax.security.auth.login.LoginException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -94,7 +90,7 @@ public final class IoxboxFrame {
             String message = this.consoleInput.getText();
             this.log(LogType.MAIN, message);
             this.consoleInput.clearText();
-            this.handleCommands(message);
+            CommandSystem.handleCommands(message);
         });
 
         //add **buttons**
@@ -127,7 +123,7 @@ public final class IoxboxFrame {
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\n"
                 + "middle button: help\n"
                 + "bottom button: clear console\n"
-                + COMMAND_LIST
+                + CommandSystem.COMMAND_LIST
         ));
         this.reloadJDA.addActionListener(e -> {
             if (Main.isFullyConnected()) {
@@ -192,111 +188,7 @@ public final class IoxboxFrame {
         return this.console;
     }
 
-    public static final String COMMAND_PREFIX = "/";
-
-    public static final String[] COMMANDS = {
-            "commands",
-            "clear",
-            "reload",
-            "disconnect",
-            "connect",
-            "ping",
-            "exit",
-            "configure"
-    };
-
-    public static final String COMMAND_LIST = "=== command list start ===\n"
-            + COMMAND_PREFIX + COMMANDS[0] + ": display this list\n"
-            + COMMAND_PREFIX + COMMANDS[1] + ": clear the console\n"
-            + COMMAND_PREFIX + COMMANDS[2] + ": reload JDA, disconnecting and reconnecting to discord\n"
-            + COMMAND_PREFIX + COMMANDS[3] + ": disconnect from discord, if already disconnected does nothing\n"
-            + COMMAND_PREFIX + COMMANDS[4] + ": connect to discord, if already connected reloads jda\n"
-            + COMMAND_PREFIX + COMMANDS[5] + ": get the current ping\n"
-            + COMMAND_PREFIX + COMMANDS[6] + ": disconnects from discord and ends the process\n"
-            + COMMAND_PREFIX + COMMANDS[7] + ": rereads the config file\n"
-            + "=== command list end ===";
-
-    public void handleCommands(final String command) {
-        if (!command.startsWith(COMMAND_PREFIX)) {
-            this.log(LogType.ERR, "invalid command: commands must start with " + COMMAND_PREFIX + "\nuse " + IoxboxFrame.COMMAND_PREFIX + COMMANDS[0] + " for a list");
-            return;
-        }
-
-        for (int i = 0; i < COMMANDS.length; i++) {
-            if ((COMMAND_PREFIX + COMMANDS[i]).equals(command)) {
-                switch (i) {
-                    case 0:
-                        this.log(LogType.HELP, COMMAND_LIST);
-                        return;
-                    case 1:
-                        this.clearConsole();
-                        return;
-                    case 2:
-                        Main.reloadJDA();
-                        return;
-                    case 3:
-                        if (Main.isFullyConnected()) {
-                            Main.shutdown();
-                        } else {
-                            this.log(LogType.ERR, "could not disconnect from discord: already disconnected");
-                        }
-                        return;
-                    case 4:
-                        if (Main.isFullyConnected()) {
-                            this.log(LogType.MAIN, "already connected; reloading JDA");
-                        } else {
-                            Main.connect();
-                            this.log(LogType.MAIN, "reconnected to discord");
-                        }
-                        return;
-                    case 5:
-                        if (Main.isFullyConnected()) {
-                            final long time = System.currentTimeMillis();
-                            final Guild guild = Main.getApi().getGuildById(Main.getConfig().getMainServer());
-                            if (guild == null) {
-                                this.log(LogType.ERR, "guild not found; could not get ping\nplease fix your config!");
-                                return;
-                            }
-                            final MessageChannel channel = guild.getTextChannelById(Main.getConfig().getSpamChannel());
-                            if (channel == null) {
-                                this.log(LogType.ERR, "channel not found; could not get ping\nplease fix your config!");
-                                return;
-                            }
-                            channel.sendMessage("calculating ping").queue(message -> {
-                                long ping = System.currentTimeMillis() - time;
-                                this.log(LogType.MAIN, "current ping: " + ping + "ms");
-                                message.editMessage("ping is " + ping + "ms").queue();
-                            });
-                        } else {
-                            this.log(LogType.ERR, "not fully connected to JDA, could not get ping");
-                        }
-                        return;
-                    case 6:
-                        System.exit(0);
-                        return;
-                    case 7:
-                        final String oldToken = Main.getConfig().getToken();
-                        Main.getConfig().readConfig();
-                        final String token = Main.getConfig().getToken();
-                        if (!oldToken.equals(token)) {
-                            FRAME.log(LogType.MAIN, "got different token; reloading JDA");
-                            Main.shutdown();
-                            try {
-                                Main.setApi(JDABuilder.createDefault(token));
-                                Main.addListeners();
-                            } catch (LoginException e) {
-                                FRAME.log(LogType.ERR, "got invalid token on config reload, enter a working one and do /configure again");
-                            }
-                        }
-                        return;
-                }
-            }
-        }
-
-        this.log(LogType.MAIN, "command not found");
-    }
-
-    private void clearConsole() {
+    public void clearConsole() {
         this.console.setText(LogType.MAIN.getValue() + ": ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
     }
 

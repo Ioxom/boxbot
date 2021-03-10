@@ -1,5 +1,7 @@
 package io.ioxcorp.ioxbox;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.ioxcorp.ioxbox.data.config.Config;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
@@ -68,6 +70,8 @@ public final class Main extends ListenerAdapter {
     //get saved box data
     public static final HashMap<Long, Box> BOXES = JacksonYeehawHelper.read();
 
+    public static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
     private static JDA api;
     private static final Config CONFIG = new Config();
     private static boolean fullyConnected;
@@ -79,7 +83,7 @@ public final class Main extends ListenerAdapter {
         //throw error if version is not found
         if (version == null) {
             version = "0.0.0";
-            FRAME.log(LogType.ERR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that is run, but it seems an error occurred on saving.");
+            FRAME.log(LogType.ERR, "could not get version from \"ioxbox.properties\". this file should normally be stored in the .jar file that you ran, but it seems an error occurred on file creation. try reporting a bug on our bug tracker!");
         }
 
         //log in

@@ -6,11 +6,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -24,7 +22,8 @@ public final class PromptTextField extends JTextField {
     private final KeyAdapter autofillAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(final KeyEvent evt) {
-            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(IoxboxFrame.COMMAND_PREFIX) && savedCommand.startsWith(getText().split(" ")[0]) && autofill) {
+            //key must be tab, autofill must be enabled, text must start with prefix, saved command must start with text
+            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(CommandSystem.COMMAND_PREFIX) && savedCommand.startsWith(getText()) && autofill) {
                 setText(savedCommand);
                 drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
             }
@@ -40,9 +39,14 @@ public final class PromptTextField extends JTextField {
         this.prompt = Objects.requireNonNullElse(prompt, "");
         this.savedCommand = "/";
         //this gives autofill the ability to work by making sure that tab doesn't just leave the text field
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
+        this.setFocusTraversalKeysEnabled(false);
     }
 
+    /**
+     * draws the prompt or an autofill option when called
+     * @param g a graphics object used to paint
+     * @see PromptTextField#drawText(String, Graphics) 
+     */
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
@@ -51,8 +55,8 @@ public final class PromptTextField extends JTextField {
             this.drawText(this.prompt, g);
         //otherwise we try to get an autofill option
         } else if (autofill) {
-            for (String command : IoxboxFrame.COMMANDS) {
-                command = IoxboxFrame.COMMAND_PREFIX + command;
+            for (String command : CommandSystem.COMMANDS) {
+                command = CommandSystem.COMMAND_PREFIX + command;
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
                     drawText(" ".repeat(this.getText().length() * 3) + command + " (press tab)", g);
@@ -75,6 +79,7 @@ public final class PromptTextField extends JTextField {
      * adapted from: https://stackoverflow.com/a/24571681
      * @param text the text to be drawn
      * @param g the {@link Graphics} object used to draw the text
+     * @see PromptTextField#paint(Graphics) 
      */
     private void drawText(final String text, final Graphics g) {
         int h = getHeight();
@@ -105,7 +110,7 @@ public final class PromptTextField extends JTextField {
     /**
      * adds the necessary {@link KeyEvent} to make autofill work: not calling this disables autofill
      */
-    public void addAutofillEvent() {
+    void addAutofillEvent() {
         this.addKeyListener(autofillAdapter);
     }
 }

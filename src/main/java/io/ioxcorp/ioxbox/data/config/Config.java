@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 
@@ -36,8 +34,6 @@ public final class Config {
     @JsonProperty("logCommands")
     private boolean logCommands;
 
-    @JsonIgnore
-    private static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     @JsonIgnore
     private static final File CONFIG_FILE = new File("config.json");
 
@@ -75,7 +71,7 @@ public final class Config {
                 if (CONFIG_FILE.createNewFile()) {
                     FileWriter writer = new FileWriter(CONFIG_FILE);
                     String token = getTokenFromDedicatedFile();
-                    writer.write(MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, token, "null", true)));
+                    writer.write(Main.MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, token, "null", true)));
                     writer.close();
                     Main.FRAME.log(LogType.ERR, "no config file found, created one\nyou can fill this in with the required information");
                 }
@@ -87,7 +83,7 @@ public final class Config {
         //read config
         Config readConfig = null;
         try {
-            readConfig = MAPPER.readValue(CONFIG_FILE, Config.class);
+            readConfig = Main.MAPPER.readValue(CONFIG_FILE, Config.class);
         } catch (JsonMappingException e) {
             if (isFirstRun) {
                 Main.FRAME.log(LogType.FATAL_ERR, "failed to map json of config: " + e);

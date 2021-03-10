@@ -43,3 +43,4 @@ task('addVersion') {
 
 tasks.build.dependsOn(tasks.addVersion)
 tasks.shadowJar.dependsOn(tasks.addVersion)
+tasks.run.dependsOn(tasks.addVersion)

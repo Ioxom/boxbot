@@ -178,7 +178,7 @@ public final class Box {
     }
 
     /**
-     * adds the Object passed to the {@link Box} specified if it is a compatible format, then saves to json
+     * adds the object passed to the {@link Box} specified if it is a compatible format, then saves to json
      * @param object a {@link String String}, a {@link CustomUser CustomUser} or {@link User User} to be added to the referenced {@link Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#remove(Object)
@@ -198,7 +198,7 @@ public final class Box {
     }
 
     /**
-     * removes the Object passed to the {@link io.ioxcorp.ioxbox.data.format.Box} specified if it is a compatible format, then saves to json
+     * removes the object passed to the {@link io.ioxcorp.ioxbox.data.format.Box} specified if it is a compatible format, then saves to json
      * @param object a {@link java.lang.String String}, a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User} to be removed from the referenced {@link io.ioxcorp.ioxbox.data.format.Box}
      * @exception IllegalArgumentException if the object passed in an incompatible type
      * @see Box#add(Object)

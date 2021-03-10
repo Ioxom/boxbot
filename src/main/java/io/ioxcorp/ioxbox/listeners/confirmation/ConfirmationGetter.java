@@ -1,11 +1,11 @@
 package io.ioxcorp.ioxbox.listeners.confirmation;
 
 import io.ioxcorp.ioxbox.Main;
-import io.ioxcorp.ioxbox.data.format.WhatAmIDoing;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
@@ -57,9 +57,9 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * gets confirmation from a user<br>
      * warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
      * @param id the id of the user we want confirmation from
-     * @return {@link WhatAmIDoing WhatAmIDoing} a {@link MessageChannel MessageChannel} and a {@link Boolean Boolean} containing the response and the channel it was sent in
+     * @return a {@link Pair} containing the response as the right and the channel it was sent in as the left
      */
-    public static WhatAmIDoing crab(final long id, final MessageChannel initialChannel) {
+    public static Pair<MessageChannel, Boolean> crab(final long id, final MessageChannel initialChannel) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
         //ideally this has already been checked for
         if (gettingConfirmationFrom(id)) {
@@ -84,10 +84,10 @@ public final class ConfirmationGetter extends ListenerAdapter {
                 response = confirmationGetter.response;
             }
 
-            return new WhatAmIDoing(confirmationGetter.channel, response);
+            return Pair.of(confirmationGetter.channel, response);
         } catch (InterruptedException ie) {
             confirmationGetter.channel.sendMessage(EmbedHelper.simpleErrorEmbed(id, "`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
-            return new WhatAmIDoing(confirmationGetter.channel, false);
+            return Pair.of(confirmationGetter.channel, false);
         } finally {
             //ensure that we remove references of the id from our HashMaps so we can check from this user again
             confirmationGetter.clean();
@@ -95,7 +95,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
     }
 
     /**
-     * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps
+     * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps<br>
      * this normally runs after getting confirmation from that user
      * this isn't necessary after the cleanup but yes
      */
