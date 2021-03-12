@@ -135,7 +135,7 @@ public final class Main extends ListenerAdapter {
      * should be used instead of {@link System#exit(int)}
      * @param code the code to exit with
      */
-    public static void exit(int code) {
+    public static void exit(final int code) {
         shutdown();
         System.exit(code);
     }
