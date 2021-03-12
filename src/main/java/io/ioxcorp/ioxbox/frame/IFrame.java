@@ -13,44 +13,44 @@ import java.awt.event.WindowListener;
  */
 public final class IFrame extends JFrame implements WindowListener {
 
-    public IFrame(String name) {
+    public IFrame(final String name) {
         super(name);
         addWindowListener(this);
     }
 
     @Override
-    public void windowClosing(WindowEvent e) {
+    public void windowClosing(final WindowEvent e) {
         Main.exit(0);
     }
 
     @Override
-    public void windowOpened(WindowEvent e) {
+    public void windowOpened(final WindowEvent e) {
         Main.FRAME.log(LogType.INIT, "ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version"));
         Main.FRAME.log(LogType.INIT, "loading ioxbox");
     }
 
     @Override
-    public void windowClosed(WindowEvent e) {
+    public void windowClosed(final WindowEvent e) {
         Main.exit(0);
     }
 
     @Override
-    public void windowIconified(WindowEvent e) {
+    public void windowIconified(final WindowEvent e) {
 
     }
 
     @Override
-    public void windowDeiconified(WindowEvent e) {
+    public void windowDeiconified(final WindowEvent e) {
 
     }
 
     @Override
-    public void windowActivated(WindowEvent e) {
+    public void windowActivated(final WindowEvent e) {
 
     }
 
     @Override
-    public void windowDeactivated(WindowEvent e) {
+    public void windowDeactivated(final WindowEvent e) {
 
     }
 }

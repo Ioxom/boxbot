@@ -254,11 +254,7 @@ public final class MainListener extends ListenerAdapter {
             "if i told you that you had a great body, would you hold it against me?"
     };
 
-    public void createBox(final CustomUser owner, final String content, EmbedHelper helper, final MessageChannel channel) {
-        if (helper == null) {
-            helper = new EmbedHelper(owner);
-        }
-
+    public void createBox(final CustomUser owner, final String content, final EmbedHelper helper, final MessageChannel channel) {
         try {
             if (content == null || content.isEmpty()) {
                 Box.createBox(owner);

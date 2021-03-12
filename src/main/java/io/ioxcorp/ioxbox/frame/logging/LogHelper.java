@@ -30,9 +30,9 @@ public final class LogHelper {
     public static String getLogMessage(final LogType type, final String message) {
         boolean addNewline = !Main.FRAME.getConsole().getText().isEmpty();
         if (type == LogType.FATAL_ERR) {
-            return replaceNewlines(type, (addNewline? "\n" : "") + message + "\nclosing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".");
+            return replaceNewlines(type, (addNewline ? "\n" : "") + message + "\nclosing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".");
         } else {
-            return replaceNewlines(type, (addNewline? "\n" : "") + message);
+            return replaceNewlines(type, (addNewline ? "\n" : "") + message);
         }
     }
 
