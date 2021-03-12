@@ -35,6 +35,7 @@ public final class Main extends ListenerAdapter {
     }
 
     public static final Random RANDOM = new Random();
+    public static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     //get the version from a .properties that's saved in the .jar that shadowJar produces
     private static String version;
@@ -69,8 +70,6 @@ public final class Main extends ListenerAdapter {
 
     //get saved box data
     public static final HashMap<Long, Box> BOXES = JacksonYeehawHelper.read();
-
-    public static final ObjectMapper MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     private static JDA api;
     private static final Config CONFIG = new Config();
@@ -130,6 +129,15 @@ public final class Main extends ListenerAdapter {
 
     public static void setApi(final JDABuilder builder) throws LoginException {
         api = builder.build();
+    }
+
+    /**
+     * should be used instead of {@link System#exit(int)}
+     * @param code the code to exit with
+     */
+    public static void exit(int code) {
+        shutdown();
+        System.exit(code);
     }
 
     /**

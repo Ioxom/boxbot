@@ -28,10 +28,11 @@ public final class LogHelper {
      * @return the message formatted as what should be sent in the console
      */
     public static String getLogMessage(final LogType type, final String message) {
+        boolean addNewline = !Main.FRAME.getConsole().getText().isEmpty();
         if (type == LogType.FATAL_ERR) {
-            return replaceNewlines(type, "\n" + message + "\nclosing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".");
+            return replaceNewlines(type, (addNewline? "\n" : "") + message + "\nclosing ioxbox. you can view this message in " + Main.FRAME.getFileLogger().getFileName() + ".");
         } else {
-            return replaceNewlines(type, "\n" + message);
+            return replaceNewlines(type, (addNewline? "\n" : "") + message);
         }
     }
 
@@ -77,7 +78,7 @@ public final class LogHelper {
         writeToConsoleAndFile(getLogMessage(LogType.FATAL_ERR, message));
         try {
             Thread.sleep(5000);
-            System.exit(1);
+            Main.exit(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

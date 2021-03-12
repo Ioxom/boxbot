@@ -253,7 +253,7 @@ public final class Box {
     }
 
     /**
-     * checks if a box contains the object specified
+     * checks if the box contains the object specified
      * @param object must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser}, {@link net.dv8tion.jda.api.entities.User User} or {@link java.lang.String}; the object to be checked for
      * @return true, if the object is found; false, if the object is not found
      */

@@ -13,7 +13,13 @@ import java.awt.Color;
  * @author ioxom
  */
 public final class EmbedHelper {
+    /**
+     * the colour to use for embeds that follow successful operations
+     */
     public static final int SUCCESS_EMBED_COLOUR = 0x00FF00;
+    /**
+     * the colour to use in embeds that inform the user of failed tasks
+     */
     public static final int ERROR_EMBED_COLOUR = 0xc91a00;
 
     private final CustomUser user;
@@ -58,7 +64,7 @@ public final class EmbedHelper {
         return new EmbedBuilder()
                 .setColor(ERROR_EMBED_COLOUR)
                 .setAuthor(author[0], author[1], author[2])
-                .setDescription(error + (rotater ? "have a rotater!" : ""))
+                .setDescription(error + (rotater ? " have a rotater!" : ""))
                 .setThumbnail(rotater ? "https://raw.githubusercontent.com/ioxom/ioxbox/master/src/main/resources/gifs/rotater.gif" : null)
                 .setFooter("requested by user " + user.getAsTag() + "\nbox id: " + getBoxID())
                 .build();
@@ -80,15 +86,6 @@ public final class EmbedHelper {
                 .setDescription(message)
                 .setTitle(title)
                 .setFooter("requested by user " + user.getAsTag() + "\nbox id: " + getBoxID())
-                .build();
-    }
-
-    public static MessageEmbed simpleErrorEmbed(final long id, final String message) {
-        return new EmbedBuilder()
-                .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
-                .setColor(ERROR_EMBED_COLOUR)
-                .setDescription(message)
-                .setFooter("requested by user with id: " + id)
                 .build();
     }
 }

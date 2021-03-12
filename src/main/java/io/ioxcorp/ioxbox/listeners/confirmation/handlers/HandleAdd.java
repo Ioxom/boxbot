@@ -24,8 +24,8 @@ public final class HandleAdd extends Handler {
 
     @Override
     public void run() {
-        final EmbedHelper helper = new EmbedHelper(this.getUser());
-        if (ConfirmationGetter.gettingConfirmationFrom(this.getUser().getId())) {
+        final EmbedHelper helper = new EmbedHelper(askingUser);
+        if (ConfirmationGetter.gettingConfirmationFrom(getUser().getId())) {
             this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {

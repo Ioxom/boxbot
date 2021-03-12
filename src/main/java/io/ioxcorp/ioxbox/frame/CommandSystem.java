@@ -58,7 +58,7 @@ public final class CommandSystem {
     public static void handleCommands(final String command) {
         if (command.startsWith(COMMAND_PREFIX)) {
             for (int i = 0; i < COMMANDS.length; i++) {
-                if ((COMMAND_PREFIX + COMMANDS[i]).equals(command)) {
+                if ((getCommand(i)).equals(command)) {
                     switch (i) {
                         case 0:
                             FRAME.log(LogType.HELP, COMMAND_LIST);
@@ -107,7 +107,7 @@ public final class CommandSystem {
                             }
                             return;
                         case 6:
-                            System.exit(0);
+                            Main.exit(0);
                             return;
                         case 7:
                             final String oldToken = Main.getConfig().getToken();

@@ -2,6 +2,7 @@ package io.ioxcorp.ioxbox.listeners.confirmation.handlers;
 
 import io.ioxcorp.ioxbox.Main;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
+import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
@@ -38,6 +39,7 @@ public final class HandleDelete extends Handler {
 
         if (response.getRight()) {
             Main.BOXES.remove(this.getUser().getId());
+            JacksonYeehawHelper.save();
             response.getLeft().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
             Main.FRAME.log(LogType.CMD, "delete box", this.getUser());
         } else {

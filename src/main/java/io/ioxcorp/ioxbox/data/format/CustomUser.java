@@ -28,7 +28,20 @@ public final class CustomUser {
      */
     public CustomUser(final User user) {
         this.id = user.getIdLong();
-        String[] splitTag = user.getAsTag().split("#");
+        final String[] splitTag = user.getAsTag().split("#");
+        this.discriminator = Integer.parseInt(splitTag[1]);
+        this.username = splitTag[0];
+    }
+
+    /**
+     * get a user from an id using {@link Main#getApi() Main's JDA object}<br>
+     * note: blocks the current thread while getting
+     * @param id the id of the user to get
+     */
+    public CustomUser(final long id) {
+        User user = Main.getApi().retrieveUserById(id).complete();
+        this.id = user.getIdLong();
+        final String[] splitTag = user.getAsTag().split("#");
         this.discriminator = Integer.parseInt(splitTag[1]);
         this.username = splitTag[0];
     }

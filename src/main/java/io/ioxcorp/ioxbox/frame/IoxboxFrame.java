@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.User;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -22,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static io.ioxcorp.ioxbox.Main.FRAME;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  * a bad swing gui
@@ -30,7 +29,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public final class IoxboxFrame {
     private final JTextArea console;
-    private final JFrame jFrame;
+    private final IFrame iFrame;
     private final JPanel mainPanel;
     private final FileLogger logger;
     private final PromptTextField consoleInput;
@@ -45,8 +44,8 @@ public final class IoxboxFrame {
      * note: this will create a new file due to the call of {@link FileLogger#FileLogger()}
      */
     public IoxboxFrame() {
-        this.jFrame = new JFrame("ioxbox v " + Main.getVersion());
-        this.console = new JTextArea("[init]: ioxbox v " + Main.getVersion() + " running on java " + System.getProperty("java.version") + LogHelper.getLogMessage(LogType.INIT, "loading ioxbox"));
+        this.iFrame = new IFrame("ioxbox v " + Main.getVersion());
+        this.console = new JTextArea();
         this.mainPanel = new JPanel(new BorderLayout(0, 0));
         this.logger = new FileLogger();
         this.consoleInput = new PromptTextField("enter commands here");
@@ -61,9 +60,10 @@ public final class IoxboxFrame {
     public void init() {
         this.logger.log(LogType.INIT, this.logger.getDebugInfo());
 
-        this.jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //do nothing on close - we have a special handler for closing
+        this.iFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         //set icon
-        this.jFrame.setIconImage(this.getImage("images/box.png"));
+        this.iFrame.setIconImage(this.getImage("images/box.png"));
         //configure the console, adding a scroll bar and setting the colour
         final Dimension consoleSize = new Dimension(600, 300);
         this.console.setForeground(new Color(30, 30, 30));
@@ -78,7 +78,7 @@ public final class IoxboxFrame {
         //configure the main background panel
         this.mainPanel.setPreferredSize(consoleSize);
         this.mainPanel.add(pane);
-        this.jFrame.setContentPane(this.mainPanel);
+        this.iFrame.setContentPane(this.mainPanel);
 
         //yes
         //input console
@@ -146,8 +146,8 @@ public final class IoxboxFrame {
         this.mainPanel.add(panel, BorderLayout.EAST);
 
         //open the frame
-        this.jFrame.setSize(consoleSize);
-        this.jFrame.setVisible(true);
+        this.iFrame.setSize(consoleSize);
+        this.iFrame.setVisible(true);
     }
 
     public void log(final LogType type, final String message) {

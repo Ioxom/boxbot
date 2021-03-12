@@ -1,6 +1,7 @@
 package io.ioxcorp.ioxbox.listeners.confirmation;
 
 import io.ioxcorp.ioxbox.Main;
+import io.ioxcorp.ioxbox.data.format.CustomUser;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -66,9 +67,11 @@ public final class ConfirmationGetter extends ListenerAdapter {
             return null;
         }
 
+        final EmbedHelper helper = new EmbedHelper(new CustomUser(id));
+
         //create a ConfirmationGetter to handle it
-        CountDownLatch crabDownLatch = new CountDownLatch(1);
-        ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id, initialChannel);
+        final CountDownLatch crabDownLatch = new CountDownLatch(1);
+        final ConfirmationGetter confirmationGetter = new ConfirmationGetter(crabDownLatch, id, initialChannel);
 
         try {
             //ensure that we've gotten our confirmation before returning a response
@@ -77,7 +80,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
             //if there were more than five messages from the user we assume they won't answer
             if (confirmationGetter.attempts >= 5) {
-                confirmationGetter.channel.sendMessage(EmbedHelper.simpleErrorEmbed(id, "no proper response received, assuming no")).queue();
+                confirmationGetter.channel.sendMessage(helper.errorEmbed("no proper response received, assuming no")).queue();
                 response = false;
             //otherwise they've answered and we take that
             } else {
@@ -86,7 +89,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
             return Pair.of(confirmationGetter.channel, response);
         } catch (InterruptedException ie) {
-            confirmationGetter.channel.sendMessage(EmbedHelper.simpleErrorEmbed(id, "`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
+            confirmationGetter.channel.sendMessage(helper.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
             return Pair.of(confirmationGetter.channel, false);
         } finally {
             //ensure that we remove references of the id from our HashMaps so we can check from this user again
@@ -137,7 +140,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
     public static void shutdown() {
         Main.FRAME.log(LogType.MAIN, "shutting down confirmation system");
         for (final ConfirmationGetter confirmationGetter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
-            confirmationGetter.getChannel().sendMessage(EmbedHelper.simpleErrorEmbed(confirmationGetter.getId(), "confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
+            confirmationGetter.getChannel().sendMessage(new EmbedHelper(new CustomUser(confirmationGetter.getId())).errorEmbed("confirmation getter closed due to JDA shutdown. ask again once this bot is back online!")).queue();
             ConfirmationGetter.CONFIRMATION_GETTERS.remove(confirmationGetter.getId());
         }
     }
