@@ -32,15 +32,15 @@ import static io.ioxcorp.ioxbox.Main.getConfig;
 public final class MainListener extends ListenerAdapter {
 
     private static final String[][] COMMANDS = {
-            { "help", "h" },
-            { "commands", "cmds", "c" },
-            { "add", "a" },
-            { "remove", "r" },
-            { "open", "o" },
-            { "delete", "del", "d" },
-            { "list", "l" },
-            { "ping", "p" },
-            { "config", "cfg", }
+            {"help", "h"},
+            {"commands", "cmds", "c" },
+            {"add", "a"},
+            {"remove", "r"},
+            {"open", "o"},
+            {"delete", "del", "d"},
+            {"list", "l"},
+            {"ping", "p"},
+            {"config", "cfg",}
     };
 
     private static String getCommandName(final int index) {
@@ -72,11 +72,11 @@ public final class MainListener extends ListenerAdapter {
             }
 
             if (isCommand) {
-                for (int i = 0; i < COMMANDS.length; i ++) {
+                for (int i = 0; i < COMMANDS.length; i++) {
 
                     //check if the array of command aliases contains the requested command
                     boolean isAlias = false;
-                    for (int j = 0; j < COMMANDS[i].length; j ++) {
+                    for (int j = 0; j < COMMANDS[i].length; j++) {
                         if (messageContent[0].equals(COMMANDS[i][j])) {
                             isAlias = true;
                             break;
