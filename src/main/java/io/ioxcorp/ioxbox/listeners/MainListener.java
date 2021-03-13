@@ -31,7 +31,7 @@ import static io.ioxcorp.ioxbox.Main.getConfig;
 public final class MainListener extends ListenerAdapter {
 
     //TODO: implement aliases in a good way
-    private static final String[] commands = {
+    private static final String[] COMMANDS = {
             "help",
             "commands",
             "add",
@@ -43,8 +43,8 @@ public final class MainListener extends ListenerAdapter {
             "cfg"
     };
 
-    private static String getCommand(int index) {
-        return Main.getConfig().getPrefix() + commands[index];
+    private static String getCommand(final int index) {
+        return Main.getConfig().getPrefix() + COMMANDS[index];
     }
 
     @Override
@@ -59,8 +59,8 @@ public final class MainListener extends ListenerAdapter {
             final CustomUser author = new CustomUser(event.getAuthor());
             final EmbedHelper helper = new EmbedHelper(author);
             final MessageChannel channel = eventMessage.getChannel();
-            if (arrayContains(commands, messageContent[0])) {
-                for (int i = 0; i < commands.length; i++) {
+            if (arrayContains(COMMANDS, messageContent[0])) {
+                for (int i = 0; i < COMMANDS.length; i++) {
                     switch (i) {
                         case 0:
                             EmbedBuilder helpEmbed = new EmbedBuilder()
