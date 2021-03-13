@@ -40,7 +40,7 @@ public final class MainListener extends ListenerAdapter {
             {"delete", "del", "d"},
             {"list", "l"},
             {"ping", "p"},
-            {"config", "cfg",}
+            {"config", "cfg"}
     };
 
     private static String getCommandName(final int index) {
