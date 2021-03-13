@@ -22,7 +22,7 @@ public final class EmbedHelper {
      */
     public static final int ERROR_EMBED_COLOUR = 0xc91a00;
 
-    private CustomUser user;
+    private final CustomUser user;
     private final String[] author = {
             "ioxbox",
             "https://ioxom.github.io/ioxbox/",
@@ -30,10 +30,6 @@ public final class EmbedHelper {
     };
 
     public EmbedHelper(final CustomUser user) {
-        this.user = user;
-    }
-
-    public void setUser(final CustomUser user) {
         this.user = user;
     }
 

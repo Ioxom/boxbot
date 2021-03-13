@@ -21,25 +21,42 @@ public final class JacksonYeehawHelper {
 
     /**
      * saves the data currently stored in {@link Main#BOXES} to box_data.json.
-     * if box_data.json doesn't exist create it
      */
     public static void save() {
         FrickYouJackson yeehaw = new FrickYouJackson(Main.BOXES);
-
         File file = new File("box_data.json");
+
+        write(file, yeehaw);
+    }
+
+    /**
+     * saves the data currently stored in {@link Main#CONFIG} to config.json.
+     */
+    public static void saveConfig() {
+        File file = new File("config.json");
+
+        write(file, Main.getConfig());
+    }
+
+    /**
+     * writes the object to a file
+     * @param file the file to write to
+     * @param value the object to write
+     */
+    private static void write(final File file, final Object value) {
         try {
             if (!file.exists()) {
                 boolean created = file.createNewFile();
-                Main.MAPPER.writeValue(file, yeehaw);
+                Main.MAPPER.writeValue(file, value);
 
                 if (created) {
                     Main.FRAME.log(LogType.MAIN, "created new file: " + file.getName() + " and saved the stored data to it");
                 }
             } else {
-                Main.MAPPER.writeValue(file, yeehaw);
+                Main.MAPPER.writeValue(file, value);
             }
         } catch (IOException e) {
-            Main.FRAME.log(LogType.ERR, "failed to write to box_data.json: " + e);
+            Main.FRAME.log(LogType.ERR, "failed to write to " + file.getName() + ": " + e);
         }
     }
 
