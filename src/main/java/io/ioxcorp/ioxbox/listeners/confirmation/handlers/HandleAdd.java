@@ -25,44 +25,44 @@ public final class HandleAdd extends Handler {
     @Override
     public void run() {
         final EmbedHelper helper = new EmbedHelper(askingUser);
-        if (ConfirmationGetter.gettingConfirmationFrom(getUser().getId())) {
-            this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+        if (ConfirmationGetter.gettingConfirmationFrom(user.getId())) {
+            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            this.getInitialChannel().sendMessage(helper.successEmbed(getUser().getPing() + ", do you give " + askingUser.getPing() + " permission to put you in their box?")).queue();
+            initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you give " + askingUser.getPing() + " permission to put you in their box?")).queue();
         }
 
-        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(this.getUser().getId(), this.getInitialChannel());
+        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(user.getId(), initialChannel);
 
         if (response == null) {
-            this.getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         if (response.getRight()) {
-            this.askingUser.getBox().add(this.getUser());
+            askingUser.getBox().add(user);
             response.getLeft().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
                     .setTitle("caught!")
                     .setDescription("the user allowed you to put them in the box!")
                     .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
-                    .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                    .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "add " + this.getUser().getAsTag() + " to their box", this.askingUser);
+            Main.FRAME.log(LogType.CMD, "add " + user.getAsTag() + " to their box", askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
-                this.askingUser.getBox().add(this.getUser());
+                askingUser.getBox().add(user);
                 response.getLeft().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                         .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                         .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                        .setFooter("requested by user " + this.askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(this.askingUser))
+                        .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "add " + this.getUser().getAsTag() + " to their box", this.askingUser);
+                Main.FRAME.log(LogType.CMD, "add " + user.getAsTag() + " to their box", askingUser);
             } else {
                 response.getLeft().sendMessage(helper.errorEmbed("user refused")).queue();
             }

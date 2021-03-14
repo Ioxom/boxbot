@@ -99,7 +99,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
     /**
      * method to remove references of a user from {@link ConfirmationGetter}'s static hash maps<br>
-     * this normally runs after getting confirmation from that user
+     * this normally runs after getting confirmation from that user<br>
      * this isn't necessary after the cleanup but yes
      */
     public void clean() {
