@@ -127,13 +127,34 @@ public final class Config {
      * @param config the config to pull values from
      */
     private void setThis(final Config config) {
-        this.isFirstRun = config.isFirstRun;
-        this.admins = config.getAdmins();
-        this.mainServer = config.mainServer;
-        this.spamChannel = config.spamChannel;
-        this.token = config.token;
-        this.prefix = config.prefix;
-        this.logCommands = config.logCommands;
+        isFirstRun = config.isFirstRun;
+        admins = config.getAdmins();
+        mainServer = config.mainServer;
+        spamChannel = config.spamChannel;
+        token = config.token;
+        prefix = config.prefix;
+        logCommands = config.logCommands;
+    }
+
+    public String toString() {
+        final StringBuilder admins = new StringBuilder();
+        for (int i = 0; i < this.admins.size(); i++) {
+            final long adminId = this.admins.get(i);
+            if (i == this.admins.size() - 1) {
+                admins.append(adminId).append("\n");
+            } else if (i == 0) {
+                admins.append("admins: ").append(adminId);
+            } else {
+                admins.append(", ").append(adminId);
+            }
+        }
+
+        return admins
+                + "main server id: " + mainServer + "\n"
+                + "spam channel id: " + spamChannel + "\n"
+                + "token: " + token + "\n"
+                + "prefix: " + prefix + "\n"
+                + "log commands? " + logCommands;
     }
 
     /**
