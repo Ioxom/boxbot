@@ -22,26 +22,26 @@ public final class HandleDelete extends Handler {
 
     @Override
     public void run() {
-        final EmbedHelper helper = new EmbedHelper(user);
-        if (ConfirmationGetter.gettingConfirmationFrom(user.getId())) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
+        final EmbedHelper helper = new EmbedHelper(getUser());
+        if (ConfirmationGetter.gettingConfirmationFrom(getUser().getId())) {
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            initialChannel.sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
+            getInitialChannel().sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
         }
 
-        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(user.getId(), initialChannel);
+        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(getUser().getId(), getInitialChannel());
 
         if (response == null) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         if (response.getRight()) {
-            Main.BOXES.remove(user.getId());
+            Main.BOXES.remove(getUser().getId());
             JacksonYeehawHelper.save();
             response.getLeft().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
-            Main.FRAME.log(LogType.CMD, "delete box", user);
+            Main.FRAME.log(LogType.CMD, "delete box", getUser());
         } else {
             response.getLeft().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
         }

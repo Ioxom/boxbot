@@ -26,35 +26,35 @@ public final class HandleOpenWithUser extends Handler {
     @Override
     public void run() {
         final EmbedHelper helper = new EmbedHelper(askingUser);
-        if (ConfirmationGetter.gettingConfirmationFrom(user.getId())) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+        if (ConfirmationGetter.gettingConfirmationFrom(getUser().getId())) {
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you want to be added to " + askingUser.getPing() + "'s new box?")).queue();
+            getInitialChannel().sendMessage(helper.successEmbed(getUser().getPing() + ", do you want to be added to " + askingUser.getPing() + "'s new box?")).queue();
         }
 
-        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(user.getId(), initialChannel);
+        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(getUser().getId(), getInitialChannel());
 
         if (response == null) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         if (response.getRight()) {
-            Box.createBox(askingUser, user);
+            Box.createBox(askingUser, getUser());
             response.getLeft().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
-                    .setTitle("put " + user.getPing() + " in your new box!")
+                    .setTitle("put " + getUser().getPing() + " in your new box!")
                     .setDescription("the user allowed you to put them in the box!")
                     .setColor(EmbedHelper.SUCCESS_EMBED_COLOUR)
                     .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "open a new box with user " + user.getAsTag(), askingUser);
+            Main.FRAME.log(LogType.CMD, "open a new box with user " + getUser().getAsTag(), askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
-                Box.createBox(askingUser, user);
+                Box.createBox(askingUser, getUser());
                 response.getLeft().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -63,7 +63,7 @@ public final class HandleOpenWithUser extends Handler {
                         .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "open a new box with user " + user.getAsTag(), askingUser);
+                Main.FRAME.log(LogType.CMD, "open a new box with user " + getUser().getAsTag(), askingUser);
             } else {
                 response.getLeft().sendMessage(helper.errorEmbed("user refused")).queue();
             }

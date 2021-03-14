@@ -25,22 +25,22 @@ public final class HandleAdd extends Handler {
     @Override
     public void run() {
         final EmbedHelper helper = new EmbedHelper(askingUser);
-        if (ConfirmationGetter.gettingConfirmationFrom(user.getId())) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+        if (ConfirmationGetter.gettingConfirmationFrom(getUser().getId())) {
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         } else {
-            initialChannel.sendMessage(helper.successEmbed(user.getPing() + ", do you give " + askingUser.getPing() + " permission to put you in their box?")).queue();
+            getInitialChannel().sendMessage(helper.successEmbed(getUser().getPing() + ", do you give " + askingUser.getPing() + " permission to put you in their box?")).queue();
         }
 
-        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(user.getId(), initialChannel);
+        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(getUser().getId(), getInitialChannel());
 
         if (response == null) {
-            initialChannel.sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
+            getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
         if (response.getRight()) {
-            askingUser.getBox().add(user);
+            askingUser.getBox().add(getUser());
             response.getLeft().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
                     .setImage("https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/gifs/get_in_box.gif")
@@ -50,10 +50,10 @@ public final class HandleAdd extends Handler {
                     .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                     .build()
             ).queue();
-            Main.FRAME.log(LogType.CMD, "add " + user.getAsTag() + " to their box", askingUser);
+            Main.FRAME.log(LogType.CMD, "add " + getUser().getAsTag() + " to their box", askingUser);
         } else {
             if (Main.RANDOM.nextInt(4) == 0) {
-                askingUser.getBox().add(user);
+                askingUser.getBox().add(getUser());
                 response.getLeft().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")
                         .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
@@ -62,7 +62,7 @@ public final class HandleAdd extends Handler {
                         .setFooter("requested by user " + askingUser.getAsTag() + "\nbox id: " + EmbedHelper.getBoxID(askingUser))
                         .build()
                 ).queue();
-                Main.FRAME.log(LogType.CMD, "add " + user.getAsTag() + " to their box", askingUser);
+                Main.FRAME.log(LogType.CMD, "add " + getUser().getAsTag() + " to their box", askingUser);
             } else {
                 response.getLeft().sendMessage(helper.errorEmbed("user refused")).queue();
             }

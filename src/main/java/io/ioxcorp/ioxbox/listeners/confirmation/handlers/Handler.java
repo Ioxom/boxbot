@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.entities.MessageChannel;
  * @author ioxom
  */
 public class Handler implements Runnable {
-    protected final CustomUser user;
-    protected final MessageChannel initialChannel;
+    private final CustomUser user;
+    private final MessageChannel initialChannel;
 
     public Handler(final CustomUser user, final MessageChannel channel) {
         this.user = user;
