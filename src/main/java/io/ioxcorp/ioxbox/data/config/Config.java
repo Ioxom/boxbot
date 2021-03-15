@@ -141,7 +141,7 @@ public final class Config {
         for (int i = 0; i < this.admins.size(); i++) {
             final long adminId = this.admins.get(i);
             if (i == this.admins.size() - 1) {
-                admins.append(adminId).append("\n");
+                admins.append(", ").append(adminId).append("\n");
             } else if (i == 0) {
                 admins.append("admins: ").append(adminId);
             } else {

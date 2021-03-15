@@ -73,6 +73,9 @@ public final class MainListener extends ListenerAdapter {
                 }
 
                 if (isAlias) {
+                    //this is used to check what config value was changed for logging
+                    String editedConfigValue = null;
+
                     switch (i) {
                         case 0:
                             EmbedBuilder helpEmbed = new EmbedBuilder()
@@ -101,8 +104,8 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 2:
-                            if (/* check for mentioned users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            if (/* check for pinged users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
+                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                                 if (author.hasBox()) {
                                     HandleAdd yes = new HandleAdd(user, author, channel);
                                     ConfirmationGetter.EXECUTOR.submit(yes);
@@ -130,8 +133,8 @@ public final class MainListener extends ListenerAdapter {
                                 break;
                             }
 
-                            if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            if (/* if we have a mentioned user */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
+                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                                 if (author.getBox().contains(user)) {
                                     author.getBox().remove(user);
                                     channel.sendMessage(helper.successEmbed(
@@ -157,8 +160,8 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 4:
-                            if (!eventMessage.getMentionedUsers().isEmpty()) {
-                                CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
+                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                                 HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
                                 ConfirmationGetter.EXECUTOR.submit(handleOpenWithUser);
                                 break;
@@ -182,7 +185,7 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 6:
-                            if (/* check for users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
+                            if (/* check for pinged users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
                                 CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
                                 if (user.hasBox()) {
                                     event.getChannel().sendMessage(user.getBox().embed()).queue();
@@ -215,6 +218,7 @@ public final class MainListener extends ListenerAdapter {
                                                     getConfig().getAdmins().add(Long.parseLong(messageContent[3]));
                                                     JacksonYeehawHelper.saveConfig();
                                                     channel.sendMessage(helper.successEmbed("added admin " + MessageHelper.getAsPing(messageContent[3]))).queue();
+                                                    editedConfigValue = "added admin " + messageContent[3];
                                                 } catch (NumberFormatException e) {
                                                     channel.sendMessage(helper.errorEmbed("failed to add admin: id is invalid")).queue();
                                                 }
@@ -223,6 +227,7 @@ public final class MainListener extends ListenerAdapter {
                                                     getConfig().getAdmins().remove(Long.parseLong(messageContent[3]));
                                                     JacksonYeehawHelper.saveConfig();
                                                     channel.sendMessage(helper.successEmbed("removed admin " + MessageHelper.getAsPing(messageContent[3]))).queue();
+                                                    editedConfigValue = "removed admin " + messageContent[3];
                                                 } catch (NumberFormatException e) {
                                                     channel.sendMessage(helper.errorEmbed("failed to remove admin: id is invalid")).queue();
                                                 }
@@ -237,6 +242,7 @@ public final class MainListener extends ListenerAdapter {
                                                 System.out.println(newPrefix);
                                                 getConfig().setPrefix(newPrefix);
                                                 channel.sendMessage(helper.successEmbed("set prefix to [" + newPrefix + "]")).queue();
+                                                editedConfigValue = "set prefix to [" + newPrefix + "]";
                                             } else {
                                                 channel.sendMessage(helper.errorEmbed("not enough arguments or unknown command")).queue();
                                             }
@@ -245,6 +251,7 @@ public final class MainListener extends ListenerAdapter {
                                             final boolean log = Boolean.parseBoolean(messageContent[2]);
                                             getConfig().setCommandLogging(log);
                                             channel.sendMessage(helper.successEmbed("set logCommands to " + log)).queue();
+                                            editedConfigValue = "set logCommands to " + log;
                                             break;
                                     }
                                 } else {
@@ -259,6 +266,7 @@ public final class MainListener extends ListenerAdapter {
                     FRAME.log(LogType.CMD, getCommandName(i), author);
                     //log config
                     if (i == 8) {
+                        FRAME.log(LogType.MAIN, "edited config value: " + editedConfigValue);
                         FRAME.log(LogType.MAIN, "new config: \n" + Main.getConfig());
                     }
                 }
