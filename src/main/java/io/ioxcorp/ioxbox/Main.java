@@ -72,7 +72,7 @@ public final class Main extends ListenerAdapter {
     //get saved box data
     public static final Map<Long, Box> BOXES = JacksonYeehawHelper.read();
 
-    public static final VariableHandler h = new VariableHandler();
+    public static final VariableHandler VARIABLE_HANDLER = new VariableHandler();
 
     private static JDA api;
     private static final Config CONFIG = new Config();

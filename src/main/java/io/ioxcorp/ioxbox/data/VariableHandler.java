@@ -26,7 +26,7 @@ public final class VariableHandler {
         return yes.toString();
     }
 
-    public void handle(String message, MessageChannel channel) {
+    public void handle(final String message, final MessageChannel channel) {
         String key = message.split("\\+\\+")[0];
         if (variables.containsKey(key)) {
             variables.put(key, variables.get(key) + 1);

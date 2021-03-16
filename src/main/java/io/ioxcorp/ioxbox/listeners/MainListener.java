@@ -272,7 +272,7 @@ public final class MainListener extends ListenerAdapter {
                 }
             }
         } else if (messageContentRaw.contains("++")) {
-            Main.h.handle(messageContentRaw, channel);
+            Main.VARIABLE_HANDLER.handle(messageContentRaw, channel);
         }
     }
 

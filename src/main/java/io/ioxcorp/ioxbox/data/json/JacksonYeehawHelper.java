@@ -31,7 +31,7 @@ public final class JacksonYeehawHelper {
     }
 
     public static void saveVariables() {
-        final FrickYouJacksonTwoElectricBoogaloo yes = new FrickYouJacksonTwoElectricBoogaloo(Main.h.getVariables());
+        final FrickYouJacksonTwoElectricBoogaloo yes = new FrickYouJacksonTwoElectricBoogaloo(Main.VARIABLE_HANDLER.getVariables());
         final File file = new File("thing_data.json");
 
         write(file, yes);
