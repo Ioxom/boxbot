@@ -108,7 +108,7 @@ public final class JacksonYeehawHelper {
      * @param file the file to write to
      * @return whether or not the file was empty and written to
      */
-    private static boolean writeIfNonExistent(File file) {
+    private static boolean writeIfNonExistent(final File file) {
         if (!file.exists()) {
             try {
                 final boolean created = file.createNewFile();
