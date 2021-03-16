@@ -115,6 +115,7 @@ public final class Box {
     /**
      * @return the box as a readable {@link String}
      */
+    @Override
     public String toString() {
         return this.owner.getAsTag() + "'s box:\nusers:\n" + this.usersToString() + "\nitems:\n" + this.itemsToString();
     }

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -43,7 +44,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
         CONFIRMATION_GETTERS.put(id, this);
     }
 
-    public static final HashMap<Long, ConfirmationGetter> CONFIRMATION_GETTERS = new HashMap<>();
+    public static final Map<Long, ConfirmationGetter> CONFIRMATION_GETTERS = new HashMap<>();
 
     /**
      * convenience method to check if we're getting confirmation from a user

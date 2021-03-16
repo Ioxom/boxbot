@@ -136,6 +136,7 @@ public final class Config {
         logCommands = config.logCommands;
     }
 
+    @Override
     public String toString() {
         final StringBuilder admins = new StringBuilder();
         for (int i = 0; i < this.admins.size(); i++) {

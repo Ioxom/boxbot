@@ -59,6 +59,7 @@ public final class CustomUser {
         this.discriminator = 0;
     }
 
+    @Override
     public String toString() {
         return "id: " + this.id + "\ntag: " + this.username + "#" + this.discriminator;
     }

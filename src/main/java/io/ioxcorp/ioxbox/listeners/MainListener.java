@@ -54,12 +54,12 @@ public final class MainListener extends ListenerAdapter {
         final String prefix = Main.getConfig().getPrefix();
         final Message eventMessage = event.getMessage();
         final String messageContentRaw = eventMessage.getContentRaw().toLowerCase();
+        final MessageChannel channel = eventMessage.getChannel();
 
         if (messageContentRaw.startsWith(prefix) && !event.getAuthor().isBot()) {
             final String[] messageContent = messageContentRaw.split(prefix)[1].split(" ");
             final CustomUser author = new CustomUser(event.getAuthor());
             final EmbedHelper helper = new EmbedHelper(author);
-            final MessageChannel channel = eventMessage.getChannel();
 
             for (int i = 0; i < COMMANDS.length; i++) {
 
@@ -271,6 +271,8 @@ public final class MainListener extends ListenerAdapter {
                     }
                 }
             }
+        } else if (messageContentRaw.contains("++")) {
+            Main.h.handle(messageContentRaw, channel);
         }
     }
 

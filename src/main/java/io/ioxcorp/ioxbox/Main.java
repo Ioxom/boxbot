@@ -2,6 +2,7 @@ package io.ioxcorp.ioxbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.ioxcorp.ioxbox.data.VariableHandler;
 import io.ioxcorp.ioxbox.data.config.Config;
 import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
@@ -21,7 +22,7 @@ import javax.security.auth.login.LoginException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -69,7 +70,9 @@ public final class Main extends ListenerAdapter {
     }
 
     //get saved box data
-    public static final HashMap<Long, Box> BOXES = JacksonYeehawHelper.read();
+    public static final Map<Long, Box> BOXES = JacksonYeehawHelper.read();
+
+    public static final VariableHandler h = new VariableHandler();
 
     private static JDA api;
     private static final Config CONFIG = new Config();
