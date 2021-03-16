@@ -32,7 +32,7 @@ public final class JacksonYeehawHelper {
 
     public static void saveVariables() {
         final FrickYouJacksonTwoElectricBoogaloo yes = new FrickYouJacksonTwoElectricBoogaloo(Main.VARIABLE_HANDLER.getVariables());
-        final File file = new File("thing_data.json");
+        final File file = new File("variable_data.json");
 
         write(file, yes);
     }
@@ -132,7 +132,7 @@ public final class JacksonYeehawHelper {
 
     //TODO: really bad duplicated code, decrease duplication
     public static Map<String, Integer> readVariables() {
-        final File file = new File("thing_data.json");
+        final File file = new File("variable_data.json");
 
         //if the file doesn't exist create it and return an empty HashMap
         if (writeIfNonExistent(file)) {

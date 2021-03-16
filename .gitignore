@@ -1,15 +1,19 @@
+#ide stuff
 .gradle
 /build/
 .idea
 .run
-/logs/
-box_data.json
-token.txt
+#vscode
 bin
+#eclipse
 .project
 .settings
 .classpath
+#ioxbox stuff
 config.json
+box_data.json
+/logs/
+variable_data.json
 
 # Ignore Gradle GUI config
 gradle-app.setting
