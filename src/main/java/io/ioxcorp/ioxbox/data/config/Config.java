@@ -17,12 +17,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Config {
     @JsonIgnore
     private boolean isFirstRun;
     @JsonProperty("admins")
-    private ArrayList<Long> admins;
+    private List<Long> admins;
     @JsonProperty("mainServer")
     private long mainServer;
     @JsonProperty("spamChannel")
@@ -51,7 +52,7 @@ public final class Config {
      * @param prefix the prefix to be used before bot commands
      * @param logCommands whether or not to log command usages
      */
-    public Config(final ArrayList<Long> admins, final long mainServer, final long spamChannel, final String token, final String prefix, final boolean logCommands) {
+    public Config(final List<Long> admins, final long mainServer, final long spamChannel, final String token, final String prefix, final boolean logCommands) {
         this.isFirstRun = false;
         this.admins = admins;
         this.mainServer = mainServer;
@@ -188,7 +189,7 @@ public final class Config {
     }
 
     @JsonGetter
-    public ArrayList<Long> getAdmins() {
+    public List<Long> getAdmins() {
         return this.admins;
     }
 

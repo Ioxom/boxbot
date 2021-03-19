@@ -8,6 +8,7 @@ import io.ioxcorp.ioxbox.data.format.Box;
 import io.ioxcorp.ioxbox.data.format.CustomUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class OldBox {
     /**
@@ -20,13 +21,13 @@ public final class OldBox {
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("items")
-    private final ArrayList<String> items;
+    private final List<String> items;
 
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("users")
-    private ArrayList<OldCustomUser> users;
+    private List<OldCustomUser> users;
 
     @JsonCreator
     public OldBox() {
@@ -36,7 +37,7 @@ public final class OldBox {
     }
 
     @JsonSetter
-    public void setUsers(final ArrayList<OldCustomUser> list) {
+    public void setUsers(final List<OldCustomUser> list) {
         this.users = list;
     }
 
@@ -46,13 +47,13 @@ public final class OldBox {
     }
 
     @JsonGetter
-    public ArrayList<String> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
     @JsonGetter
-    public ArrayList<CustomUser> getUsers() {
-        ArrayList<CustomUser> list = new ArrayList<>();
+    public List<CustomUser> getUsers() {
+        List<CustomUser> list = new ArrayList<>();
         for (final OldCustomUser user : this.users) {
             list.add(new CustomUser(user));
         }

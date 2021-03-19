@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,13 +31,13 @@ public final class Box {
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("items")
-    private final ArrayList<String> items;
+    private final List<String> items;
 
     /**
      * an {@link ArrayList} of {@link String Strings}: the items in the box
      */
     @JsonProperty("users")
-    private final ArrayList<CustomUser> users;
+    private final List<CustomUser> users;
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
@@ -106,7 +107,7 @@ public final class Box {
         this.users = new ArrayList<>();
     }
 
-    public Box(final CustomUser owner, final ArrayList<CustomUser> users, final ArrayList<String> items) {
+    public Box(final CustomUser owner, final List<CustomUser> users, final List<String> items) {
         this.owner = owner;
         this.users = users;
         this.items = items;
@@ -276,12 +277,12 @@ public final class Box {
     }
 
     @JsonGetter
-    public ArrayList<String> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
     @JsonGetter
-    public ArrayList<CustomUser> getUsers() {
+    public List<CustomUser> getUsers() {
         return users;
     }
 
