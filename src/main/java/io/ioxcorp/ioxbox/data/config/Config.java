@@ -68,7 +68,7 @@ public final class Config {
     public void readConfig() {
         //create file if it doesn't exist
         if (!CONFIG_FILE.exists()) {
-            try (FileWriter writer = new FileWriter(CONFIG_FILE)){
+            try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
                 if (CONFIG_FILE.createNewFile()) {
                     String tokenToMigrate = getTokenFromDedicatedFile();
                     writer.write(Main.MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, tokenToMigrate, "null", true)));
