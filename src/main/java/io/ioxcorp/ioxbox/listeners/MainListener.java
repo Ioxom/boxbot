@@ -14,11 +14,13 @@ import io.ioxcorp.ioxbox.listeners.confirmation.handlers.HandleOpenWithUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
+import java.util.Optional;
 
 import static io.ioxcorp.ioxbox.Main.FRAME;
 import static io.ioxcorp.ioxbox.Main.getConfig;
@@ -104,8 +106,9 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 2:
-                            if (/* check for pinged users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            final Optional<User> pingedUser = eventMessage.getMentionedUsers().stream().findFirst();
+                            if (/* check for pinged users */ pingedUser.isPresent()) {
+                                final CustomUser user = new CustomUser(pingedUser.get());
                                 if (author.hasBox()) {
                                     HandleAdd yes = new HandleAdd(user, author, channel);
                                     ConfirmationGetter.EXECUTOR.submit(yes);
@@ -133,8 +136,9 @@ public final class MainListener extends ListenerAdapter {
                                 break;
                             }
 
-                            if (/* if we have a mentioned user */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            final Optional<User> pingedUser1 = eventMessage.getMentionedUsers().stream().findFirst();
+                            if (/* if we have a mentioned user */ pingedUser1.isPresent()) {
+                                final CustomUser user = new CustomUser(pingedUser1.get());
                                 if (author.getBox().contains(user)) {
                                     author.getBox().remove(user);
                                     channel.sendMessage(helper.successEmbed(
@@ -160,8 +164,9 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 4:
-                            if (eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                final CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            final Optional<User> pingedUser2 = eventMessage.getMentionedUsers().stream().findFirst();
+                            if (/* check for pinged users */ pingedUser2.isPresent()) {
+                                final CustomUser user = new CustomUser(pingedUser2.get());
                                 HandleOpenWithUser handleOpenWithUser = new HandleOpenWithUser(user, author, channel);
                                 ConfirmationGetter.EXECUTOR.submit(handleOpenWithUser);
                                 break;
@@ -185,8 +190,9 @@ public final class MainListener extends ListenerAdapter {
                             break;
 
                         case 6:
-                            if (/* check for pinged users */ eventMessage.getMentionedUsers().stream().findFirst().isPresent()) {
-                                CustomUser user = new CustomUser(eventMessage.getMentionedUsers().stream().findFirst().get());
+                            final Optional<User> pingedUser3 = eventMessage.getMentionedUsers().stream().findFirst();
+                            if (/* check for pinged users */ pingedUser3.isPresent()) {
+                                CustomUser user = new CustomUser(pingedUser3.get());
                                 if (user.hasBox()) {
                                     event.getChannel().sendMessage(user.getBox().embed()).queue();
                                 } else {

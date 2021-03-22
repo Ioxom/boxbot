@@ -94,10 +94,8 @@ public final class FileLogger {
      * @param message the message to write
      */
     public void write(final String message) {
-        try {
-            FileWriter writer = new FileWriter(this.file, true);
+        try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(message);
-            writer.close();
         //this should never be thrown because our file is always valid
         } catch (IOException e) {
             e.printStackTrace();

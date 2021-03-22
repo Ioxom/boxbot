@@ -26,7 +26,7 @@ public final class ConfirmationGetterListener extends ListenerAdapter {
                 getter.setChannel(event.getChannel());
                 getter.getLatch().countDown();
             //has to be the right person of course - we don't add any attempts for the wrong user
-            } else if (!(event.getAuthor().getIdLong() == getter.getId())) {
+            } else if (event.getAuthor().getIdLong() != getter.getId()) {
                 return;
             }
 

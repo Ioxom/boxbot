@@ -14,8 +14,8 @@ import static io.ioxcorp.ioxbox.Main.FRAME;
  * system for handling console commands
  * @author ioxom
  */
-public final class CommandSystem {
-    private CommandSystem() {
+public final class FrameCommandSystem {
+    private FrameCommandSystem() {
 
     }
 
@@ -33,7 +33,7 @@ public final class CommandSystem {
     };
 
     /**
-     * @param index the index of the command in {@link CommandSystem#COMMANDS}
+     * @param index the index of the command in {@link FrameCommandSystem#COMMANDS}
      * @return the commands with added prefix
      */
     private static String getCommand(final int index) {

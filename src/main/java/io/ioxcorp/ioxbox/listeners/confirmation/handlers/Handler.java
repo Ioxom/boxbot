@@ -19,7 +19,7 @@ public class Handler implements Runnable {
 
     @Override
     public void run() {
-
+        //this does nothing, meant to be used only when Handler is extended
     }
 
     /**

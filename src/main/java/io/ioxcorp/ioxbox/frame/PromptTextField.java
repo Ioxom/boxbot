@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 
@@ -19,11 +18,11 @@ public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
     private boolean autofill;
-    private final KeyAdapter autofillAdapter = new KeyAdapter() {
+    private final SerializableKeyAdapter autofillAdapter = new SerializableKeyAdapter() {
         @Override
         public void keyPressed(final KeyEvent evt) {
             //key must be tab, autofill must be enabled, text must start with prefix, saved command must start with text
-            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(CommandSystem.COMMAND_PREFIX) && savedCommand.startsWith(getText()) && autofill) {
+            if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(FrameCommandSystem.COMMAND_PREFIX) && savedCommand.startsWith(getText()) && autofill) {
                 setText(savedCommand);
                 drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
             }
@@ -55,8 +54,8 @@ public final class PromptTextField extends JTextField {
             this.drawText(this.prompt, g);
         //otherwise we try to get an autofill option
         } else if (autofill) {
-            for (String command : CommandSystem.COMMANDS) {
-                command = CommandSystem.COMMAND_PREFIX + command;
+            for (String command : FrameCommandSystem.COMMANDS) {
+                command = FrameCommandSystem.COMMAND_PREFIX + command;
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
                     drawText(" ".repeat(this.getText().length() * 3) + command + " (press tab)", g);

@@ -68,12 +68,10 @@ public final class Config {
     public void readConfig() {
         //create file if it doesn't exist
         if (!CONFIG_FILE.exists()) {
-            try {
+            try (FileWriter writer = new FileWriter(CONFIG_FILE)){
                 if (CONFIG_FILE.createNewFile()) {
-                    FileWriter writer = new FileWriter(CONFIG_FILE);
-                    String token = getTokenFromDedicatedFile();
-                    writer.write(Main.MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, token, "null", true)));
-                    writer.close();
+                    String tokenToMigrate = getTokenFromDedicatedFile();
+                    writer.write(Main.MAPPER.writeValueAsString(new Config(new ArrayList<>(), 0L, 0L, tokenToMigrate, "null", true)));
                     Main.FRAME.log(LogType.ERR, "no config file found, created one\nyou can fill this in with the required information");
                 }
             } catch (IOException e) {
@@ -139,19 +137,19 @@ public final class Config {
 
     @Override
     public String toString() {
-        final StringBuilder admins = new StringBuilder();
+        final StringBuilder adminsAsString = new StringBuilder();
         for (int i = 0; i < this.admins.size(); i++) {
             final long adminId = this.admins.get(i);
             if (i == this.admins.size() - 1) {
-                admins.append(", ").append(adminId).append("\n");
+                adminsAsString.append(", ").append(adminId).append("\n");
             } else if (i == 0) {
-                admins.append("admins: ").append(adminId);
+                adminsAsString.append("admins: ").append(adminId);
             } else {
-                admins.append(", ").append(adminId);
+                adminsAsString.append(", ").append(adminId);
             }
         }
 
-        return admins
+        return adminsAsString
                 + "main server id: " + mainServer + "\n"
                 + "spam channel id: " + spamChannel + "\n"
                 + "token: " + token + "\n"
@@ -182,7 +180,7 @@ public final class Config {
                 try {
                     Files.delete(path);
                 } catch (IOException ignored) {
-
+                    //this is ignored because it should be impossible to throw
                 }
             }
         }

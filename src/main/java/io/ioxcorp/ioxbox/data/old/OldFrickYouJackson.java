@@ -20,8 +20,8 @@ public final class OldFrickYouJackson {
 
     public Map<Long, Box> convert() {
         Map<Long, Box> convertedData = new HashMap<>();
-        for (final long key : boxes.keySet()) {
-            convertedData.put(key, boxes.get(key).convert());
+        for (final Map.Entry<Long, OldBox> entry : boxes.entrySet()) {
+            convertedData.put(entry.getKey(), entry.getValue().convert());
         }
         return convertedData;
     }

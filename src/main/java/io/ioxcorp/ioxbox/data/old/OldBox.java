@@ -31,9 +31,9 @@ public final class OldBox {
 
     @JsonCreator
     public OldBox() {
-        this.owner = new OldCustomUser();
-        this.items = new ArrayList<>();
-        this.users = new ArrayList<>();
+        owner = new OldCustomUser();
+        items = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     @JsonSetter
@@ -42,8 +42,8 @@ public final class OldBox {
     }
 
     @JsonGetter
-    public CustomUser getOwner() {
-        return new CustomUser(this.owner);
+    public OldCustomUser getOwner() {
+        return owner;
     }
 
     @JsonGetter
@@ -52,15 +52,15 @@ public final class OldBox {
     }
 
     @JsonGetter
-    public List<CustomUser> getUsers() {
-        List<CustomUser> list = new ArrayList<>();
-        for (final OldCustomUser user : this.users) {
-            list.add(new CustomUser(user));
-        }
-        return list;
+    public List<OldCustomUser> getUsers() {
+        return users;
     }
 
     public Box convert() {
-        return new Box(this.getOwner(), this.getUsers(), this.getItems());
+        List<CustomUser> convertedUsers = new ArrayList<>();
+        for (final OldCustomUser user : this.users) {
+            convertedUsers.add(new CustomUser(user));
+        }
+        return new Box(new CustomUser(owner), convertedUsers, items);
     }
 }

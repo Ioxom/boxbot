@@ -19,8 +19,8 @@ public final class VariableHandler {
     @Override
     public String toString() {
         StringBuilder yes = new StringBuilder("data:");
-        for (String key : variables.keySet()) {
-            yes.append("\n").append(key).append(": ").append(variables.get(key));
+        for (final Map.Entry<String, Integer> entry : variables.entrySet()) {
+            yes.append("\n").append(entry.getKey()).append(": ").append(entry.getValue());
         }
 
         return yes.toString();

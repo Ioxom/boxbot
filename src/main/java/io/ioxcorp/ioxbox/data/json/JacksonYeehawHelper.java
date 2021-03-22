@@ -110,11 +110,9 @@ public final class JacksonYeehawHelper {
      */
     private static boolean writeIfNonExistent(final File file) {
         if (!file.exists()) {
-            try {
+            try (final FileWriter writer = new FileWriter(file)) {
                 final boolean created = file.createNewFile();
-                final FileWriter writer = new FileWriter(file);
                 writer.write("{\n   \n}");
-                writer.close();
 
                 if (created) {
                     Main.FRAME.log(LogType.MAIN, "created new file: " + file.getName());

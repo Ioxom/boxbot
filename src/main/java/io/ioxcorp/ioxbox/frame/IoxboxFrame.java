@@ -90,7 +90,7 @@ public final class IoxboxFrame {
             String message = this.consoleInput.getText();
             this.log(LogType.MAIN, message);
             this.consoleInput.clearText();
-            CommandSystem.handleCommands(message);
+            FrameCommandSystem.handleCommands(message);
         });
 
         //add **buttons**
@@ -123,7 +123,7 @@ public final class IoxboxFrame {
         this.commandHelp.addActionListener(e -> this.log(LogType.HELP, "top button: reload jda\n"
                 + "middle button: help\n"
                 + "bottom button: clear console\n"
-                + CommandSystem.COMMAND_LIST
+                + FrameCommandSystem.COMMAND_LIST
         ));
         this.reloadJDA.addActionListener(e -> {
             if (Main.isFullyConnected()) {

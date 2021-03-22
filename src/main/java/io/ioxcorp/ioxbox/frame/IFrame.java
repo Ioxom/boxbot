@@ -36,21 +36,21 @@ public final class IFrame extends JFrame implements WindowListener {
 
     @Override
     public void windowIconified(final WindowEvent e) {
-
+        //do nothing: this method has to be implemented to properly extend WindowListener
     }
 
     @Override
     public void windowDeiconified(final WindowEvent e) {
-
+        //do nothing: this method has to be implemented to properly extend WindowListener
     }
 
     @Override
     public void windowActivated(final WindowEvent e) {
-
+        //do nothing: this method has to be implemented to properly extend WindowListener
     }
 
     @Override
     public void windowDeactivated(final WindowEvent e) {
-
+        //do nothing: this method has to be implemented to properly extend WindowListener
     }
 }

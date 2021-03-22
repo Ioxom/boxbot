@@ -158,8 +158,12 @@ public final class Main extends ListenerAdapter {
     @Override
     public void onReady(final @NotNull ReadyEvent e) {
         FRAME.log(LogType.MAIN, "fully loaded JDA; connected to discord");
-        fullyConnected = true;
+        setConnected();
         FRAME.setReloadJDAImage("images/lightning_bolt_white.png");
+    }
+
+    private static void setConnected() {
+        fullyConnected = true;
     }
 
     public static JDA getApi() {

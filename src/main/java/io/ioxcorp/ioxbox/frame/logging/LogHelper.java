@@ -81,6 +81,7 @@ public final class LogHelper {
             Main.exit(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

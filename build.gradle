@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = "io.ioxcorp.ioxbox.Main"
 group 'io.ioxcorp'
-version '0.6.0'
+version '0.6.1'
 
 repositories {
     mavenCentral()
@@ -33,12 +33,10 @@ compileJava {
 
 //append the version to a properties file so we can access it from java code
 task('addVersion') {
-    doLast {
-        file("src/main/resources/ioxbox.properties").write(
-                "# ioxbox's version. this is stored here to allow project-wide version syncing\n" +
-                        "version=$version"
-        )
-    }
+    file("src/main/resources/ioxbox.properties").write(
+            "# ioxbox's version. this is stored here to allow project-wide version syncing\n" +
+                    "version=$version"
+    )
 }
 
 tasks.build.dependsOn(tasks.addVersion)

@@ -90,8 +90,12 @@ public final class ConfirmationGetter extends ListenerAdapter {
 
             return Pair.of(confirmationGetter.channel, response);
         } catch (InterruptedException ie) {
-            confirmationGetter.channel.sendMessage(helper.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
-            return Pair.of(confirmationGetter.channel, false);
+            try {
+                confirmationGetter.channel.sendMessage(helper.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
+                return Pair.of(confirmationGetter.channel, false);
+            } finally {
+                Thread.currentThread().interrupt();
+            }
         } finally {
             //ensure that we remove references of the id from our HashMaps so we can check from this user again
             confirmationGetter.clean();

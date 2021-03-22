@@ -37,7 +37,7 @@ public final class HandleDelete extends Handler {
             return;
         }
 
-        if (response.getRight()) {
+        if (Boolean.TRUE.equals(response.getRight())) {
             Main.BOXES.remove(getUser().getId());
             JacksonYeehawHelper.save();
             response.getLeft().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();

@@ -39,7 +39,7 @@ public final class HandleAdd extends Handler {
             return;
         }
 
-        if (response.getRight()) {
+        if (Boolean.TRUE.equals(response.getRight())) {
             askingUser.getBox().add(getUser());
             response.getLeft().sendMessage(new EmbedBuilder()
                     .setAuthor("ioxbox", "https://ioxom.github.io/ioxbox/", "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png")
