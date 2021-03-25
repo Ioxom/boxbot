@@ -5,8 +5,8 @@ plugins {
 }
 
 mainClassName = "io.ioxcorp.ioxbox.Main"
-group 'io.ioxcorp'
-version '0.6.1'
+group = 'io.ioxcorp'
+version = '0.6.2'
 
 repositories {
     mavenCentral()
@@ -37,6 +37,10 @@ task('addVersion') {
             "# ioxbox's version. this is stored here to allow project-wide version syncing\n" +
                     "version=$version"
     )
+}
+
+shadowJar {
+    archiveFileName = project.name + "-" + archiveVersion.get() + ".jar"
 }
 
 tasks.build.dependsOn(tasks.addVersion)
