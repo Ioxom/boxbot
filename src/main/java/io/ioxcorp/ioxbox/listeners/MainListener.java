@@ -51,6 +51,7 @@ public final class MainListener extends ListenerAdapter {
     }
 
     @Override
+    @SuppressWarnings("MethodLength")
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
         final String prefix = Main.getConfig().getPrefix();

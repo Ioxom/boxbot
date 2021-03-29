@@ -8,18 +8,13 @@ import net.dv8tion.jda.api.entities.MessageChannel;
  * implements {@link Runnable} - should be used by running on a new thread
  * @author ioxom
  */
-public class Handler implements Runnable {
+public abstract class Handler implements Runnable {
     private final CustomUser user;
     private final MessageChannel initialChannel;
 
-    public Handler(final CustomUser user, final MessageChannel channel) {
-        this.user = user;
+    protected Handler(final CustomUser customUser, final MessageChannel channel) {
+        this.user = customUser;
         this.initialChannel = channel;
-    }
-
-    @Override
-    public void run() {
-        //this does nothing, meant to be used only when Handler is extended
     }
 
     /**

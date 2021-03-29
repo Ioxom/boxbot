@@ -18,9 +18,9 @@ import net.dv8tion.jda.internal.utils.tuple.Pair;
 public final class HandleOpenWithUser extends Handler {
     private final CustomUser askingUser;
 
-    public HandleOpenWithUser(final CustomUser user, final CustomUser askingUser, final MessageChannel initialChannel) {
+    public HandleOpenWithUser(final CustomUser user, final CustomUser inputAskingUser, final MessageChannel initialChannel) {
         super(user, initialChannel);
-        this.askingUser = askingUser;
+        this.askingUser = inputAskingUser;
     }
 
     @Override

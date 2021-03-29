@@ -17,9 +17,9 @@ import net.dv8tion.jda.internal.utils.tuple.Pair;
 public final class HandleAdd extends Handler {
     private final CustomUser askingUser;
 
-    public HandleAdd(final CustomUser user, final CustomUser askingUser, final MessageChannel initialChannel) {
+    public HandleAdd(final CustomUser user, final CustomUser inputAskingUser, final MessageChannel initialChannel) {
         super(user, initialChannel);
-        this.askingUser = askingUser;
+        this.askingUser = inputAskingUser;
     }
 
     @Override
