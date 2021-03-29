@@ -36,10 +36,10 @@ public final class CustomUser {
     /**
      * get a user from an id using {@link Main#getApi() Main's JDA object}<br>
      * note: blocks the current thread while getting
-     * @param id the id of the user to get
+     * @param idToRetrieve the id of the user to get
      */
-    public CustomUser(final long id) {
-        User user = Main.getApi().retrieveUserById(id).complete();
+    public CustomUser(final long idToRetrieve) {
+        User user = Main.getApi().retrieveUserById(idToRetrieve).complete();
         this.id = user.getIdLong();
         final String[] splitTag = user.getAsTag().split("#");
         this.discriminator = Integer.parseInt(splitTag[1]);

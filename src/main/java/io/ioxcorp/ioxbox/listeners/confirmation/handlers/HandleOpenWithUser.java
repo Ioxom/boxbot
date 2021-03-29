@@ -23,6 +23,8 @@ public final class HandleOpenWithUser extends Handler {
         this.askingUser = inputAskingUser;
     }
 
+    static final int USER_FORCE_CHANCE = 4;
+
     @Override
     public void run() {
         final EmbedHelper helper = new EmbedHelper(askingUser);
@@ -53,7 +55,7 @@ public final class HandleOpenWithUser extends Handler {
             ).queue();
             Main.FRAME.log(LogType.CMD, "open a new box with user " + getUser().getAsTag(), askingUser);
         } else {
-            if (Main.RANDOM.nextInt(4) == 0) {
+            if (Main.RANDOM.nextInt(USER_FORCE_CHANCE) == 0) {
                 Box.createBox(askingUser, getUser());
                 response.getLeft().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them into the box with superior strength")

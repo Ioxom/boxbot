@@ -28,8 +28,8 @@ public enum LogType {
 
     private final String value;
 
-    LogType(final String value) {
-        this.value = value;
+    LogType(final String inputValue) {
+        this.value = inputValue;
     }
 
     public String getValue() {

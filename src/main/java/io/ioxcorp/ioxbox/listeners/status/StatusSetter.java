@@ -9,8 +9,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
  */
 public final class StatusSetter extends ListenerAdapter {
     private final int timeBetweenChanges;
-    public StatusSetter(final int timeBetweenChanges) {
-        this.timeBetweenChanges = timeBetweenChanges;
+
+    public StatusSetter(final int time) {
+        this.timeBetweenChanges = time;
     }
 
     @Override

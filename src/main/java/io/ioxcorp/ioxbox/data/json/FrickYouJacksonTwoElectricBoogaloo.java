@@ -12,8 +12,8 @@ public final class FrickYouJacksonTwoElectricBoogaloo {
 
     }
 
-    public FrickYouJacksonTwoElectricBoogaloo(final Map<String, Integer> data) {
-        this.data = data;
+    public FrickYouJacksonTwoElectricBoogaloo(final Map<String, Integer> inputData) {
+        this.data = inputData;
     }
 
     public Map<String, Integer> getData() {

@@ -41,16 +41,16 @@ public final class Box {
 
     /**
      * the main constructor for {@link Box Box}; creates a new box with the specified item inside and the specified user as owner
-     * @param owner must be a {@link CustomUser CustomUser} or {@link User User}; the owner of the box
+     * @param boxOwner must be a {@link CustomUser CustomUser} or {@link User User}; the owner of the box
      * @param object must be a {@link String String}, {@link CustomUser CustomUser} or {@link User User}; the object that is inside the newly created box
      * @exception IllegalArgumentException if the owner or object parameters are incompatible types
      */
-    public Box(final Object owner, final Object object) {
+    public Box(final Object boxOwner, final Object object) {
         //convert the owner object to a CustomUser and save
-        if (owner instanceof CustomUser) {
-            this.owner = (CustomUser) owner;
-        } else if (owner instanceof User) {
-            this.owner = new CustomUser((User) owner);
+        if (boxOwner instanceof CustomUser) {
+            this.owner = (CustomUser) boxOwner;
+        } else if (boxOwner instanceof User) {
+            this.owner = new CustomUser((User) boxOwner);
         //if we don't get a User or CustomUser object throw exception
         } else {
             throw new IllegalArgumentException("passed user object of incompatible type to Box constructor (must be User or CustomUser)");
@@ -78,16 +78,16 @@ public final class Box {
 
     /**
      * a stripped-down version of {@link Box#Box(Object, Object)} that creates an empty box
-     * @param owner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the owner of the box
+     * @param boxOwner must be a {@link io.ioxcorp.ioxbox.data.format.CustomUser CustomUser} or {@link net.dv8tion.jda.api.entities.User User}; the owner of the box
      * @exception IllegalArgumentException if the owner object passed is an incompatible type
      * @see Box#Box(Object, Object)
      */
-    public Box(final Object owner) {
+    public Box(final Object boxOwner) {
         //convert the owner object to a CustomUser and save
-        if (owner instanceof CustomUser) {
-            this.owner = (CustomUser) owner;
-        } else if (owner instanceof User) {
-            this.owner = new CustomUser((User) owner);
+        if (boxOwner instanceof CustomUser) {
+            this.owner = (CustomUser) boxOwner;
+        } else if (boxOwner instanceof User) {
+            this.owner = new CustomUser((User) boxOwner);
             //if we don't get a User or CustomUser object throw exception
         } else {
             throw new IllegalArgumentException("passed user object of incompatible type to Box constructor (must be User or CustomUser)");
@@ -107,10 +107,10 @@ public final class Box {
         this.users = new ArrayList<>();
     }
 
-    public Box(final CustomUser owner, final List<CustomUser> users, final List<String> items) {
-        this.owner = owner;
-        this.users = users;
-        this.items = items;
+    public Box(final CustomUser boxOwner, final List<CustomUser> boxUsers, final List<String> boxItems) {
+        this.owner = boxOwner;
+        this.users = boxUsers;
+        this.items = boxItems;
     }
 
     /**

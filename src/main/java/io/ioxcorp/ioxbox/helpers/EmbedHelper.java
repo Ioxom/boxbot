@@ -29,8 +29,8 @@ public final class EmbedHelper {
             "https://raw.githubusercontent.com/Ioxom/ioxbox/master/src/main/resources/images/box.png"
     };
 
-    public EmbedHelper(final CustomUser user) {
-        this.user = user;
+    public EmbedHelper(final CustomUser inputUser) {
+        this.user = inputUser;
     }
 
     @JsonIgnore
@@ -52,14 +52,18 @@ public final class EmbedHelper {
     }
 
     @JsonIgnore
+    @SuppressWarnings("checkstyle:MagicNumber")
     public Color getRandomEmbedColour() {
         return new Color(Main.RANDOM.nextInt(0xffffff));
     }
 
+    private static final int ROTATER_PERCENT = 5;
+
+    @SuppressWarnings("checkstyle:MagicNumber")
     public MessageEmbed errorEmbed(final String error) {
 
         //5% chance for rotater
-        boolean rotater = Main.RANDOM.nextInt(100 + 1) - 1 > 95;
+        boolean rotater = Main.RANDOM.nextInt(100 + 1) - 1 > 100 - ROTATER_PERCENT;
 
         return new EmbedBuilder()
                 .setColor(ERROR_EMBED_COLOUR)

@@ -18,24 +18,27 @@ public final class PromptTextField extends JTextField {
     private final String prompt;
     private String savedCommand;
     private boolean autofill;
+
+    private static final int SPACE_BETWEEN_TEXT = 3;
+
     private final SerializableKeyAdapter autofillAdapter = new SerializableKeyAdapter() {
         @Override
         public void keyPressed(final KeyEvent evt) {
             //key must be tab, autofill must be enabled, text must start with prefix, saved command must start with text
             if (evt.getKeyCode() == KeyEvent.VK_TAB && getText().startsWith(FrameCommandSystem.COMMAND_PREFIX) && savedCommand.startsWith(getText()) && autofill) {
                 setText(savedCommand);
-                drawText(" ".repeat(getText().length() * 3) + "press enter to run", getGraphics());
+                drawText(" ".repeat(getText().length() * SPACE_BETWEEN_TEXT) + "press enter to run", getGraphics());
             }
         }
     };
 
     /**
      * constructs a new {@link PromptTextField} with autofill set to false
-     * @param prompt the prompt to show in the text field, set to null or "" for no prompt
+     * @param inputPrompt the prompt to show in the text field, set to null or "" for no prompt
      */
-    public PromptTextField(final String prompt) {
+    public PromptTextField(final String inputPrompt) {
         this.autofill = false;
-        this.prompt = Objects.requireNonNullElse(prompt, "");
+        this.prompt = Objects.requireNonNullElse(inputPrompt, "");
         this.savedCommand = "/";
         //this gives autofill the ability to work by making sure that tab doesn't just leave the text field
         this.setFocusTraversalKeysEnabled(false);
@@ -58,11 +61,11 @@ public final class PromptTextField extends JTextField {
                 command = FrameCommandSystem.COMMAND_PREFIX + command;
                 if (command.startsWith(this.getText()) && !command.equals(this.getText())) {
                     this.savedCommand = command;
-                    drawText(" ".repeat(this.getText().length() * 3) + command + " (press tab)", g);
+                    drawText(" ".repeat(this.getText().length() * SPACE_BETWEEN_TEXT) + command + " (press tab)", g);
                     return;
                 } else if (command.equals(this.getText())) {
                     this.savedCommand = command;
-                    this.drawText(" ".repeat(this.getText().length() * 3) + "press enter to run", g);
+                    this.drawText(" ".repeat(this.getText().length() * SPACE_BETWEEN_TEXT) + "press enter to run", g);
                     return;
                 }
             }
@@ -80,6 +83,7 @@ public final class PromptTextField extends JTextField {
      * @param g the {@link Graphics} object used to draw the text
      * @see PromptTextField#paint(Graphics)
      */
+    @SuppressWarnings("checkstyle:MagicNumber")
     private void drawText(final String text, final Graphics g) {
         int h = getHeight();
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

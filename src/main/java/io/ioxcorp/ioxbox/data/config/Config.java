@@ -45,21 +45,21 @@ public final class Config {
 
     /**
      * creates a new config with all values set to the parameters
-     * @param admins an {@link ArrayList} of user ids: the admins who are allowed to use config commands from discord
-     * @param mainServer the id of the server to find the {@link Config#spamChannel} in
-     * @param spamChannel the id of the channel to use when getting ping from the console
-     * @param token the bot's token
-     * @param prefix the prefix to be used before bot commands
-     * @param logCommands whether or not to log command usages
+     * @param configAdmins an {@link ArrayList} of user ids: the admins who are allowed to use config commands from discord
+     * @param configMainServer the id of the server to find the {@link Config#spamChannel} in
+     * @param configSpamChannel the id of the channel to use when getting ping from the console
+     * @param configToken the bot's token
+     * @param configPrefix the prefix to be used before bot commands
+     * @param configLogCommands whether or not to log command usages
      */
-    public Config(final List<Long> admins, final long mainServer, final long spamChannel, final String token, final String prefix, final boolean logCommands) {
+    public Config(final List<Long> configAdmins, final long configMainServer, final long configSpamChannel, final String configToken, final String configPrefix, final boolean configLogCommands) {
         this.isFirstRun = false;
-        this.admins = admins;
-        this.mainServer = mainServer;
-        this.spamChannel = spamChannel;
-        this.token = token;
-        this.prefix = prefix;
-        this.logCommands = logCommands;
+        this.admins = configAdmins;
+        this.mainServer = configMainServer;
+        this.spamChannel = configSpamChannel;
+        this.token = configToken;
+        this.prefix = configPrefix;
+        this.logCommands = configLogCommands;
     }
 
     /**

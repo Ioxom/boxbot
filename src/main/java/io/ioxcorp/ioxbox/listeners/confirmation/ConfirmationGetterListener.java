@@ -22,7 +22,7 @@ public final class ConfirmationGetterListener extends ListenerAdapter {
         for (final ConfirmationGetter getter : ConfirmationGetter.CONFIRMATION_GETTERS.values()) {
 
             //with over 5 attempts we assume no
-            if (getter.getAttempts() >= 5) {
+            if (getter.getAttempts() >= ConfirmationGetter.MAX_ATTEMPTS) {
                 getter.setChannel(event.getChannel());
                 getter.getLatch().countDown();
             //has to be the right person of course - we don't add any attempts for the wrong user

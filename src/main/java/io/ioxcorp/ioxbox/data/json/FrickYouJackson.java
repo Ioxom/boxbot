@@ -17,8 +17,8 @@ public final class FrickYouJackson {
 
     }
 
-    public FrickYouJackson(final Map<Long, Box> boxes) {
-        this.boxes = boxes;
+    public FrickYouJackson(final Map<Long, Box> data) {
+        this.boxes = data;
     }
 
     public Map<Long, Box> getBoxes() {

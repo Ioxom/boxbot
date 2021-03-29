@@ -51,7 +51,7 @@ public final class MainListener extends ListenerAdapter {
     }
 
     @Override
-    @SuppressWarnings("MethodLength")
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:MagicNumber"})
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
         final String prefix = Main.getConfig().getPrefix();

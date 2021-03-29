@@ -143,6 +143,8 @@ public final class Main extends ListenerAdapter {
         System.exit(code);
     }
 
+    private static final int TIME_BETWEEN_STATUS_CHANGES = 20;
+
     /**
      * add the four main listeners for ioxbox: {@link MainListener}, {@link ConfirmationGetterListener}, {@link StatusSetter} and {@link Main}<br>
      * events added:<br>
@@ -152,7 +154,7 @@ public final class Main extends ListenerAdapter {
      * {@link Main}: {@link ListenerAdapter#onReady(ReadyEvent)} - tells ioxbox whether JDA is fully connected or not, shows whether it is with {@link IoxboxFrame#reloadJDA reloadJDA's} icon, and logs the connection<br>
      */
     public static void addListeners() {
-        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(20), new Main());
+        api.addEventListener(new MainListener(), new ConfirmationGetterListener(), new StatusSetter(TIME_BETWEEN_STATUS_CHANGES), new Main());
     }
 
     @Override

@@ -52,7 +52,7 @@ public final class HandleAdd extends Handler {
             ).queue();
             Main.FRAME.log(LogType.CMD, "add " + getUser().getAsTag() + " to their box", askingUser);
         } else {
-            if (Main.RANDOM.nextInt(4) == 0) {
+            if (Main.RANDOM.nextInt(HandleOpenWithUser.USER_FORCE_CHANCE) == 0) {
                 askingUser.getBox().add(getUser());
                 response.getLeft().sendMessage(new EmbedBuilder()
                         .setDescription("user declined, but you managed to wrestle them in with superior strength")

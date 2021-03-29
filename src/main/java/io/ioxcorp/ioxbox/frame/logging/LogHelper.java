@@ -70,6 +70,8 @@ public final class LogHelper {
         CONSOLE
     }
 
+    private static final int MILLISECONDS_BEFORE_QUITTING = 5000;
+
     /**
      * exits ioxbox after giving ample time to read the message
      * @param message the message to send before killing the process
@@ -77,7 +79,7 @@ public final class LogHelper {
     private static void throwFatalError(final String message) {
         writeToConsoleAndFile(getLogMessage(LogType.FATAL_ERR, message));
         try {
-            Thread.sleep(5000);
+            Thread.sleep(MILLISECONDS_BEFORE_QUITTING);
             Main.exit(1);
         } catch (InterruptedException e) {
             e.printStackTrace();

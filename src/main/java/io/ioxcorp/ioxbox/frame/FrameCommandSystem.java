@@ -55,6 +55,8 @@ public final class FrameCommandSystem {
      * handle the sent command, running the associated command or printing "command not found"
      * @param command the command to run
      */
+    //for some reason these switch numbers are considered magic
+    @SuppressWarnings("checkstyle:MagicNumber")
     public static void handleCommands(final String command) {
         if (command.startsWith(COMMAND_PREFIX)) {
             for (int i = 0; i < COMMANDS.length; i++) {
