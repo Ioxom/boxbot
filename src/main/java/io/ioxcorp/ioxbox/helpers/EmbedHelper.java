@@ -52,14 +52,14 @@ public final class EmbedHelper {
     }
 
     @JsonIgnore
-    @SuppressWarnings("Checker:TreeWalker:MagicNumber")
+    @SuppressWarnings("checker:treewalker::MagicNumber")
     public Color getRandomEmbedColour() {
         return new Color(Main.RANDOM.nextInt(0xffffff));
     }
 
     private static final int ROTATER_PERCENT = 5;
 
-    @SuppressWarnings("Checker:TreeWalker:MagicNumber")
+    @SuppressWarnings("checker:treewalker::MagicNumber")
     public MessageEmbed errorEmbed(final String error) {
 
         //5% chance for rotater

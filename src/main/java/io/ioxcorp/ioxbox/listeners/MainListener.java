@@ -51,7 +51,7 @@ public final class MainListener extends ListenerAdapter {
     }
 
     @Override
-    @SuppressWarnings({"Checker:TreeWalker:MethodLength", "Checker:TreeWalker:MagicNumber"})
+    @SuppressWarnings({"checker:treewalker::MethodLength", "checker:treewalker::MagicNumber"})
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
 
         final String prefix = Main.getConfig().getPrefix();
