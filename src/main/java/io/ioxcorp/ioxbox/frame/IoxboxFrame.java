@@ -57,7 +57,7 @@ public final class IoxboxFrame {
     /**
      * initialises and opens the frame. this method is essentially "make the program available to the user", everything executed before it simply makes it seem like the program is loading slowly.
      */
-    @SuppressWarnings("checkstyle:MagicNumber")
+    @SuppressWarnings("Checker:TreeWalker:MagicNumber")
     public void init() {
         this.logger.log(LogType.INIT, this.logger.getDebugInfo());
 

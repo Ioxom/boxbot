@@ -83,7 +83,7 @@ public final class PromptTextField extends JTextField {
      * @param g the {@link Graphics} object used to draw the text
      * @see PromptTextField#paint(Graphics)
      */
-    @SuppressWarnings("checkstyle:MagicNumber")
+    @SuppressWarnings("Checker:TreeWalker:MagicNumber")
     private void drawText(final String text, final Graphics g) {
         int h = getHeight();
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
