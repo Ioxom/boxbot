@@ -217,8 +217,8 @@ public final class Config {
     }
 
     @JsonSetter
-    public void setPrefix(final String prefix) {
-        this.prefix = prefix;
+    public void setPrefix(final String inputPrefix) {
+        this.prefix = inputPrefix;
     }
 
     @JsonSetter("logCommands")

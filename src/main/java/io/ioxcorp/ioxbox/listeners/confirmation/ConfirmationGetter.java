@@ -121,12 +121,12 @@ public final class ConfirmationGetter extends ListenerAdapter {
         return this.id;
     }
 
-    public void setResponse(final boolean response) {
-        this.response = response;
+    public void setResponse(final boolean b) {
+        this.response = b;
     }
 
-    public void setChannel(final MessageChannel channel) {
-        this.channel = channel;
+    public void setChannel(final MessageChannel c) {
+        this.channel = c;
     }
 
     public int getAttempts() {
