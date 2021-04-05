@@ -6,7 +6,6 @@ import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +60,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * gets confirmation from a user<br>
      * warning: blocks the {@link Thread} it's running on until confirmation is given - proceed with caution
      * @param userId the id of the user we want confirmation from
-     * @return a {@link Pair} containing the response as the right and the channel it was sent in as the left
+     * @return a {@link Response} containing the response, the channel it was sent in, and whether or not we received a proper yes or no
      */
     public static Response crab(final long userId, final MessageChannel initialChannel) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
