@@ -6,8 +6,8 @@ import io.ioxcorp.ioxbox.data.json.JacksonYeehawHelper;
 import io.ioxcorp.ioxbox.frame.logging.LogType;
 import io.ioxcorp.ioxbox.helpers.EmbedHelper;
 import io.ioxcorp.ioxbox.listeners.confirmation.ConfirmationGetter;
+import io.ioxcorp.ioxbox.listeners.confirmation.Response;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 /**
  * deletes a user's box, after asking for confirmation <br>
@@ -30,20 +30,20 @@ public final class HandleDelete extends Handler {
             getInitialChannel().sendMessage(helper.successEmbed("delete box? this action is permanent and will remove everything in your box")).queue();
         }
 
-        final Pair<MessageChannel, Boolean> response = ConfirmationGetter.crab(getUser().getId(), getInitialChannel());
+        final Response response = ConfirmationGetter.crab(getUser().getId(), getInitialChannel());
 
         if (response == null) {
             getInitialChannel().sendMessage(helper.errorEmbed("confirmation from a user can only be asked for one thing at once, please wait until they've answered the other queries that are waiting on them")).queue();
             return;
         }
 
-        if (Boolean.TRUE.equals(response.getRight())) {
+        if (Boolean.TRUE.equals(response.getAnswer())) {
             Main.BOXES.remove(getUser().getId());
             JacksonYeehawHelper.save();
-            response.getLeft().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
+            response.getChannel().sendMessage(helper.successEmbed("successfully deleted your box!")).queue();
             Main.FRAME.log(LogType.CMD, "delete box", getUser());
-        } else {
-            response.getLeft().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
+        } else if (response.gotProperResponse()) {
+            response.getChannel().sendMessage(helper.errorEmbed("received false response: did not delete box")).queue();
         }
     }
 }

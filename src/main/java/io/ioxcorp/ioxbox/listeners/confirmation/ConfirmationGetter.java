@@ -63,7 +63,7 @@ public final class ConfirmationGetter extends ListenerAdapter {
      * @param userId the id of the user we want confirmation from
      * @return a {@link Pair} containing the response as the right and the channel it was sent in as the left
      */
-    public static Pair<MessageChannel, Boolean> crab(final long userId, final MessageChannel initialChannel) {
+    public static Response crab(final long userId, final MessageChannel initialChannel) {
         //safeguard: if we're already getting confirmation from someone we can't do multiple instances at the same time
         //ideally this has already been checked for
         if (gettingConfirmationFrom(userId)) {
@@ -80,21 +80,24 @@ public final class ConfirmationGetter extends ListenerAdapter {
             //ensure that we've gotten our confirmation before returning a response
             crabDownLatch.await();
             boolean response;
+            boolean gotProperResponse;
 
             //if there were more than five messages from the user we assume they won't answer
             if (confirmationGetter.attempts >= MAX_ATTEMPTS) {
                 confirmationGetter.channel.sendMessage(helper.errorEmbed("no proper response received, assuming no")).queue();
                 response = false;
+                gotProperResponse = false;
             //otherwise they've answered and we take that
             } else {
                 response = confirmationGetter.response;
+                gotProperResponse = true;
             }
 
-            return Pair.of(confirmationGetter.channel, response);
+            return new Response(confirmationGetter.channel, response, gotProperResponse);
         } catch (InterruptedException ie) {
             try {
                 confirmationGetter.channel.sendMessage(helper.errorEmbed("`an InterruptedException occurred while waiting for response: " + ie + "`" + "\naborting and assuming no")).queue();
-                return Pair.of(confirmationGetter.channel, false);
+                return new Response(confirmationGetter.channel, false, true);
             } finally {
                 Thread.currentThread().interrupt();
             }
