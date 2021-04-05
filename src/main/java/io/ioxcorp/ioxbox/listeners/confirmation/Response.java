@@ -2,12 +2,12 @@ package io.ioxcorp.ioxbox.listeners.confirmation;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class Response {
+public final class Response {
     private final MessageChannel channel;
     private final boolean answer;
     private final boolean gotProperResponse;
 
-    public Response(MessageChannel inputChannel, boolean inputAnswer, boolean properResponse) {
+    public Response(final MessageChannel inputChannel, final boolean inputAnswer, final boolean properResponse) {
         channel = inputChannel;
         answer = inputAnswer;
         gotProperResponse = properResponse;
